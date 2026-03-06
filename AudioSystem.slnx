@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="Core/AudioSystem.Core.csproj" />
+  </Folder>
+  <Folder Name="/Godot/">
+    <Project Path="Godot/AudioSystem.Godot.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/AudioSystem.Tests.csproj" />
+  </Folder>
+  <Project Path="../WorldState/WorldState.Core.csproj" />
+</Solution>
