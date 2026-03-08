@@ -1,7 +1,8 @@
-namespace AudioSystem.Core.Systems;
+﻿namespace AudioSystem.Core.Systems;
+
+using MoonBark.Core.ECS;
 
 using AudioSystem.Core.Components;
-using AudioSystem.Core.ECS;
 using Friflo.Engine.ECS;
 
 public sealed class AudioCueSystem : IECSSystem

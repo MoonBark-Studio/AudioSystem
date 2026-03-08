@@ -2,6 +2,7 @@ using AudioSystem.Core.Configuration;
 using Godot;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace AudioSystem.Godot.Systems;
 
@@ -10,6 +11,8 @@ namespace AudioSystem.Godot.Systems;
 /// </summary>
 public partial class GodotAudioManager : Node
 {
+    private const string MusicPlayerNodeName = "MusicPlayer";
+    private const string AmbientPlayerNodeName = "AmbientPlayer";
     private const float DefaultMusicVolume = 0.0f;
     private const float DefaultAmbientVolume = -10.0f;
 
@@ -29,6 +32,7 @@ public partial class GodotAudioManager : Node
     public override void _Ready()
     {
         _musicPlayer = new AudioStreamPlayer();
+        _musicPlayer.Name = MusicPlayerNodeName;
         _musicPlayer.Bus = "Master";
         _musicPlayer.VolumeDb = DefaultMusicVolume;
         _musicPlayer.Finished += () =>
@@ -41,6 +45,7 @@ public partial class GodotAudioManager : Node
         AddChild(_musicPlayer);
 
         _ambientPlayer = new AudioStreamPlayer();
+    _ambientPlayer.Name = AmbientPlayerNodeName;
         _ambientPlayer.Bus = "Master";
         _ambientPlayer.VolumeDb = DefaultAmbientVolume;
         AddChild(_ambientPlayer);
@@ -133,12 +138,12 @@ public partial class GodotAudioManager : Node
         player.Stop();
         player.Stream = null;
 
-        if (!mapping.TryGetPath(cueId, out string? path) || string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        if (!mapping.TryGetPath(cueId, out string? path) || string.IsNullOrWhiteSpace(path) || !CanResolveAudioPath(path))
         {
             return;
         }
 
-        AudioStream? stream = LoadStream(path);
+        AudioStream? stream = LoadAudioStream(path);
         if (stream == null)
         {
             return;
@@ -150,12 +155,12 @@ public partial class GodotAudioManager : Node
 
     private void PlayOneShot(string cueId)
     {
-        if (!_cuePaths.TryGetPath(cueId, out string? path) || string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        if (!_cuePaths.TryGetPath(cueId, out string? path) || string.IsNullOrWhiteSpace(path) || !CanResolveAudioPath(path))
         {
             return;
         }
 
-        AudioStream? stream = LoadStream(path);
+        AudioStream? stream = LoadAudioStream(path);
         if (stream == null)
         {
             return;
@@ -172,24 +177,41 @@ public partial class GodotAudioManager : Node
         oneShotPlayer.Play();
     }
 
-    private static AudioStream? LoadStream(string path)
+    private static AudioStream? LoadAudioStream(string path)
     {
         try
         {
-            string localizedPath = ProjectSettings.LocalizePath(path);
-            if (string.IsNullOrWhiteSpace(localizedPath) || !localizedPath.StartsWith("res://", StringComparison.Ordinal))
+            if (IsGodotResourcePath(path))
             {
-                GD.PrintErr($"GodotAudioManager: Audio file must be inside the Godot project to load as a resource: {path}");
+                AudioStream? resourceStream = ResourceLoader.Load<AudioStream>(path);
+                if (resourceStream != null)
+                {
+                    return resourceStream;
+                }
+
+                GD.PrintErr($"GodotAudioManager: Failed to load audio resource '{path}': ResourceLoader returned null");
                 return null;
             }
 
-            AudioStream? stream = ResourceLoader.Load<AudioStream>(localizedPath);
+            MethodInfo? loadFromFileMethod = typeof(AudioStreamWav).GetMethod(
+                "LoadFromFile",
+                BindingFlags.Public | BindingFlags.Static,
+                binder: null,
+                types: [typeof(string)],
+                modifiers: null);
+            if (loadFromFileMethod == null)
+            {
+                GD.PrintErr($"GodotAudioManager: External wav loading is unavailable in this Godot runtime: {path}");
+                return null;
+            }
+
+            AudioStreamWav? stream = loadFromFileMethod.Invoke(obj: null, parameters: [path]) as AudioStreamWav;
             if (stream != null)
             {
                 return stream;
             }
 
-            GD.PrintErr($"GodotAudioManager: Failed to load audio resource '{localizedPath}' derived from '{path}'");
+            GD.PrintErr($"GodotAudioManager: Failed to load external wav '{path}': LoadFromFile returned null");
             return null;
         }
         catch (FileNotFoundException)
@@ -204,9 +226,22 @@ public partial class GodotAudioManager : Node
         }
         catch (Exception ex)
         {
-            GD.PrintErr($"GodotAudioManager: Unexpected error loading wav '{path}': {ex.Message}");
+            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio '{path}': {ex.Message}");
             return null;
         }
+    }
+
+    private static bool IsGodotResourcePath(string path)
+    {
+        return path.StartsWith("res://", StringComparison.OrdinalIgnoreCase)
+            || path.StartsWith("user://", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool CanResolveAudioPath(string path)
+    {
+        return IsGodotResourcePath(path)
+            ? ResourceLoader.Exists(path)
+            : File.Exists(path);
     }
 
     private static int GetInt(object? value)

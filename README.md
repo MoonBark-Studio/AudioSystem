@@ -8,6 +8,11 @@ A reusable world-state-driven audio orchestration plugin for Godot games.
 - YAML-backed audio configuration loading
 - `AudioStateComponent` for runtime state
 
+## Godot Audio Manager Contract
+- Creates named `MusicPlayer` and `AmbientPlayer` child nodes during `_Ready()`.
+- Mirrors `audio.music`, `audio.ambient`, `audio.last_cue`, and `audio.cue_version` from world state.
+- Loads both Godot resource paths like `res://...` and external `.wav` file paths.
+
 ## Dependencies
 - `WorldState`
 - `Friflo.Engine.ECS`
