@@ -3,60 +3,108 @@
 using MoonBark.Core.ECS;
 
 using AudioSystem.Core.Components;
+using AudioSystem.Core.Configuration;
 using Friflo.Engine.ECS;
 
+/// <summary>
+/// Generic audio cue selection system that uses configuration to map world state to audio cues.
+/// </summary>
 public sealed class AudioCueSystem : IECSSystem
 {
     private readonly global::WorldState.WorldState _worldState;
+    private readonly ICueSelectionConfiguration _configuration;
 
-    public AudioCueSystem(global::WorldState.WorldState worldState)
+    /// <summary>
+    /// Creates a new AudioCueSystem with the specified configuration.
+    /// </summary>
+    /// <param name="worldState">The world state to read from.</param>
+    /// <param name="configuration">The configuration for cue selection logic.</param>
+    public AudioCueSystem(global::WorldState.WorldState worldState, ICueSelectionConfiguration configuration)
     {
         _worldState = worldState;
+        _configuration = configuration;
     }
 
+    /// <summary>
+    /// Gets the system priority. Lower numbers execute first.
+    /// </summary>
     public int Priority => 12;
 
+    /// <summary>
+    /// Updates audio state for all entities with AudioStateComponent.
+    /// </summary>
+    /// <param name="world">The entity store to process.</param>
+    /// <param name="deltaTime">Time elapsed since last update in seconds.</param>
     public void Update(EntityStore world, float deltaTime)
     {
-        bool isNight = _worldState.GetValue("time.is_night") as bool? ?? false;
-        string eventKind = _worldState.GetValue("narrative.active_event_kind") as string ?? string.Empty;
-        int completedTasks = GetInt(_worldState.GetValue("task.completed_last_frame"));
+        bool isNight = _configuration.IsNight(_worldState);
+        string eventKind = _configuration.GetEventKind(_worldState);
+        int completedTasks = _configuration.GetCompletedTasks(_worldState);
+        float currentTime = _configuration.GetTotalTimeHours(_worldState) * 3600.0f; // Convert hours to seconds
 
-        ArchetypeQuery<AudioStateComponent> query = world.Query<AudioStateComponent>();
-        foreach (Entity entity in query.Entities)
+        // Query for entities with AudioStateComponent
+        var audioQuery = world.Query<AudioStateComponent>();
+        foreach (Entity entity in audioQuery.Entities)
         {
             ref AudioStateComponent audio = ref entity.GetComponent<AudioStateComponent>();
-            audio.CurrentAmbientTrack = isNight ? "forest_night" : "forest_day";
-            audio.CurrentMusicTrack = string.Equals(eventKind, "ThreatPressure", System.StringComparison.Ordinal)
-                ? "tension"
-                : string.Equals(eventKind, "Opportunity", System.StringComparison.Ordinal)
-                    ? "curious_exploration"
-                    : "exploration";
 
-            if (completedTasks > 0)
+            // Update ambient track immediately (no cooldown)
+            audio.CurrentAmbientTrack = _configuration.SelectAmbientTrack(isNight);
+
+            // Check if this entity has a music cooldown component
+            bool hasCooldown = entity.HasComponent<MusicCooldownComponent>();
+
+            // Determine desired music track
+            string desiredMusicTrack = _configuration.SelectMusicTrack(eventKind);
+
+            if (hasCooldown)
             {
-                EnqueueCue(ref audio, "task_complete");
+                // Use cooldown logic
+                ref MusicCooldownComponent cooldown = ref entity.GetComponent<MusicCooldownComponent>();
+                bool canChangeMusic = (currentTime - cooldown.LastMusicChangeTime) >= cooldown.MusicChangeCooldown;
+
+                // Only change music if cooldown has passed and track is different
+                if (canChangeMusic && audio.CurrentMusicTrack != desiredMusicTrack)
+                {
+                    audio.CurrentMusicTrack = desiredMusicTrack;
+                    cooldown.LastMusicChangeTime = currentTime;
+                }
+                // During cooldown, keep current music track (don't update CurrentMusicTrack)
+            }
+            else
+            {
+                // No cooldown - change immediately
+                audio.CurrentMusicTrack = desiredMusicTrack;
             }
 
+            // Enqueue task completion cue
+            string? taskCompleteCue = _configuration.SelectTaskCompleteCue();
+            if (completedTasks > 0 && taskCompleteCue != null)
+            {
+                EnqueueCue(ref audio, taskCompleteCue);
+            }
+
+            // Enqueue event change cue
             if (eventKind != audio.LastObservedEventKind)
             {
-                if (string.Equals(eventKind, "ResourceScarcity", System.StringComparison.Ordinal))
+                string? eventChangeCue = _configuration.SelectEventChangeCue(eventKind);
+                if (eventChangeCue != null)
                 {
-                    EnqueueCue(ref audio, "resource_warning");
-                }
-                else if (string.Equals(eventKind, "ThreatPressure", System.StringComparison.Ordinal))
-                {
-                    EnqueueCue(ref audio, "danger_sting");
+                    EnqueueCue(ref audio, eventChangeCue);
                 }
             }
 
-            while (audio.PendingCues.Count > 2)
+            // Limit pending cues
+            while (audio.PendingCues.Count > _configuration.MaxPendingCues)
             {
                 audio.PendingCues.Dequeue();
             }
 
+            // Update last cue and event kind
             audio.LastCue = audio.PendingCues.Count > 0 ? audio.PendingCues.Peek() : string.Empty;
             audio.LastObservedEventKind = eventKind;
+
+            // Publish audio state to world state
             _worldState.SetValue("audio.ambient", audio.CurrentAmbientTrack);
             _worldState.SetValue("audio.music", audio.CurrentMusicTrack);
             _worldState.SetValue("audio.last_cue", audio.LastCue);
@@ -68,16 +116,5 @@ public sealed class AudioCueSystem : IECSSystem
     {
         audio.PendingCues.Enqueue(cueId);
         audio.CueVersion++;
-    }
-
-    private static int GetInt(object? value)
-    {
-        return value switch
-        {
-            int integer => integer,
-            float single => (int)single,
-            double dbl => (int)dbl,
-            _ => 0
-        };
     }
 }
