@@ -1,6 +1,4 @@
-﻿namespace AudioSystem.Core.Systems;
-
-using MoonBark.Core.ECS;
+namespace AudioSystem.Core.Systems;
 
 using AudioSystem.Core.Components;
 using AudioSystem.Core.Configuration;
@@ -9,7 +7,7 @@ using Friflo.Engine.ECS;
 /// <summary>
 /// Generic audio cue selection system that uses configuration to map world state to audio cues.
 /// </summary>
-public sealed class AudioCueSystem : IECSSystem
+public sealed class AudioCueSystem
 {
     private readonly global::WorldState.WorldState _worldState;
     private readonly ICueSelectionConfiguration _configuration;
