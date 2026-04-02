@@ -12,7 +12,6 @@ using YamlDotNet.Serialization.NamingConventions;
 public static class AudioConfigLoader
 {
     private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.yaml";
-    private const string LocalAudioConfigPath = "Assets/Audio/audio_config.yaml";
 
     /// <summary>
     /// Resolves the audio configuration path by walking up from the supplied or default roots.
@@ -25,22 +24,14 @@ public static class AudioConfigLoader
 
         if (!string.IsNullOrWhiteSpace(startDirectory))
         {
-            candidateRoots.Add(startDirectory);
+            candidateRoots.Add(Path.GetFullPath(startDirectory));
         }
-        else
-        {
-            candidateRoots.Add(AppContext.BaseDirectory);
-            candidateRoots.Add(Environment.CurrentDirectory);
-        }
+
+        candidateRoots.Add(AppContext.BaseDirectory);
+        candidateRoots.Add(Environment.CurrentDirectory);
 
         foreach (string root in candidateRoots)
         {
-            string localCandidate = Path.Combine(Path.GetFullPath(root), LocalAudioConfigPath.Replace('/', Path.DirectorySeparatorChar));
-            if (File.Exists(localCandidate))
-            {
-                return localCandidate;
-            }
-
             string? current = Path.GetFullPath(root);
             while (!string.IsNullOrWhiteSpace(current))
             {
@@ -51,7 +42,7 @@ public static class AudioConfigLoader
                 }
 
                 DirectoryInfo? parent = Directory.GetParent(current);
-                if (parent == null)
+                if (parent is null)
                 {
                     break;
                 }
@@ -60,7 +51,8 @@ public static class AudioConfigLoader
             }
         }
 
-        throw new FileNotFoundException($"Audio config file not found. Expected to locate {RelativeAudioConfigPath} from {startDirectory ?? AppContext.BaseDirectory}.");
+        throw new FileNotFoundException(
+            $"Audio config file not found. Expected to locate {RelativeAudioConfigPath} from {startDirectory ?? AppContext.BaseDirectory}.");
     }
 
     /// <summary>
@@ -77,6 +69,7 @@ public static class AudioConfigLoader
         }
 
         string yaml = File.ReadAllText(resolvedPath);
+
         IDeserializer deserializer = new DeserializerBuilder()
             .WithNamingConvention(UnderscoredNamingConvention.Instance)
             .IgnoreUnmatchedProperties()
@@ -99,14 +92,26 @@ public static class AudioConfigLoader
     /// <returns>The absolute audio root path.</returns>
     public static string ResolveAudioRootPath(AudioConfigDocument config, string? configPath = null)
     {
-        if (Path.IsPathRooted(config.AudioRootPath))
+        string resolvedConfigPath = configPath ?? ResolveConfigPath();
+        return ResolveConfigRootPath(config.AudioRootPath, resolvedConfigPath);
+    }
+
+    /// <summary>
+    /// Resolves the root path from a configuration object. If the root path is relative,
+    /// it is resolved against the directory containing the config file.
+    /// </summary>
+    /// <param name="rootPath">The root path string from the config (may be relative or absolute).</param>
+    /// <param name="configFilePath">The full path to the config file (used to resolve relative roots).</param>
+    /// <returns>The absolute resolved root path.</returns>
+    public static string ResolveConfigRootPath(string rootPath, string configFilePath)
+    {
+        if (Path.IsPathRooted(rootPath))
         {
-            return Path.GetFullPath(config.AudioRootPath);
+            return Path.GetFullPath(rootPath);
         }
 
-        string resolvedConfigPath = configPath ?? ResolveConfigPath();
-        string configDirectory = Path.GetDirectoryName(resolvedConfigPath) ?? AppContext.BaseDirectory;
-        return Path.GetFullPath(Path.Combine(configDirectory, NormalizeConfigPath(config.AudioRootPath)));
+        string configDirectory = Path.GetDirectoryName(configFilePath) ?? AppContext.BaseDirectory;
+        return Path.GetFullPath(Path.Combine(configDirectory, NormalizeConfigPath(rootPath)));
     }
 
     /// <summary>
@@ -116,7 +121,10 @@ public static class AudioConfigLoader
     /// <param name="relativePaths">The relative path collection to expand.</param>
     /// <param name="configPath">An optional explicit config path.</param>
     /// <returns>A collection with absolute resolved paths.</returns>
-    public static AudioPathCollection BuildAbsolutePathMap(AudioConfigDocument config, AudioPathCollection relativePaths, string? configPath = null)
+    public static AudioPathCollection BuildAbsolutePathMap(
+        AudioConfigDocument config,
+        AudioPathCollection relativePaths,
+        string? configPath = null)
     {
         string audioRootPath = ResolveAudioRootPath(config, configPath);
         AudioPathCollection collection = new();
@@ -145,12 +153,7 @@ public static class AudioConfigLoader
         return collection;
     }
 
-    /// <summary>
-    /// Normalizes a configuration path to the current platform separator.
-    /// </summary>
-    /// <param name="path">The path to normalize.</param>
-    /// <returns>The normalized path.</returns>
-    public static string NormalizeConfigPath(string path)
+    private static string NormalizeConfigPath(string path)
     {
         return path.Replace('/', Path.DirectorySeparatorChar);
     }
