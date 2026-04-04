@@ -9,7 +9,8 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <AssemblyName>AudioSystem.Godot</AssemblyName>
     <RootNamespace>AudioSystem.Godot</RootNamespace>
-    <OutputPath>.godot/mono/temp/bin/$(Configuration)\</OutputPath>
+    <OutputPath>bin/Debug/net8.0/</OutputPath>
+    <UseExportedPluginDlls>true</UseExportedPluginDlls>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

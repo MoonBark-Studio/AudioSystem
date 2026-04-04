@@ -1,0 +1,28 @@
+{
+  "source_pack": {
+    "name": "Test Audio Pack",
+    "source_url": "https://example.com/audio",
+    "license_name": "CC0-1.0",
+    "license_summary": "Public domain",
+    "notes": "Synthetic test data — no real audio files needed"
+  },
+  "audio_root_path": "test_fixtures",
+  "cues": {
+    "footstep_stone": "sfx/footstep_stone.ogg",
+    "footstep_grass": "sfx/footstep_grass.ogg",
+    "ui_click": "sfx/ui_click.ogg",
+    "coin_pickup": "sfx/coin_pickup.ogg",
+    "buff_apply": "sfx/buff_apply.ogg",
+    "harvest_ready": "sfx/harvest_ready.ogg"
+  },
+  "music": {
+    "main_theme": "music/main_theme.ogg",
+    "peaceful_morning": "music/peaceful_morning.ogg",
+    "tense_evening": "music/tense_evening.ogg"
+  },
+  "ambient": {
+    "forest_day": "ambient/forest_day.ogg",
+    "rain_heavy": "ambient/rain_heavy.ogg",
+    "fire_crackle": "ambient/fire_crackle.ogg"
+  }
+}

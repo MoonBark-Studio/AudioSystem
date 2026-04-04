@@ -5,7 +5,7 @@ A reusable world-state-driven audio orchestration plugin for Godot games.
 ## Includes
 - `AudioCueSystem` for ECS-driven cue selection
 - `GodotAudioManager` for Godot playback
-- YAML-backed audio configuration loading
+- JSON-backed audio configuration loading (`.json` format, snake_case keys)
 - `AudioStateComponent` for runtime state
 
 ## Godot Audio Manager Contract
@@ -16,7 +16,6 @@ A reusable world-state-driven audio orchestration plugin for Godot games.
 ## Dependencies
 - `WorldState`
 - `Friflo.Engine.ECS`
-- `YamlDotNet`
 - `GodotSharp` for Godot integration
 
 ## World State Contract

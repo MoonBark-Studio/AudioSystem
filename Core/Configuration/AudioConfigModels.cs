@@ -2,54 +2,44 @@ namespace AudioSystem.Core.Configuration;
 
 using System;
 using System.Collections.Generic;
-using YamlDotNet.Serialization;
+using System.Text.Json.Serialization;
 
 /// <summary>
-/// Represents the root audio configuration document loaded from YAML.
+/// Represents the root audio configuration document loaded from JSON.
 /// </summary>
 public sealed class AudioConfigDocument
 {
-    /// <summary>
-    /// Gets or sets the source pack metadata for the configured audio assets.
-    /// </summary>
+    [JsonPropertyName("source_pack")]
     public AudioSourceConfig SourcePack { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets the root path containing the configured audio assets.
-    /// </summary>
+    [JsonPropertyName("audio_root_path")]
     public string AudioRootPath { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or sets the cue mappings used for YAML deserialization.
-    /// </summary>
-    [YamlMember(Alias = "cues")]
+    [JsonPropertyName("cues")]
     public Dictionary<string, string> CuesDict { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets the music mappings used for YAML deserialization.
-    /// </summary>
-    [YamlMember(Alias = "music")]
+    [JsonPropertyName("music")]
     public Dictionary<string, string> MusicDict { get; set; } = new();
 
-    /// <summary>
-    /// Gets or sets the ambient mappings used for YAML deserialization.
-    /// </summary>
-    [YamlMember(Alias = "ambient")]
+    [JsonPropertyName("ambient")]
     public Dictionary<string, string> AmbientDict { get; set; } = new();
 
     /// <summary>
     /// Gets the type-safe cue mappings.
     /// </summary>
+    [JsonIgnore]
     public AudioPathCollection Cues => AudioPathCollection.FromDictionary(CuesDict);
 
     /// <summary>
     /// Gets the type-safe music mappings.
     /// </summary>
+    [JsonIgnore]
     public AudioPathCollection Music => AudioPathCollection.FromDictionary(MusicDict);
 
     /// <summary>
     /// Gets the type-safe ambient mappings.
     /// </summary>
+    [JsonIgnore]
     public AudioPathCollection Ambient => AudioPathCollection.FromDictionary(AmbientDict);
 }
 
@@ -155,28 +145,18 @@ public sealed class AudioPathCollection
 /// </summary>
 public sealed class AudioSourceConfig
 {
-    /// <summary>
-    /// Gets or sets the source pack display name.
-    /// </summary>
+    [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or sets the source URL for the pack.
-    /// </summary>
+    [JsonPropertyName("source_url")]
     public string SourceUrl { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or sets the license name.
-    /// </summary>
+    [JsonPropertyName("license_name")]
     public string LicenseName { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or sets the short license summary.
-    /// </summary>
+    [JsonPropertyName("license_summary")]
     public string LicenseSummary { get; set; } = string.Empty;
 
-    /// <summary>
-    /// Gets or sets implementation notes for the pack.
-    /// </summary>
+    [JsonPropertyName("notes")]
     public string Notes { get; set; } = string.Empty;
 }

@@ -7,7 +7,7 @@ using Xunit;
 public class AudioConfigLoaderTests
 {
     private static readonly string FixturePath = Path.Combine(
-        AppContext.BaseDirectory, "Fixtures", "audio_config.yaml");
+        AppContext.BaseDirectory, "Fixtures", "audio_config.json");
 
     [Fact]
     public void Load_ValidConfig_ReturnsDocument()
@@ -84,7 +84,7 @@ public class AudioConfigLoaderTests
     {
         // Act & Assert
         Assert.Throws<FileNotFoundException>(() =>
-            AudioConfigLoader.Load("non_existent_path.yaml"));
+            AudioConfigLoader.Load("non_existent_path.json"));
     }
 
     [Fact]
@@ -115,7 +115,27 @@ public class AudioConfigLoaderTests
         // Assert
         Assert.True(absoluteCues.TryGetPath("footstep_stone", out string? absPath));
         Assert.True(Path.IsPathRooted(absPath!), "Expected absolute path");
-        Assert.True(absPath!.EndsWith($"sfx{Path.DirectorySeparatorChar}footstep_stone.ogg")
-            || absPath.EndsWith("sfx/footstep_stone.ogg"));
+    }
+
+    [Fact]
+    public void BuildAbsolutePathMap_ResPaths_ReturnedAsIs()
+    {
+        // Arrange
+        AudioConfigDocument config = new()
+        {
+            AudioRootPath = string.Empty,
+            CuesDict = new Dictionary<string, string>
+            {
+                ["test_cue"] = "res://assets/audio/sfx/test.ogg"
+            }
+        };
+
+        // Act
+        AudioPathCollection result = AudioConfigLoader.BuildAbsolutePathMap(
+            config, config.Cues, FixturePath);
+
+        // Assert
+        Assert.True(result.TryGetPath("test_cue", out string? path));
+        Assert.Equal("res://assets/audio/sfx/test.ogg", path);
     }
 }

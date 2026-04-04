@@ -3,15 +3,17 @@ namespace AudioSystem.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 /// <summary>
-/// Loads and resolves YAML-backed audio configuration documents.
+/// Loads and resolves JSON-backed audio configuration documents.
+/// Supports both absolute resource paths (res://) and relative file paths.
+/// YAML loading has been removed — config files should use JSON format.
 /// </summary>
 public static class AudioConfigLoader
 {
-    private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.yaml";
+    private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.json";
 
     /// <summary>
     /// Resolves the audio configuration path by walking up from the supplied or default roots.
@@ -56,7 +58,7 @@ public static class AudioConfigLoader
     }
 
     /// <summary>
-    /// Loads and deserializes an audio configuration document.
+    /// Loads and deserializes an audio configuration document from JSON.
     /// </summary>
     /// <param name="configPath">An optional explicit config path.</param>
     /// <returns>The parsed audio configuration document.</returns>
@@ -68,21 +70,28 @@ public static class AudioConfigLoader
             throw new FileNotFoundException($"Audio config file not found: {resolvedPath}", resolvedPath);
         }
 
-        string yaml = File.ReadAllText(resolvedPath);
+        string json = File.ReadAllText(resolvedPath);
 
-        IDeserializer deserializer = new DeserializerBuilder()
-            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-            .IgnoreUnmatchedProperties()
-            .Build();
+        // Handle BOM
+        if (json.Length > 0 && json[0] == '\uFEFF')
+        {
+            json = json[1..];
+        }
 
-        AudioConfigDocument? config = deserializer.Deserialize<AudioConfigDocument>(yaml);
-        if (config is null || string.IsNullOrWhiteSpace(config.AudioRootPath))
+        AudioConfigDocument? config = JsonSerializer.Deserialize<AudioConfigDocument>(json, JsonOptions);
+        if (config is null)
         {
             throw new InvalidOperationException($"Audio config at {resolvedPath} is missing required mappings.");
         }
 
         return config;
     }
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+    };
 
     /// <summary>
     /// Resolves the absolute audio root path for a configuration document.
@@ -105,6 +114,11 @@ public static class AudioConfigLoader
     /// <returns>The absolute resolved root path.</returns>
     public static string ResolveConfigRootPath(string rootPath, string configFilePath)
     {
+        if (string.IsNullOrWhiteSpace(rootPath))
+        {
+            return Path.GetDirectoryName(configFilePath) ?? AppContext.BaseDirectory;
+        }
+
         if (Path.IsPathRooted(rootPath))
         {
             return Path.GetFullPath(rootPath);
@@ -116,6 +130,8 @@ public static class AudioConfigLoader
 
     /// <summary>
     /// Builds a collection containing absolute paths for all configured audio entries.
+    /// Supports res:// resource paths (returned as-is) and relative file paths
+    /// (resolved against the audio root path from the config).
     /// </summary>
     /// <param name="config">The source configuration.</param>
     /// <param name="relativePaths">The relative path collection to expand.</param>
@@ -143,6 +159,13 @@ public static class AudioConfigLoader
                 continue;
             }
 
+            // res:// and user:// paths are Godot resource paths — return as-is
+            if (IsGodotResourcePath(relativePath))
+            {
+                collection.Add(cueId, relativePath);
+                continue;
+            }
+
             string absolutePath = Path.IsPathRooted(relativePath)
                 ? Path.GetFullPath(relativePath)
                 : Path.GetFullPath(Path.Combine(audioRootPath, NormalizeConfigPath(relativePath)));
@@ -151,6 +174,12 @@ public static class AudioConfigLoader
         }
 
         return collection;
+    }
+
+    private static bool IsGodotResourcePath(string path)
+    {
+        return path.StartsWith("res://", StringComparison.OrdinalIgnoreCase)
+            || path.StartsWith("user://", StringComparison.OrdinalIgnoreCase);
     }
 
     private static string NormalizeConfigPath(string path)

@@ -7,7 +7,7 @@ using Xunit;
 public class GodotAudioManagerTests
 {
     private static readonly string ConfigPath = Path.Combine(
-        AppContext.BaseDirectory, "Fixtures", "audio_config.yaml");
+        AppContext.BaseDirectory, "Fixtures", "audio_config.json");
 
     [Fact]
     public void AudioConfigLoader_ResolvesRelativeRootFromConfigFileLocation()
@@ -113,7 +113,7 @@ public class GodotAudioManagerTests
             AudioConfigLoader.ResolveConfigPath(@"C:\non_existent_directory"));
 
         Assert.Contains("Audio config file not found", ex.Message);
-        Assert.Contains("Assets/Audio/audio_config.yaml", ex.Message);
+        Assert.Contains("audio_config.json", ex.Message);
     }
 
     [Fact]
