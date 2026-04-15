@@ -19,6 +19,7 @@ public partial class GodotAudioManager : Node
     private const float DefaultMusicVolume = 0.0f;
     private const float DefaultAmbientVolume = -10.0f;
     private const int OneShotPoolMaxSize = 32;  // MoonBark Idle target; covers virtually all concurrent needs
+    private const float FadeEpsilon = 0.001f;
 
     private readonly AudioPathCollection _cuePaths = new();
     private readonly AudioPathCollection _musicPaths = new();
@@ -171,13 +172,13 @@ public partial class GodotAudioManager : Node
         float deltaSec = (float)delta;
 
         // Fade music player
-        if (_musicPlayer != null && (_musicFadingIn || Math.Abs(_musicPlayer.VolumeDb - GetEffectiveMusicVolumeDb()) > 0.001f))
+        if (_musicPlayer != null && (_musicFadingIn || Math.Abs(_musicPlayer.VolumeDb - GetEffectiveMusicVolumeDb()) > FadeEpsilon))
         {
             float targetDb = GetEffectiveMusicVolumeDb();
             if (_musicFadingIn)
             {
                 _musicPlayer.VolumeDb = Mathf.MoveToward(_musicPlayer.VolumeDb, targetDb, _musicFadeRate * deltaSec);
-                if (Math.Abs(_musicPlayer.VolumeDb - targetDb) < 0.001f)
+                if (Math.Abs(_musicPlayer.VolumeDb - targetDb) < FadeEpsilon)
                 {
                     _musicFadingIn = false;
                 }
@@ -190,13 +191,13 @@ public partial class GodotAudioManager : Node
         }
 
         // Fade ambient player
-        if (_ambientPlayer != null && (_ambientFadingIn || Math.Abs(_ambientPlayer.VolumeDb - GetEffectiveAmbientVolumeDb()) > 0.001f))
+        if (_ambientPlayer != null && (_ambientFadingIn || Math.Abs(_ambientPlayer.VolumeDb - GetEffectiveAmbientVolumeDb()) > FadeEpsilon))
         {
             float targetDb = GetEffectiveAmbientVolumeDb();
             if (_ambientFadingIn)
             {
                 _ambientPlayer.VolumeDb = Mathf.MoveToward(_ambientPlayer.VolumeDb, targetDb, _ambientFadeRate * deltaSec);
-                if (Math.Abs(_ambientPlayer.VolumeDb - targetDb) < 0.001f)
+                if (Math.Abs(_ambientPlayer.VolumeDb - targetDb) < FadeEpsilon)
                 {
                     _ambientFadingIn = false;
                 }
@@ -213,7 +214,7 @@ public partial class GodotAudioManager : Node
         {
             string cueId = _pendingMusicCueId;
             _pendingMusicCueId = null;
-            PlayLoopInternal(_musicPlayer, cueId, _musicPaths);
+            PlayLoop(_musicPlayer, cueId, _musicPaths);
             _musicFadingIn = true;
         }
 
@@ -221,14 +222,14 @@ public partial class GodotAudioManager : Node
         {
             string cueId = _pendingAmbientCueId;
             _pendingAmbientCueId = null;
-            PlayLoopInternal(_ambientPlayer, cueId, _ambientPaths);
+            PlayLoop(_ambientPlayer, cueId, _ambientPaths);
             _ambientFadingIn = true;
         }
     }
 
     private bool IsPlayerFadingToward(AudioStreamPlayer player, float targetDb)
     {
-        return Math.Abs(player.VolumeDb - targetDb) > 0.001f;
+        return Math.Abs(player.VolumeDb - targetDb) > FadeEpsilon;
     }
 
     private float GetEffectiveMusicVolumeDb()
@@ -286,7 +287,7 @@ public partial class GodotAudioManager : Node
             _musicFadingIn = true;
             _musicFadeRate = 1.0f / fadeDurationSec;
             // Start at silence and fade in
-            _musicPlayer.VolumeDb = DefaultMusicVolume + LinearToDb(_masterVolume * _musicVolume * 0.001f);
+            _musicPlayer.VolumeDb = DefaultMusicVolume + LinearToDb(_masterVolume * _musicVolume * FadeEpsilon);
         }
     }
 
@@ -326,7 +327,7 @@ public partial class GodotAudioManager : Node
             PlayLoop(_ambientPlayer, cueId, _ambientPaths);
             _ambientFadingIn = true;
             _ambientFadeRate = 1.0f / fadeDurationSec;
-            _ambientPlayer.VolumeDb = DefaultAmbientVolume + LinearToDb(_masterVolume * _ambientVolume * 0.001f);
+            _ambientPlayer.VolumeDb = DefaultAmbientVolume + LinearToDb(_masterVolume * _ambientVolume * FadeEpsilon);
         }
     }
 
@@ -463,26 +464,6 @@ public partial class GodotAudioManager : Node
     }
 
     private void PlayLoop(AudioStreamPlayer player, string cueId, AudioPathCollection mapping)
-    {
-        player.Stop();
-        player.Stream = null;
-
-        if (string.IsNullOrWhiteSpace(cueId) || !mapping.TryGetPath(cueId, out string? path) || !CanResolveAudioPath(path))
-        {
-            return;
-        }
-
-        AudioStream? stream = LoadAudioStream(path);
-        if (stream == null)
-        {
-            return;
-        }
-
-        player.Stream = stream;
-        player.Play();
-    }
-
-    private void PlayLoopInternal(AudioStreamPlayer player, string cueId, AudioPathCollection mapping)
     {
         player.Stop();
         player.Stream = null;
