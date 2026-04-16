@@ -42,7 +42,7 @@
 | Check | Status | Notes |
 |-------|--------|-------|
 | Build | ✅ PASS | AudioSystem.Core — 0 errors |
-| Tests | ✅ 2 files | GodotAudioManagerTests, AudioConfigLoaderTests |
+| Tests | ✅ 47 tests | 3 test files (AudioConfigLoaderTests, AudioConfigModelsTests, GodotAudioManagerTests) |
 
 ---
 
