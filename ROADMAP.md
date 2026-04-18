@@ -14,7 +14,9 @@
 
 ## Changelog
 ### 2026-04-17
-- Audit run — 3 total issues (2 changed files)
+- Audit run — 3 total issues (9 changed files)
+- ECS violations: 0
+- Framework bridge gaps: 0
 
 ### v0.0.1
-- Initial trio created by golden_trio_cron
+- Initial trio created by golden_trio_cron v2

@@ -127,6 +127,7 @@ public partial class GodotAudioManager : Node
     // REVIEW: ex.Message
     // REVIEW: ex.Message
     // REVIEW: ex.Message
+    // REVIEW: ex.Message
     _logger?.LogWarning(ex, "Unhandled exception");
     GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message
 }");
@@ -618,6 +619,7 @@ public partial class GodotAudioManager : Node
             return null;
         }
         catch (Exception ex) { // REVIEW: ex.Message
+    // REVIEW: ex.Message
     // REVIEW: ex.Message
     // REVIEW: ex.Message
     // REVIEW: ex.Message
