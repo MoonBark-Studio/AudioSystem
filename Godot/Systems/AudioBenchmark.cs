@@ -19,9 +19,11 @@ using System.Diagnostics;
 public partial class AudioBenchmark : Node
 {
     // ─── Benchmark Configuration ─────────────────────────────────────────────
-    private const int PoolMaxSize     = LargeChannels;
-    private const int GeneratorPoolSize = MaxChannels;
+    private const int PoolMaxSize     = 32;
+    private const int GeneratorPoolSize = 64;
     private const int WarmupIterations = 5;
+    private const int StandardSampleRate = 44100;
+    private const float SineFrequency = 440.0f;
     private static readonly int[] ConcurrentLevels = { 10, 50, 100, 500 };
 
     // ─── UI References ─────────────────────────────────────────────────────────
@@ -30,7 +32,7 @@ public partial class AudioBenchmark : Node
 
     // ─── Audio Resources ───────────────────────────────────────────────────────
     // Primary: synthetic generator (self-contained, no file dependency)
-    // Fallback: audio file from GridPlacement demos
+    // Fallback: audio file from MoonBark.GridPlacement demos
     private AudioStream? _testStream;
     private string _demoStreamPath = "res://demos/shared/assets/audio/sfx/workshopsfx_gamesupply/build_place_pkg2_33.mp3";
 
@@ -81,14 +83,12 @@ public partial class AudioBenchmark : Node
 
     public AudioBenchmark()
     {
-        // Pre-compute sine sample buffer once (440 Hz, 0.1 s at 44100 Hz)
-        const int sampleRate = 44100;
-        const float freq = 440.0f;
-        int count = sampleRate / 10;
+        // Pre-compute sine sample buffer once (440 Hz, 0.1 s at StandardSampleRate)
+        int count = StandardSampleRate / 10;
         _sineSamples = new float[count];
         for (int i = 0; i < count; i++)
         {
-            _sineSamples[i] = Mathf.Sin(2.0f * Mathf.Pi * freq * ((float)i / sampleRate)) * 0.5f;
+            _sineSamples[i] = Mathf.Sin(2.0f * Mathf.Pi * SineFrequency * ((float)i / StandardSampleRate)) * 0.5f;
         }
         _sineCursor = 0;
     }
@@ -143,7 +143,7 @@ public partial class AudioBenchmark : Node
         {
             var gen = new AudioStreamGenerator();
             gen.BufferLength = 0.05f; // 50 ms
-            gen.MixRate = 44100;
+            gen.MixRate = StandardSampleRate;
             return gen;
         }
         catch (InvalidOperationException ex)
@@ -331,7 +331,7 @@ public partial class AudioBenchmark : Node
             // Get the playback and push one frame (stereo = 2 samples)
             // AudioStreamGeneratorPlayback.PushFrame(float[] frames) takes a stereo sample pair
             // The number of frames to push per call is determined by the buffer size.
-            // We push 512 stereo frames (Kilobyte mono samples) per call to keep it simple.
+            // We push 512 stereo frames (1024 mono samples) per call to keep it simple.
             const int framesPerPush = 512;
             var buf = new float[framesPerPush * 2]; // stereo
 
@@ -585,7 +585,7 @@ public partial class AudioBenchmark : Node
 
         Log("\n[Approach D: AudioStreamGenerator + PushFrame()]");
         Log("  Instantiation time : O(μs) — same as pool, but NO AudioStreamPlayer node needed");
-        Log("  Concurrent limit   : GeneratorPoolSize (hard cap, ~MaxChannels on desktop)");
+        Log("  Concurrent limit   : GeneratorPoolSize (hard cap, ~64 on desktop)");
         Log("  GC pressure        : VERY LOW — just an int index, no managed audio objects");
         Log("  CPU overhead       : Higher than pool — PushFrame() must be called per-frame");
         Log("                       per active sound. At 500 concurrent = 500 PushFrame calls/frame.");
@@ -596,12 +596,12 @@ public partial class AudioBenchmark : Node
         Log($"\n{'=',60}");
         Log("RECOMMENDATION FOR MOONBARK IDLE:");
         Log("  → Use APPROACH B (Pooled) as the primary system.");
-        Log("    Pool size LargeChannels–MaxChannels covers virtually all idle game concurrent needs.");
+        Log("    Pool size 32–64 covers virtually all idle game concurrent needs.");
         Log("    Zero GC pressure, deterministic, fast, easy to audit/limit volume.");
         Log("");
-        Log("  → If you ever need >MaxChannels concurrent sounds (e.g., particle burst audio),");
+        Log("  → If you ever need >64 concurrent sounds (e.g., particle burst audio),");
         Log("    add a secondary Approach D layer (Generator pool) that activates when");
-        Log("    Approach B's pool is full. Or simply cap the pool at MaxChannels and accept");
+        Log("    Approach B's pool is full. Or simply cap the pool at 64 and accept");
         Log("    that extreme bursts get quiet-dropped (standard game audio practice).");
         Log($"\n{'=',60}");
 

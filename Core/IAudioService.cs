@@ -1,4 +1,4 @@
-namespace AudioSystem.Core;
+namespace MoonBark.AudioSystem.Core;
 
 /// <summary>
 /// Core audio service interface — pure C#, no engine dependencies.

@@ -1,7 +1,7 @@
-using AudioSystem.Core;
+using MoonBark.AudioSystem.Core;
 using MoonBark.Framework.Core;
 
-namespace AudioSystem;
+namespace MoonBark.AudioSystem;
 
 /// <summary>
 /// Registers AudioSystem's services with the Framework module registry.

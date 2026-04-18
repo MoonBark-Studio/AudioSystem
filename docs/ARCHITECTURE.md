@@ -22,7 +22,7 @@ Every plugin follows this two-layer pattern:
 - Signal bus: inherits from `RefCounted`, can emit Godot `[Signal]` attributes, callable from GDScript
 - Bridge: signal bus subscribes to core events and re-emits them as Godot signals
 
-**Reference implementation:** `GridPlacement.Godot.Events.PlacementSignalBus` — the canonical example.
+**Reference implementation:** `MoonBark.GridPlacement.Godot.Events.PlacementSignalBus` — the canonical example.
 
 ---
 
@@ -31,7 +31,7 @@ Every plugin follows this two-layer pattern:
 | Plugin | Path | Status | Events |
 |--------|------|--------|--------|
 | **WorldTime** | `WorldTime.Godot.Events.WorldTimeSignalBus` | ⚠️ Stub — signals defined but `Publish()` methods are no-ops. Core `WorldTimeEventBus` exists but is not bridged. | `TimeAdvancedSignal`, `DateChangedSignal`, `TimeOfDayChangedSignal`, `WorldAgeChangedSignal` |
-| **GridPlacement** | `GridPlacement.Godot.Events.PlacementSignalBus` | ✅ Full implementation | `PlacementSuccessSignal`, `PlacementFailedSignal`, `PlacementValidatedSignal`, `PlaceableSelectedSignal`, `PlacementCancelledSignal` |
+| **MoonBark.GridPlacement** | `MoonBark.GridPlacement.Godot.Events.PlacementSignalBus` | ✅ Full implementation | `PlacementSuccessSignal`, `PlacementFailedSignal`, `PlacementValidatedSignal`, `PlaceableSelectedSignal`, `PlacementCancelledSignal` |
 | **Wiring** | `Wiring.Core.Events.FrameworkEventBus` | ⚠️ Static generic bus — not a Godot signal bus. No Godot-level bridge. | Generic `Action<T>` — typed events via `QuestEvents`, `ItemPickupEvent`, etc. |
 | **EntityStats** | `EntityStats.Core.Events.DamageEvents` | Pure C# events only — no Godot signal bus | `DamageEvent`, `DeathEvent` |
 | **Inventory** | `Inventory.Core.Events.InventoryEvents` | Pure C# events only — no Godot signal bus | `ItemAddedEvent`, `ItemRemovedEvent`, `ItemMovedEvent`, etc. |

@@ -1,11 +1,11 @@
-using AudioSystem.Core.Configuration;
+using MoonBark.AudioSystem.Core.Configuration;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace AudioSystem.Godot.Systems;
+namespace MoonBark.AudioSystem.Godot.Systems;
 
 /// <summary>
 /// Godot audio manager that plays music, ambient, and one-shot audio cues via direct method calls.

@@ -1,6 +1,6 @@
-namespace AudioSystem.Tests;
+namespace MoonBark.AudioSystem.Tests;
 
-using AudioSystem.Core.Configuration;
+using MoonBark.AudioSystem.Core.Configuration;
 using Xunit;
 
 public class AudioPathCollectionTests

@@ -1,4 +1,4 @@
-namespace AudioSystem.Core.Configuration;
+namespace MoonBark.AudioSystem.Core.Configuration;
 
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@
 ## Overview
 <!-- What this folder contains and its purpose -->
 
-## Key Types (9 files, ~2322 lines)
+## Key Types (9 files, ~2319 lines)
 AudioBenchmark, AudioConfigDocument, AudioConfigDocumentTests, AudioConfigLoader, AudioConfigLoaderTests, AudioPathCollection, AudioPathCollectionTests, AudioSourceConfig, AudioSourceConfigTests, AudioSystemModule, BenchmarkPhase, GodotAudioManager, GodotAudioManagerTests, IAudioService
 
 ## Namespaces
@@ -27,6 +27,6 @@ AudioBenchmark, AudioConfigDocument, AudioConfigDocumentTests, AudioConfigLoader
 <!-- What this module depends on -->
 
 ## Status
-- ✅ Audited: 2026-04-17
-- Changed files this run: 9
-- File count: 9 C# files (~2322 lines)
+- ✅ Audited: 2026-04-18
+- Changed files this run: 0
+- File count: 9 C# files (~2319 lines)

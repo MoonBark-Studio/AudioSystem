@@ -1,4 +1,4 @@
-namespace AudioSystem.Core.Configuration;
+namespace MoonBark.AudioSystem.Core.Configuration;
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 /// <summary>
 /// Loads and resolves JSON-backed audio configuration documents.
 /// Supports both absolute resource paths (res://) and relative file paths.
-/// YAML loading has been removed — config files should use JSON format.
+/// YAML loading has been removed â€” config files should use JSON format.
 /// </summary>
 public static class AudioConfigLoader
 {
@@ -159,7 +159,7 @@ public static class AudioConfigLoader
                 continue;
             }
 
-            // res:// and user:// paths are Godot resource paths — return as-is
+            // res:// and user:// paths are Godot resource paths â€” return as-is
             if (IsGodotResourcePath(relativePath))
             {
                 collection.Add(cueId, relativePath);
