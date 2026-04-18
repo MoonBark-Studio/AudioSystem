@@ -123,14 +123,17 @@ public partial class GodotAudioManager : Node
         {
             GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
         }
-        catch (Exception ex) { // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    _logger?.LogWarning(ex, "Unhandled exception");
-    GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message
-}");
+        catch (FileNotFoundException ex)
+        {
+            GD.PrintErr($"GodotAudioManager: Audio config file not found: {ex.Message}");
+        }
+        catch (IOException ex)
+        {
+            GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message}");
         }
     }
 
@@ -618,15 +621,11 @@ public partial class GodotAudioManager : Node
             GD.PrintErr($"GodotAudioManager: Failed to read audio file '{path}': {ex.Message}");
             return null;
         }
-        catch (Exception ex) { // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    _logger?.LogWarning(ex, "Unhandled exception");
-    GD.PrintErr($"GodotAudioManager: Unexpected error loading audio '{path
-}': {ex.Message}");
+        catch (InvalidOperationException ex)
+        {
+            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio '{path}': {ex.Message}");
             return null;
         }
     }
+}
 }

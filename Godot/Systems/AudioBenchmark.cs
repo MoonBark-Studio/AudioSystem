@@ -146,14 +146,9 @@ public partial class AudioBenchmark : Node
             gen.MixRate = 44100;
             return gen;
         }
-        catch (Exception ex) { // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    // REVIEW: ex.Message
-    _logger?.LogWarning(ex, "Unhandled exception");
-    GD.PushError($"AudioBenchmark: CreateGeneratorStream failed: {ex.Message
-}");
+        catch (InvalidOperationException ex)
+        {
+            GD.PushError($"AudioBenchmark: CreateGeneratorStream failed: {ex.Message}");
             return null!;
         }
     }
