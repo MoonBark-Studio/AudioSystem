@@ -1,31 +1,27 @@
-# AudioSystem Plugin
+# AudioSystem
 
-A reusable world-state-driven audio orchestration plugin for Godot games.
+**Module:** `plugins.AudioSystem`
 
-## Includes
-- `AudioCueSystem` for ECS-driven cue selection
-- `GodotAudioManager` for Godot playback
-- JSON-backed audio configuration loading (`.json` format, snake_case keys)
-- `AudioStateComponent` for runtime state
+## Overview
+<!-- What this folder contains and its purpose -->
 
-## Godot Audio Manager Contract
-- Creates named `MusicPlayer` and `AmbientPlayer` child nodes during `_Ready()`.
-- Mirrors `audio.music`, `audio.ambient`, `audio.last_cue`, and `audio.cue_version` from world state.
-- Loads both Godot resource paths like `res://...` and external `.wav` file paths.
+## Key Types (9 files, ~2313 lines)
+AudioBenchmark, AudioConfigDocument, AudioConfigDocumentTests, AudioConfigLoader, AudioConfigLoaderTests, AudioPathCollection, AudioPathCollectionTests, AudioSourceConfig, AudioSourceConfigTests, AudioSystemModule, BenchmarkPhase, GodotAudioManager, GodotAudioManagerTests, IAudioService
+
+## Namespaces
+- `AudioSystem`
+- `AudioSystem.Core`
+- `AudioSystem.Core.Configuration`
+- `AudioSystem.Godot.Systems`
+- `AudioSystem.Tests`
+
+## Architecture
+<!-- Key components and how they fit together -->
 
 ## Dependencies
-- `WorldState`
-- `Friflo.Engine.ECS`
-- `GodotSharp` for Godot integration
+<!-- What this module depends on -->
 
-## World State Contract
-Reads:
-- `time.is_night`
-- `narrative.active_event_kind`
-- `task.completed_last_frame`
-
-Writes:
-- `audio.ambient`
-- `audio.music`
-- `audio.last_cue`
-- `audio.cue_version`
+## Status
+- ✅ Audited: 2026-04-17
+- Changed files this run: 2
+- File count: 9 C# files (~2313 lines)

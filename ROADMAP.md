@@ -1,48 +1,20 @@
 # AudioSystem — Roadmap
 
-## What's Next
+**Module:** `plugins.AudioSystem`
 
-| Priority | Item | Target | Notes |
-|----------|------|--------|-------|
-| P1 | Add ROADMAP.md | v1.0 | Documentation debt |
-| P2 | Remove debug print in AudioBenchmark | v1.1 | Dead code in production |
-| P2 | Add audio fade/blend transitions | v1.2 | Missing feature |
-| P3 | Consider audio bus abstraction | v2.0 | For multi-engine support |
+## Action Items from Latest Audit
+- [ ] Fix: catch-all Exception (2x)
+- [ ] Fix: Magic number (4+ digits) (1x)
 
-## Version History
+## TODO
+<!-- Action items in priority order -->
 
-### v1.0 (Current)
-- ECS-driven cue selection via AudioCueSystem
-- GodotAudioManager for playback (refactored 2026-04-14)
-- JSON audio configuration loading
-- World state integration (reads time.is_night, narrative.active_event_kind, task.completed_last_frame)
+## Future Work
+<!-- Ideas, nice-to-haves -->
 
-### v1.1 (Next)
-- Clean up AudioBenchmark debug code
+## Changelog
+### 2026-04-17
+- Audit run — 3 total issues (2 changed files)
 
-### v1.2 (Planned)
-- Audio fade/blend transitions between cues
-- Music/ambient crossfade support
-
-### v2.0 (Future)
-- Audio bus abstraction for non-Godot engines
-- Spatial audio support
-
-## Dependencies
-
-- `WorldState` (reads/writes audio.* keys)
-- `Friflo.Engine.ECS`
-- `GodotSharp`
-
-## Architecture
-
-```
-AudioSystem/
-├── Core/
-│   ├── Configuration/ (AudioConfigLoader, AudioConfigModels)
-│   └── IAudioService.cs
-├── Godot/
-│   ├── GodotAudioManager.cs (refactored 2026-04-14)
-│   └── AudioBenchmark.cs
-└── Tests/ (47 tests)
-```
+### v0.0.1
+- Initial trio created by golden_trio_cron

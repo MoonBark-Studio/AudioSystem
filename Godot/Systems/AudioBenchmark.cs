@@ -19,8 +19,8 @@ using System.Diagnostics;
 public partial class AudioBenchmark : Node
 {
     // ─── Benchmark Configuration ─────────────────────────────────────────────
-    private const int PoolMaxSize     = 32;
-    private const int GeneratorPoolSize = 64;
+    private const int PoolMaxSize     = LargeChannels;
+    private const int GeneratorPoolSize = MaxChannels;
     private const int WarmupIterations = 5;
     private static readonly int[] ConcurrentLevels = { 10, 50, 100, 500 };
 
@@ -146,9 +146,10 @@ public partial class AudioBenchmark : Node
             gen.MixRate = 44100;
             return gen;
         }
-        catch (Exception ex)
-        {
-            GD.PushError($"AudioBenchmark: CreateGeneratorStream failed: {ex.Message}");
+        catch (Exception ex) { // REVIEW: ex.Message
+    _logger?.LogWarning(ex, "Unhandled exception");
+    GD.PushError($"AudioBenchmark: CreateGeneratorStream failed: {ex.Message
+}");
             return null!;
         }
     }
@@ -331,7 +332,7 @@ public partial class AudioBenchmark : Node
             // Get the playback and push one frame (stereo = 2 samples)
             // AudioStreamGeneratorPlayback.PushFrame(float[] frames) takes a stereo sample pair
             // The number of frames to push per call is determined by the buffer size.
-            // We push 512 stereo frames (1024 mono samples) per call to keep it simple.
+            // We push 512 stereo frames (Kilobyte mono samples) per call to keep it simple.
             const int framesPerPush = 512;
             var buf = new float[framesPerPush * 2]; // stereo
 
@@ -585,7 +586,7 @@ public partial class AudioBenchmark : Node
 
         Log("\n[Approach D: AudioStreamGenerator + PushFrame()]");
         Log("  Instantiation time : O(μs) — same as pool, but NO AudioStreamPlayer node needed");
-        Log("  Concurrent limit   : GeneratorPoolSize (hard cap, ~64 on desktop)");
+        Log("  Concurrent limit   : GeneratorPoolSize (hard cap, ~MaxChannels on desktop)");
         Log("  GC pressure        : VERY LOW — just an int index, no managed audio objects");
         Log("  CPU overhead       : Higher than pool — PushFrame() must be called per-frame");
         Log("                       per active sound. At 500 concurrent = 500 PushFrame calls/frame.");
@@ -596,12 +597,12 @@ public partial class AudioBenchmark : Node
         Log($"\n{'=',60}");
         Log("RECOMMENDATION FOR MOONBARK IDLE:");
         Log("  → Use APPROACH B (Pooled) as the primary system.");
-        Log("    Pool size 32–64 covers virtually all idle game concurrent needs.");
+        Log("    Pool size LargeChannels–MaxChannels covers virtually all idle game concurrent needs.");
         Log("    Zero GC pressure, deterministic, fast, easy to audit/limit volume.");
         Log("");
-        Log("  → If you ever need >64 concurrent sounds (e.g., particle burst audio),");
+        Log("  → If you ever need >MaxChannels concurrent sounds (e.g., particle burst audio),");
         Log("    add a secondary Approach D layer (Generator pool) that activates when");
-        Log("    Approach B's pool is full. Or simply cap the pool at 64 and accept");
+        Log("    Approach B's pool is full. Or simply cap the pool at MaxChannels and accept");
         Log("    that extreme bursts get quiet-dropped (standard game audio practice).");
         Log($"\n{'=',60}");
 
