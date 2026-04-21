@@ -46,9 +46,6 @@
 [submodule "plugins/ItemVault"]
 	path = plugins/ItemVault
 	url = https://github.com/MoonBark-Studio/ItemVault.git
-[submodule "plugins/moonbark-docs"]
-	path = plugins/moonbark-docs
-	url = https://github.com/MoonBark-Studio/MoonBarkDocs.git
 [submodule "plugins/MoonBark.Attributes"]
 	path = plugins/MoonBark.Attributes
 	url = https://github.com/MoonBark-Studio/MoonBark.Attributes
