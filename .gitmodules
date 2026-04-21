@@ -1,4 +1,4 @@
-[submodule "MoonBark.ECS"]
+[submodule "cores/MoonBark.ECS"]
 	path = cores/MoonBark.ECS
 	url = https://github.com/MoonBark-Studio/MoonBark.ECS
 [submodule "games/moonbark-idle"]
