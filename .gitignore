@@ -1,4 +1,5 @@
 # Godot artifacts
+.godot/
 .import/
 .kilo/
 .mono/
