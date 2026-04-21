@@ -11,7 +11,7 @@
 - `thistletide` - Thistletide game
 
 ### plugins/ (21 spokes)
-Abilities, AudioSystem, EcsPhysics2D, EntitySensors, EntityTargetingSystem, GridPathfinding, GridPlacement, ItemVault, MoonBark.AI, MoonBark.Attributes, MoonBark.ItemDrops, MoonBark.Minimap, MoonBark.Quest, NetworkSync, PrototypeUI, RenderingOptimizations, TaskDistribution, TiledMapLoader, WorldGen2D, WorldState, WorldTime
+Abilities, AI, Attributes, AudioSystem, EcsPhysics2D, EntitySensors, EntityTargetingSystem, GridPathfinding, GridPlacement, ItemDrops, ItemVault, Minimap, NetworkSync, PrototypeUI, Quest, RenderingOptimizations, TaskDistribution, TiledMapLoader, WorldGen2D, WorldState, WorldTime
 
 ## What's Next
 
