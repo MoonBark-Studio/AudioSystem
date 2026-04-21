@@ -20,7 +20,7 @@ public partial class TelemetryPanelIntegrationTests : Node
     {
         // Initial setup for the test
         _panel = new TelemetryPanel();
-        _panel.Initialize(_mockData, _config);
+        _panel.Initialize(_mockData, null, _config);
         AddChild(_panel);
         
         GD.Print("TelemetryPanelIntegrationTests: Setup complete.");

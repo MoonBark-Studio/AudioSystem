@@ -101,8 +101,8 @@
     },
     "MoonBark.Framework/0.1.0": {
       "type": "project",
-      "path": "../../../MoonBark.Framework/MoonBark.Framework.csproj",
-      "msbuildProject": "../../../MoonBark.Framework/MoonBark.Framework.csproj"
+      "path": "../../../cores/MoonBark.Framework/MoonBark.Framework.csproj",
+      "msbuildProject": "../../../cores/MoonBark.Framework/MoonBark.Framework.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -117,11 +117,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\gamedev\\godot\\projects\\internal\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
+      "projectUniqueName": "C:\\gamedev\\godot\\projects\\plugins\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
       "projectName": "MoonBark.Telemetry.Core",
-      "projectPath": "c:\\gamedev\\godot\\projects\\internal\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
+      "projectPath": "C:\\gamedev\\godot\\projects\\plugins\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
       "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-      "outputPath": "c:\\gamedev\\godot\\projects\\internal\\Telemetry\\Core\\obj\\",
+      "outputPath": "C:\\gamedev\\godot\\projects\\plugins\\Telemetry\\Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -136,8 +136,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\gamedev\\godot\\projects\\MoonBark.Framework\\MoonBark.Framework.csproj": {
-              "projectPath": "c:\\gamedev\\godot\\projects\\MoonBark.Framework\\MoonBark.Framework.csproj"
+            "C:\\gamedev\\godot\\projects\\cores\\MoonBark.Framework\\MoonBark.Framework.csproj": {
+              "projectPath": "C:\\gamedev\\godot\\projects\\cores\\MoonBark.Framework\\MoonBark.Framework.csproj"
             }
           }
         }

@@ -1,0 +1,12 @@
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\bin\Debug\net8.0\MoonBark.Telemetry.Core.deps.json
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\bin\Debug\net8.0\MoonBark.Telemetry.Core.dll
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\bin\Debug\net8.0\MoonBark.Telemetry.Core.pdb
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.AssemblyInfoInputs.cache
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.AssemblyInfo.cs
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.csproj.CoreCompileInputs.cache
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.sourcelink.json
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.dll
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\refint\MoonBark.Telemetry.Core.dll
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\MoonBark.Telemetry.Core.pdb
+C:\gamedev\godot\projects\plugins\Telemetry\Core\MoonBark.Telemetry.Core\obj\Debug\net8.0\ref\MoonBark.Telemetry.Core.dll

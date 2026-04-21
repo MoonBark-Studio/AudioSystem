@@ -6,17 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Reference the local Core and Godot DLLs for testing -->
-    <Reference Include="MoonBark.Telemetry.Core">
-      <HintPath>lib\MoonBark.Telemetry.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MoonBark.Telemetry.Godot">
-      <HintPath>lib\MoonBark.Telemetry.Godot.dll</HintPath>
-    </Reference>
-    
-    <!-- Framework is always required -->
-    <Reference Include="MoonBark.Framework.Core">
-      <HintPath>..\..\..\MoonBark.Framework\bin\Debug\net8.0\MoonBark.Framework.Core.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Core\MoonBark.Telemetry.Core.csproj" />
+    <ProjectReference Include="..\Godot\MoonBark.Telemetry.Godot.csproj" />
+    <ProjectReference Include="..\..\..\cores\MoonBark.Framework\MoonBark.Framework.csproj" />
   </ItemGroup>
 </Project>

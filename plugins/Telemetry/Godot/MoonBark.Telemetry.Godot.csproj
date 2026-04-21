@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\MoonBark.Telemetry.Core.csproj" />
-    <ProjectReference Include="..\..\..\MoonBark.Framework\MoonBark.Framework.csproj" />
+    <ProjectReference Include="..\..\..\cores\MoonBark.Framework\MoonBark.Framework.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MoonBark.Framework\MoonBark.Framework.csproj" />
+    <Compile Remove="MoonBark.Telemetry.Core\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\cores\MoonBark.Framework\MoonBark.Framework.csproj" />
   </ItemGroup>
 
 </Project>

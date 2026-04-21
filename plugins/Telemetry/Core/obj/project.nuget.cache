@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UHBSEVglOIk=",
+  "dgSpecHash": "k4MOtwjl944=",
   "success": true,
-  "projectFilePath": "c:\\gamedev\\godot\\projects\\internal\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
+  "projectFilePath": "C:\\gamedev\\godot\\projects\\plugins\\Telemetry\\Core\\MoonBark.Telemetry.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\chris\\.nuget\\packages\\system.io.hashing\\10.0.5\\system.io.hashing.10.0.5.nupkg.sha512",
     "C:\\Users\\chris\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
