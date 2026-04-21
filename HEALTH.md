@@ -1,31 +1,20 @@
-# AudioSystem — Health
+# AudioSystem — AudioSystem
 
-**Module:** `plugins.AudioSystem`
+## Status: Active
 
-## Overview
-<!-- Current status summary -->
+## Last Audited: 2026-04-21
+
+## Discovered Issues
+(none yet)
 
 ## Metrics
-- C# Files: 9
-- Total Lines: ~2319
-- Issues Found: 1
-- Changed Files: 0
-- Last Audit: 2026-04-18 08:08
+- **Lines of C# production code**: 2309 (from `cloc --include-lang=C# --quiet Core/ src/`)
+- **Test coverage**: unknown
+- **.csproj count**: 3
+- **Last commit**: a8e4f5f — plugins\AudioSystem: add .gitattributes for CRLF normalization (2026-04-21 16:50:15 -0400)
 
-## Issues Found
-- **Magic number (4+ digits)**: 1
+## Architecture
+Brief description of the architecture.
 
-## ECS Boundary Compliance (v2)
-- ✅ ECS types inside ECS/ subdirectories
-
-## Framework Contracts (v2)
-- ✅ No framework contract gaps detected
-
-## License Compliance (v2)
-- ✅ License compliant
-
-## Critical Debt
-<!-- Known problems requiring attention -->
-
-## Last Audit
-*Audited by golden_trio_cron v2 — 2026-04-18 08:08*
+## Dependencies
+- (none)
