@@ -72,7 +72,21 @@ GodotProjects (hub)
 - ⚠️ **Nested submodule:** `games/moonbark-idle/godot/assets/maps` has no URL configured
 - ⚠️ **Branch inconsistency:** Some spokes track `master`, others track `main`
 - ⚠️ **SSH/HTTPS mix:** TiledMapLoader and thistletide use SSH, others use HTTPS
-- ⚠️ **csproj paths:** Framework paths updated locally but commits not pushed to all submodules
+- ⚠️ **Plugin interdependencies:** Several plugins depend on types from other plugins (not cores). These will only compile when used together in a game project.
+- ⚠️ **csproj paths:** Framework paths fixed but changes not committed to submodules
+
+## Compilation Status
+
+| Project | Status | Notes |
+|---------|--------|-------|
+| MoonBark.Framework | ✅ Builds | Core library |
+| GridPlacement.Core | ✅ Builds | Fixed path to cores/ |
+| WorldTime.Core | ❌ Missing ITimeProvider | Depends on Framework internals |
+| ItemVault.Core | ❌ Missing IItemProvider | Depends on internal types |
+| Abilities | ❌ Missing AbilityCommand | Depends on internal types |
+| MoonBark.Attributes | ❌ Missing IVital | Depends on ECS types |
+
+**Note:** Plugins have cross-plugin dependencies. Build in isolation shows errors; build via game project succeeds.
 
 ## Cross-Spoke CI/CD Validation
 

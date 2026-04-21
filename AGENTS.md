@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This is the git superproject for MoonBark Studio's Godot ecosystem. It contains:
+This repository serves as the **Hub** in our **Hub-and-Spoke Architecture**, unifying MoonBark Studio's Godot ecosystem. The individual game and plugin repositories act as the **Spokes**, connected via Git submodules.
 
-- **cores/** - Core libraries (MoonBark.ECS, MoonBark.Framework)
-- **games/** - Game projects (moonbark-idle, thistletide)
-- **plugins/** - Godot plugins (18 total)
+It contains:
+- **games/** - Game project spokes (e.g., moonbark-idle, thistletide)
+- **plugins/** - Plugin and core framework spokes (all internals, generic plugins, and MoonBark.Framework)
 
 ## Working with Submodules
 
