@@ -20,3 +20,7 @@ obj/
 *.suo
 *.cache
 *.tmp
+
+# Godot artifacts (added by workspace audit)
+.git/
+.vscode/
