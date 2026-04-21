@@ -1,5 +1,5 @@
 [submodule "MoonBark.ECS"]
-	path = MoonBark.ECS
+	path = cores/MoonBark.ECS
 	url = https://github.com/MoonBark-Studio/MoonBark.ECS
 [submodule "games/moonbark-idle"]
 	path = games/moonbark-idle
@@ -34,8 +34,8 @@
 [submodule "plugins/TaskDistribution"]
 	path = plugins/TaskDistribution
 	url = https://github.com/MoonBark-Studio/TaskDistribution.git
-[submodule "plugins/MoonBark.Framework"]
-	path = plugins/MoonBark.Framework
+[submodule "cores/MoonBark.Framework"]
+	path = cores/MoonBark.Framework
 	url = https://github.com/MoonBark-Studio/Framework
 [submodule "plugins/AudioSystem"]
 	path = plugins/AudioSystem
@@ -73,3 +73,6 @@
 [submodule "plugins/WorldTime"]
 	path = plugins/WorldTime
 	url = https://github.com/MoonBark-Studio/WorldTime
+[submodule "plugins/MoonBark.AI"]
+	path = plugins/MoonBark.AI
+	url = https://github.com/MoonBark-Studio/MoonBark.AI
