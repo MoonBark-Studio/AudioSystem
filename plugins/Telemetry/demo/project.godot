@@ -1,0 +1,15 @@
+config_version=5
+
+[application]
+
+config/name="MoonBark Telemetry Demo"
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="MoonBark.Telemetry.Demo"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/MoonBark.Telemetry/plugin.cfg")

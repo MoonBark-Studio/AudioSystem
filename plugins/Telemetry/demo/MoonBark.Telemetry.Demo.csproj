@@ -1,0 +1,22 @@
+<Project Sdk="Godot.NET.Sdk/4.4.1">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Reference the local Core and Godot DLLs for testing -->
+    <Reference Include="MoonBark.Telemetry.Core">
+      <HintPath>lib\MoonBark.Telemetry.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MoonBark.Telemetry.Godot">
+      <HintPath>lib\MoonBark.Telemetry.Godot.dll</HintPath>
+    </Reference>
+    
+    <!-- Framework is always required -->
+    <Reference Include="MoonBark.Framework.Core">
+      <HintPath>..\..\..\MoonBark.Framework\bin\Debug\net8.0\MoonBark.Framework.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
