@@ -11,7 +11,8 @@ using System.Text.Json.Serialization;
 /// Supports both absolute resource paths (res://) and relative file paths.
 /// YAML loading has been removed â€” config files should use JSON format.
 /// </summary>
-public static readonly class AudioConfigLoader
+public static class AudioConfigLoader
+{
     private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.json";
 
     /// <summary>
