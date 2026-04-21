@@ -1,0 +1,75 @@
+[submodule "MoonBark.ECS"]
+	path = MoonBark.ECS
+	url = https://github.com/MoonBark-Studio/MoonBark.ECS
+[submodule "games/moonbark-idle"]
+	path = games/moonbark-idle
+	url = https://github.com/MoonBark-Studio/IdleGame.git
+[submodule "games/thistletide"]
+	path = games/thistletide
+	url = git@github.com:MoonBark-Studio/thistletide-godot.git
+[submodule "plugins/Abilities"]
+	path = plugins/Abilities
+	url = https://github.com/MoonBark-Studio/Abilities.git
+[submodule "plugins/EcsPhysics2D"]
+	path = plugins/EcsPhysics2D
+	url = https://github.com/MoonBark-Studio/EcsPhysics2D.git
+[submodule "plugins/EntitySensors"]
+	path = plugins/EntitySensors
+	url = https://github.com/MoonBark-Studio/EntitySensors.git
+[submodule "plugins/EntityTargetingSystem"]
+	path = plugins/EntityTargetingSystem
+	url = https://github.com/MoonBark-Studio/EntityTargetingSystem.git
+[submodule "plugins/GridPathfinding"]
+	path = plugins/GridPathfinding
+	url = https://github.com/MoonBark-Studio/GridPathfinding.git
+[submodule "plugins/NetworkSync"]
+	path = plugins/NetworkSync
+	url = https://github.com/MoonBark-Studio/NetworkSync.git
+[submodule "plugins/PrototypeUI"]
+	path = plugins/PrototypeUI
+	url = https://github.com/MoonBark-Studio/PrototypeUI.git
+[submodule "plugins/RenderingOptimizations"]
+	path = plugins/RenderingOptimizations
+	url = https://github.com/MoonBark-Studio/RenderingOptimizations.git
+[submodule "plugins/TaskDistribution"]
+	path = plugins/TaskDistribution
+	url = https://github.com/MoonBark-Studio/TaskDistribution.git
+[submodule "plugins/MoonBark.Framework"]
+	path = plugins/MoonBark.Framework
+	url = https://github.com/MoonBark-Studio/Framework
+[submodule "plugins/AudioSystem"]
+	path = plugins/AudioSystem
+	url = https://github.com/MoonBark-Studio/AudioSystem.git
+[submodule "plugins/GridPlacement"]
+	path = plugins/GridPlacement
+	url = https://github.com/MoonBark-Studio/GridPlacement.git
+[submodule "plugins/ItemVault"]
+	path = plugins/ItemVault
+	url = https://github.com/MoonBark-Studio/ItemVault.git
+[submodule "plugins/moonbark-docs"]
+	path = plugins/moonbark-docs
+	url = https://github.com/MoonBark-Studio/MoonBarkDocs.git
+[submodule "plugins/MoonBark.Attributes"]
+	path = plugins/MoonBark.Attributes
+	url = https://github.com/MoonBark-Studio/MoonBark.Attributes
+[submodule "plugins/MoonBark.ItemDrops"]
+	path = plugins/MoonBark.ItemDrops
+	url = https://github.com/MoonBark-Studio/ItemDrops
+[submodule "plugins/MoonBark.Minimap"]
+	path = plugins/MoonBark.Minimap
+	url = https://github.com/MoonBark-Studio/Minimap.git
+[submodule "plugins/MoonBark.Quest"]
+	path = plugins/MoonBark.Quest
+	url = https://github.com/MoonBark-Studio/Quest.git
+[submodule "plugins/TiledMapLoader"]
+	path = plugins/TiledMapLoader
+	url = git@github.com:MoonBark-Studio/TiledMapLoader.git
+[submodule "plugins/WorldGen2D"]
+	path = plugins/WorldGen2D
+	url = https://github.com/MoonBark-Studio/WorldGen2D
+[submodule "plugins/WorldState"]
+	path = plugins/WorldState
+	url = https://github.com/MoonBark-Studio/WorldState.git
+[submodule "plugins/WorldTime"]
+	path = plugins/WorldTime
+	url = https://github.com/MoonBark-Studio/WorldTime
