@@ -9,6 +9,7 @@ node_modules/
 *.tscn.cache
 *.tres.cache
 export_presets.cfg
+*.uid
 *.log
 
 bin/
