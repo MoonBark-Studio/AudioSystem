@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\AudioSystem.Core.csproj" />
+    <ProjectReference Include="..\Core\MoonBark.AudioSystem.Core.csproj" />
   </ItemGroup>
 
 </Project>

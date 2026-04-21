@@ -123,14 +123,6 @@ public partial class GodotAudioManager : Node
         {
             GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
         }
-        catch (FileNotFoundException ex)
-        {
-            GD.PrintErr($"GodotAudioManager: Audio config file not found: {ex.Message}");
-        }
-        catch (IOException ex)
-        {
-            GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
-        }
         catch (InvalidOperationException ex)
         {
             GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message}");
@@ -627,5 +619,4 @@ public partial class GodotAudioManager : Node
             return null;
         }
     }
-}
 }
