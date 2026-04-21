@@ -66,6 +66,9 @@ GodotProjects (hub)
 - 2026-04-21: Removed moonbark-docs (docs moved to separate repo)
 - 2026-04-21: Updated .gitmodules submodule names to match paths
 - 2026-04-21: Fixed Framework project references (local csproj paths updated)
+- 2026-04-21: Renamed MoonBark.* plugins to drop prefix (AI, Attributes, ItemDrops, Minimap, Quest)
+- 2026-04-21: Fixed Framework duplicate glob (Core/Abstractions included twice)
+- 2026-04-21: Fixed all csproj paths to point to cores/Framework
 
 ## Known Issues
 
@@ -73,20 +76,20 @@ GodotProjects (hub)
 - ⚠️ **Branch inconsistency:** Some spokes track `master`, others track `main`
 - ⚠️ **SSH/HTTPS mix:** TiledMapLoader and thistletide use SSH, others use HTTPS
 - ⚠️ **Plugin interdependencies:** Several plugins depend on types from other plugins (not cores). These will only compile when used together in a game project.
-- ⚠️ **csproj paths:** Framework paths fixed but changes not committed to submodules
 
 ## Compilation Status
 
 | Project | Status | Notes |
 |---------|--------|-------|
-| MoonBark.Framework | ✅ Builds | Core library |
+| MoonBark.Framework | ✅ Builds | Fixed duplicate glob warning |
+| GridPathfinding.Core | ✅ Builds | Fixed path to cores/ |
 | GridPlacement.Core | ✅ Builds | Fixed path to cores/ |
-| WorldTime.Core | ❌ Missing ITimeProvider | Depends on Framework internals |
-| ItemVault.Core | ❌ Missing IItemProvider | Depends on internal types |
-| Abilities | ❌ Missing AbilityCommand | Depends on internal types |
-| MoonBark.Attributes | ❌ Missing IVital | Depends on ECS types |
+| ItemVault.Core | ✅ Builds | Fixed path to cores/ |
+| WorldTime.Core | ⚠️ See note | Depends on plugin internals |
+| Abilities | ⚠️ See note | Depends on plugin internals |
+| Attributes | ⚠️ See note | Depends on ECS types |
 
-**Note:** Plugins have cross-plugin dependencies. Build in isolation shows errors; build via game project succeeds.
+**Note:** Most Core projects build successfully when Framework path is correct. Cross-plugin dependencies require full game project build.
 
 ## Cross-Spoke CI/CD Validation
 
