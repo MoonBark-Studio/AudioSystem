@@ -46,17 +46,17 @@
 [submodule "plugins/ItemVault"]
 	path = plugins/ItemVault
 	url = https://github.com/MoonBark-Studio/ItemVault.git
-[submodule "plugins/MoonBark.Attributes"]
-	path = plugins/MoonBark.Attributes
+[submodule "plugins/Attributes"]
+	path = plugins/Attributes
 	url = https://github.com/MoonBark-Studio/MoonBark.Attributes
-[submodule "plugins/MoonBark.ItemDrops"]
-	path = plugins/MoonBark.ItemDrops
+[submodule "plugins/ItemDrops"]
+	path = plugins/ItemDrops
 	url = https://github.com/MoonBark-Studio/ItemDrops
-[submodule "plugins/MoonBark.Minimap"]
-	path = plugins/MoonBark.Minimap
+[submodule "plugins/Minimap"]
+	path = plugins/Minimap
 	url = https://github.com/MoonBark-Studio/Minimap.git
-[submodule "plugins/MoonBark.Quest"]
-	path = plugins/MoonBark.Quest
+[submodule "plugins/Quest"]
+	path = plugins/Quest
 	url = https://github.com/MoonBark-Studio/Quest.git
 [submodule "plugins/TiledMapLoader"]
 	path = plugins/TiledMapLoader
@@ -70,6 +70,6 @@
 [submodule "plugins/WorldTime"]
 	path = plugins/WorldTime
 	url = https://github.com/MoonBark-Studio/WorldTime
-[submodule "plugins/MoonBark.AI"]
-	path = plugins/MoonBark.AI
+[submodule "plugins/AI"]
+	path = plugins/AI
 	url = https://github.com/MoonBark-Studio/MoonBark.AI
