@@ -12,20 +12,27 @@ export_presets.cfg
 *.uid
 *.log
 
+# Build
 bin/
 obj/
-.vs/
-.idea/
-*.user
-*.suo
-*.cache
-*.tmp
 
-# Godot artifacts (added by workspace audit)
-.vscode/
-
-# Missing .NET / C# patterns (workspace audit)
+# .NET / NuGet
 *.csproj
 *.sln
 *.pck
 *.res
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# OS
+
+# Temp
+
+# Other
+*.cache
+*.tmp
