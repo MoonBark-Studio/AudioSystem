@@ -17,6 +17,9 @@ export_presets.cfg
 # Build
 bin/
 obj/
+*.dll
+*.pdb
+*.exe
 
 # .NET / NuGet
 *.csproj
