@@ -94,7 +94,7 @@ GodotProjects (hub)
 - ⚠️ **Branch inconsistency** — **FIXED** — all 8 repos renamed master→main. Ecosystem fully on `main`.
 - ⚠️ **Nested submodule** — `games/moonbark-idle/godot/assets/maps` was a submodule (`tiled-maps-moonbark-idle.git`). Maps converted to regular tracked files in moonbark-idle repo — no longer a submodule. The `tiled-maps-moonbark-idle.git` repo is archived/deprecated.
 - ⚠️ **GoDotTest DLL copy hardcoded** — **FIXED** — removed manual DLL copy, uses PackageReference with CopyLocalLockFileAssemblies.
-- ⚠️ **MoonBark.AI broken reference** — `moonbark-idle.Core.csproj` referenced `internal/BehaviorTrees` which doesn't exist. Commented out. BehaviorTrees code is not present in the monorepo.
+- ⚠️ **BehaviorTrees YAGNI** — `moonbark-idle.Core.csproj` previously had a dead comment referencing `internal/BehaviorTrees` (repo never existed). Chris confirmed BT is YAGNI given the utility/GOAP AI direction. **FIXED** — comment block removed entirely.
 - ⚠️ **PrototypeUI net10.0→net8.0** — all plugins now target net8.0. **FIXED**.
 - ⚠️ **ItemDrops Godot.Tests skips all integration and runtime tests**.
 
@@ -129,7 +129,7 @@ col 3 (tile 3, GID 4) → terrain 3 = Dirt
 | ItemVault.Core | ✅ Builds | |
 | TiledMapLoader.Core | ✅ Builds | YATI-free; pure C# JSON |
 | TiledMapLoader.Godot | ✅ Builds | GodotFileReader + orphaned TiledMapLoaderGodot.cs |
-| moonbark-idle | ✅ Builds | test_farm.tmj wired as first level |
+| moonbark-idle | ✅ Builds | sunhatch-glade.tmj wired as first level |
 | WorldTime.Godot | ✅ SDK fixed | Upgraded 4.4.1→4.6.2 |
 | WorldState.Core | ✅ Builds | |
 | WorldState.Tests | ⚠️ Package fixed | xunit.runner 2.8.2→3.1.4 |
@@ -150,7 +150,7 @@ col 3 (tile 3, GID 4) → terrain 3 = Dirt
 | EntityTargetingSystem | ✅ | |
 | GridPathfinding | ✅ | |
 | GridPlacement | ✅ | |
-| ItemDrops | ⚠️ Tests skipped | Integration/runtime excluded |
+| ItemDrops | ✅ Tests pass | 113 tests; 5 orphaned tests for removed types deleted |
 | Minimap | ✅ | |
 | PrototypeUI | ⚠️ net10.0 | Inconsistent TargetFramework |
 | Quest | ✅ | |
