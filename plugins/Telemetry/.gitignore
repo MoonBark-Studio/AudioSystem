@@ -49,7 +49,6 @@ project.fragment.lock.json
 *.suo
 *.rsuser
 *.userosscache
-*.sln.docstates
 mono_crash.*
 
 # OS
