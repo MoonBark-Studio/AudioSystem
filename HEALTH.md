@@ -31,7 +31,7 @@ GodotProjects (hub)
 ### games/
 | Spoke | URL | Status |
 |-------|-----|--------|
-| moonbark-idle | https://github.com/MoonBark-Studio/IdleGame.git | ⚠️ nested submodule issue |
+| moonbark-idle | https://github.com/MoonBark-Studio/IdleGame.git | ✅ master |
 | thistletide | git@github.com:MoonBark-Studio/thistletide-godot.git | ✅ master |
 
 ### plugins/
@@ -78,6 +78,7 @@ GodotProjects (hub)
 - 2026-04-21: WorldGen2D — added `FastNoiseLite` 1.0.0 package (was placeholder stub).
 - 2026-04-21: PrototypeUI — `net10.0` → `net8.0` to match ecosystem.
 - 2026-04-21: moonbark-idle — broken `internal/BehaviorTrees` reference commented out (path doesn't exist).
+- 2026-04-21: moonbark-idle — maps submodule removed, files now tracked directly (submodule was unfetchable in WSL).
 
 ## Discovered Issues
 
@@ -91,7 +92,7 @@ GodotProjects (hub)
 
 - ⚠️ **sunhatch-glade.tmj GID→terrain semantic mismatch** — map artist used GID 2 for dirt paths but tileset col 1 = Path. TiledGroundLoader remaps GID 2 → DirtTerrain at runtime. If tileset columns are rearranged, update the loader's GID switch. Consider aligning map GIDs with tileset columns to eliminate runtime remapping.
 - ⚠️ **Branch inconsistency** — 10 plugins track `master`, 11 track `main`.
-- ⚠️ **Nested submodule** — `games/moonbark-idle/godot/assets/maps` is a submodule (`tiled-maps-moonbark-idle.git`). Contains `sunhatch-glade.tmj` (24×32 production map) and `test_farm.tmj` (16×12 test stub). Run `git submodule update --init` on fresh clones.
+- ⚠️ **Nested submodule** — `games/moonbark-idle/godot/assets/maps` was a submodule (`tiled-maps-moonbark-idle.git`). Maps converted to regular tracked files in moonbark-idle repo — no longer a submodule. The `tiled-maps-moonbark-idle.git` repo is archived/deprecated.
 - ⚠️ **GoDotTest DLL copy hardcoded** — `chickensoft.godottest\1.3.4\lib\net6.0\Chickensoft.GoDotTest.dll` fragile on version bumps.
 - ⚠️ **MoonBark.AI broken reference** — `moonbark-idle.Core.csproj` referenced `internal/BehaviorTrees` which doesn't exist. Commented out. BehaviorTrees code is not present in the monorepo.
 - ⚠️ **PrototypeUI net10.0→net8.0** — all plugins now target net8.0. **FIXED**.
