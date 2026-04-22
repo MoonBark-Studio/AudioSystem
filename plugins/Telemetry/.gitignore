@@ -6,6 +6,17 @@
 addons/
 node_modules/
 *.import
+# Godot resource import artifacts (explicit, for clarity)
+*.png.import
+*.tres.import
+*.tscn.import
+*.wav.import
+*.ogg.import
+*.ttf.import
+*.otf.import
+*.obj.import
+*.gltf.import
+*.glb.import
 *.tscn.cache
 *.tres.cache
 export_presets.cfg
