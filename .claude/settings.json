@@ -1,0 +1,57 @@
+# MoonBark Godot Projects — Monorepo
+
+## Structure
+```
+C:\gamedev\godot\projects\        ← monorepo root (git shell + submodules)
+  cores/                           ← shared core libraries
+    MoonBark.Framework/             ← main framework (main branch)
+    MoonBark.ECS/                  ← ECS implementation (main branch)
+  plugins/                         ← Godot plugins (25 repos)
+    AI/, Abilities/, Attributes/, AudioSystem/, EcsPhysics2D/, ...
+  games/                          ← game projects
+    moonbark-idle/                 ← idle game (master branch)
+    thistletide/                   ← main game (master branch)
+```
+
+## Branch Conventions
+- `cores/` repos: `main` branch
+- `plugins/` repos: `main` branch (most), `master` (some older ones)
+- `games/` repos: `master` branch
+
+## Common Commands
+```bash
+# Status of all submodules
+git submodule status
+
+# Update monorepo pointers after submodule changes
+git add cores/ plugins/ games/
+git commit -m "submodule: sync pointers"
+git push origin main
+
+# Health audit
+python3 ~/.hermes/scripts/audit_golden_trio.py C:\gamedev\godot\projects
+```
+
+## Code Standards
+- All MoonBark value classes: `IEquatable<T>` — no exceptions
+- ECS types in `ECS/` subdirectory only (plugins)
+- Godot C#: unsubscribe in `_ExitTree()`, null Actions in `Dispose()`
+- Golden trio: `HEALTH.md`, `README.md`, `ROADMAP.md` in every repo
+
+## Health Audit (Golden Trio v3)
+Format each repo's HEALTH.md with:
+```
+# [RepoName] — One-line description
+## Status: Active | Stale | WIP | Archived | Wrecked
+## Last Audited: YYYY-MM-DD
+## Discovered Issues
+(none yet)
+## Metrics
+- Lines of C# production code: N
+- Test coverage: N%
+- .csproj count: N
+- Last commit: YYYY-MM-DD — short description
+## Architecture
+## Dependencies
+(none)
+```
