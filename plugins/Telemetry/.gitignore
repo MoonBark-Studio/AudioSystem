@@ -1,0 +1,59 @@
+# Godot artifacts
+.godot/
+.import/
+.kilo/
+.mono/
+addons/
+node_modules/
+*.import
+*.tscn.cache
+*.tres.cache
+export_presets.cfg
+*.uid
+*.log
+
+# Build
+bin/
+obj/
+artifacts/
+*.dll
+*.exe
+*.pdb
+*.xml
+*.deps.json
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+mono_crash.*
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+
+# Temp
+tmp/
+.tmp/
+temp/
+.temp/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+TestResults/
