@@ -91,9 +91,9 @@ GodotProjects (hub)
 ### Warnings
 
 - ⚠️ **sunhatch-glade.tmj GID→terrain semantic mismatch** — map artist used GID 2 for dirt paths but tileset col 1 = Path. TiledGroundLoader remaps GID 2 → DirtTerrain at runtime. If tileset columns are rearranged, update the loader's GID switch. Consider aligning map GIDs with tileset columns to eliminate runtime remapping.
-- ⚠️ **Branch inconsistency** — 10 plugins track `master`, 11 track `main`.
+- ⚠️ **Branch inconsistency** — **FIXED** — all 8 repos renamed master→main. Ecosystem fully on `main`.
 - ⚠️ **Nested submodule** — `games/moonbark-idle/godot/assets/maps` was a submodule (`tiled-maps-moonbark-idle.git`). Maps converted to regular tracked files in moonbark-idle repo — no longer a submodule. The `tiled-maps-moonbark-idle.git` repo is archived/deprecated.
-- ⚠️ **GoDotTest DLL copy hardcoded** — `chickensoft.godottest\1.3.4\lib\net6.0\Chickensoft.GoDotTest.dll` fragile on version bumps.
+- ⚠️ **GoDotTest DLL copy hardcoded** — **FIXED** — removed manual DLL copy, uses PackageReference with CopyLocalLockFileAssemblies.
 - ⚠️ **MoonBark.AI broken reference** — `moonbark-idle.Core.csproj` referenced `internal/BehaviorTrees` which doesn't exist. Commented out. BehaviorTrees code is not present in the monorepo.
 - ⚠️ **PrototypeUI net10.0→net8.0** — all plugins now target net8.0. **FIXED**.
 - ⚠️ **ItemDrops Godot.Tests skips all integration and runtime tests**.
