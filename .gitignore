@@ -1,0 +1,2 @@
+﻿# Ignore duplicate/misconfigured Sensors directory (official submodule is plugins/EntitySensors)
+plugins/Sensors/

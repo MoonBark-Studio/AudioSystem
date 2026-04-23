@@ -31,32 +31,31 @@ GodotProjects (hub)
 ### games/
 | Spoke | URL | Status |
 |-------|-----|--------|
-| moonbark-idle | https://github.com/MoonBark-Studio/IdleGame.git | ✅ master |
-| thistletide | git@github.com:MoonBark-Studio/thistletide-godot.git | ✅ master |
+| moonbark-idle | https://github.com/MoonBark-Studio/IdleGame.git | ✅ main |
+| thistletide | git@github.com:MoonBark-Studio/thistletide-godot.git | ✅ main |
 
 ### plugins/
 | Spoke | URL | Branch |
 |-------|-----|--------|
-| Abilities | https://github.com/MoonBark-Studio/Abilities.git | master |
-| AudioSystem | https://github.com/MoonBark-Studio/AudioSystem.git | master |
+| Abilities | https://github.com/MoonBark-Studio/Abilities.git | main |
+| AudioSystem | https://github.com/MoonBark-Studio/AudioSystem.git | main |
 | EcsPhysics2D | https://github.com/MoonBark-Studio/EcsPhysics2D.git | main |
 | EntitySensors | https://github.com/MoonBark-Studio/EntitySensors.git | main |
-| EntityTargetingSystem | https://github.com/MoonBark-Studio/EntityTargetingSystem.git | master |
+| EntityTargetingSystem | https://github.com/MoonBark-Studio/EntityTargetingSystem.git | main |
 | GridPathfinding | https://github.com/MoonBark-Studio/GridPathfinding.git | main |
 | GridPlacement | https://github.com/MoonBark-Studio/GridPlacement.git | main |
 | ItemVault | https://github.com/MoonBark-Studio/ItemVault.git | main |
 | MoonBark.AI | https://github.com/MoonBark-Studio/MoonBark.AI | main |
 | MoonBark.Attributes | https://github.com/MoonBark-Studio/MoonBark.Attributes | main |
 | MoonBark.ItemDrops | https://github.com/MoonBark-Studio/ItemDrops.git | main |
-| MoonBark.Minimap | https://github.com/MoonBark-Studio/Minimap.git | master |
+| MoonBark.Minimap | https://github.com/MoonBark-Studio/Minimap.git | main |
 | MoonBark.Quest | https://github.com/MoonBark-Studio/MoonBark.Quest.git | main |
-| NetworkSync | https://github.com/MoonBark-Studio/NetworkSync.git | master |
+| NetworkSync | https://github.com/MoonBark-Studio/NetworkSync.git | main |
 | PrototypeUI | https://github.com/MoonBark-Studio/PrototypeUI.git | main |
-| RenderingOptimizations | https://github.com/MoonBark-Studio/RenderingOptimizations.git | master |
-| TaskDistribution | https://github.com/MoonBark-Studio/TaskDistribution.git | master |
-| TiledMapLoader | git@github.com:MoonBark-Studio/TiledMapLoader.git | main |
+| RenderingOptimizations | https://github.com/MoonBark-Studio/RenderingOptimizations.git | main |
+| TaskDistribution | https://github.com/MoonBark-Studio/TaskDistribution.git | main |
+| WorldState | https://github.com/MoonBark-Studio/WorldState.git | main |
 | WorldGen2D | https://github.com/MoonBark-Studio/WorldGen2D | main |
-| WorldState | https://github.com/MoonBark-Studio/WorldState.git | master |
 | WorldTime | https://github.com/MoonBark-Studio/WorldTime | main |
 
 ## Recent Changes
