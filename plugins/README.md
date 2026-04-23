@@ -6,7 +6,7 @@
 <!-- What this folder contains and its purpose -->
 
 ## Key Types
-## Key Types (1699 files, ~227880 lines)
+## Key Types (1718 files, ~229382 lines)
 AIMode, AISystemCoordinator, AbilitiesModule, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityKind, AbilityLearningComponent, AbilityRegistry, AbilityRegistryTests, AbilitySlotKind, CanCastAbilitiesTag, CanLearnAbilitiesTag, Conditions
 ## Namespaces
 - `MoonBark.AI.Conditions`
@@ -29,7 +29,7 @@ AIMode, AISystemCoordinator, AbilitiesModule, AbilityBookComponent, AbilityComma
 <!-- Key components and how they fit together -->
 
 ## ECS Architecture (v2)
-- ECS subdirectories: Abilities/ECS, Attributes/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, WorldTime/ECS, GridPlacement/cs/ECS, GridPlacement/cs/test/ECS, GridPlacement/cs/Godot/test/ECS, GridPlacement/cs/test/Core/ECS, ItemVault/Tests/ECS, WorldTime/ECS/tests/ECS
+- ECS subdirectories: Abilities/ECS, Attributes/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, StatusEffects/ECS, WorldTime/ECS, GridPlacement/cs/ECS, GridPlacement/cs/test/ECS, GridPlacement/cs/Godot/test/ECS, GridPlacement/cs/test/Core/ECS, ItemVault/Tests/ECS, WorldTime/ECS/tests/ECS
 - ECS files outside subdirectories: 58
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 ## Dependencies
@@ -37,5 +37,5 @@ AIMode, AISystemCoordinator, AbilitiesModule, AbilityBookComponent, AbilityComma
 
 ## Status
 - ✅ Audited: 2026-04-22
-- Changed files this run: 0
-- File count: 1699 C# files (~227880 lines)
+- Changed files this run: 35
+- File count: 1718 C# files (~229382 lines)
