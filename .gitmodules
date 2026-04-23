@@ -84,3 +84,7 @@
 	path = plugins/StatusEffects
 	url = https://github.com/MoonBark-Studio/StatusEffects.git
 
+[submodule "plugins/Telemetry"]
+	path = plugins/Telemetry
+	url = https://github.com/MoonBark-Studio/Telemetry.git
+
