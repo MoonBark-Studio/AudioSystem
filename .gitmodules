@@ -1,5 +1,5 @@
-[submodule "cores/MoonBark.ECS"]
-	path = cores/MoonBark.ECS
+[submodule "libs/MoonBark.ECS"]
+	path = libs/MoonBark.ECS
 	url = https://github.com/MoonBark-Studio/MoonBark.ECS
 [submodule "games/moonbark-idle"]
 	path = games/moonbark-idle
@@ -73,3 +73,12 @@
 [submodule "plugins/AI"]
 	path = plugins/AI
 	url = https://github.com/MoonBark-Studio/MoonBark.AI
+[submodule "plugins/GridSpatial"]
+	path = plugins/GridSpatial
+	url = https://github.com/MoonBark-Studio/GridSpatial.git
+[submodule "plugins/Economy"]
+	path = plugins/Economy
+	url = https://github.com/MoonBark-Studio/Economy.git
+[submodule "plugins/Upgrades"]
+	path = plugins/Upgrades
+	url = https://github.com/MoonBark-Studio/Upgrades.git
