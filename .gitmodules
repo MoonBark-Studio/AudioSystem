@@ -13,9 +13,6 @@
 [submodule "plugins/EcsPhysics2D"]
 	path = plugins/EcsPhysics2D
 	url = https://github.com/MoonBark-Studio/EcsPhysics2D.git
-[submodule "plugins/EntitySensors"]
-	path = plugins/EntitySensors
-	url = https://github.com/MoonBark-Studio/EntitySensors.git
 [submodule "plugins/EntityTargetingSystem"]
 	path = plugins/EntityTargetingSystem
 	url = https://github.com/MoonBark-Studio/EntityTargetingSystem.git
@@ -79,3 +76,6 @@
 [submodule "plugins/Upgrades"]
 	path = plugins/Upgrades
 	url = https://github.com/MoonBark-Studio/Upgrades.git
+[submodule "plugins/Sensors"]
+	path = plugins/Sensors
+	url = https://github.com/MoonBark-Studio/Sensors.git
