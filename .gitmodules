@@ -79,3 +79,8 @@
 [submodule "plugins/Sensors"]
 	path = plugins/Sensors
 	url = https://github.com/MoonBark-Studio/Sensors.git
+
+[submodule "plugins/StatusEffects"]
+	path = plugins/StatusEffects
+	url = https://github.com/MoonBark-Studio/StatusEffects.git
+
