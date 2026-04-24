@@ -15,7 +15,7 @@ MoonBark Studio's Godot plugin ecosystem and game projects.
     ├── Abilities
     ├── AudioSystem
     ├── EcsPhysics2D
-    ├── EntitySensors
+    ├── Sensors
     ├── EntityTargetingSystem
     ├── GridPathfinding
     ├── GridPlacement

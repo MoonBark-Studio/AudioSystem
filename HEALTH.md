@@ -40,7 +40,7 @@ GodotProjects (hub)
 | Abilities | https://github.com/MoonBark-Studio/Abilities.git | main |
 | AudioSystem | https://github.com/MoonBark-Studio/AudioSystem.git | main |
 | EcsPhysics2D | https://github.com/MoonBark-Studio/EcsPhysics2D.git | main |
-| EntitySensors | https://github.com/MoonBark-Studio/EntitySensors.git | main |
+| Sensors | https://github.com/MoonBark-Studio/Sensors.git | main |
 | EntityTargetingSystem | https://github.com/MoonBark-Studio/EntityTargetingSystem.git | main |
 | GridPathfinding | https://github.com/MoonBark-Studio/GridPathfinding.git | main |
 | GridPlacement | https://github.com/MoonBark-Studio/GridPlacement.git | main |
@@ -145,7 +145,7 @@ col 3 (tile 3, GID 4) → terrain 3 = Dirt
 | Abilities | ✅ | |
 | Attributes | ⚠️ Core only | No Godot csproj |
 | EcsPhysics2D | ⚠️ Box2D | Not wired into any game |
-| EntitySensors | ✅ | |
+| Sensors | ✅ | |
 | EntityTargetingSystem | ✅ | |
 | GridPathfinding | ✅ | |
 | GridPlacement | ✅ | |
