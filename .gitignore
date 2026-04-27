@@ -21,6 +21,7 @@ node_modules/
 *.tres.cache
 export_presets.cfg
 *.uid
+**/*.uid
 *.log
 **/*.log
 
