@@ -7,6 +7,7 @@
 [submodule "plugins/Abilities"]
 	path = plugins/Abilities
 	url = https://github.com/MoonBark-Studio/Abilities.git
+	branch = main
 [submodule "plugins/EcsPhysics2D"]
 	path = plugins/EcsPhysics2D
 	url = https://github.com/MoonBark-Studio/EcsPhysics2D.git
@@ -16,6 +17,7 @@
 [submodule "plugins/GridPathfinding"]
 	path = plugins/GridPathfinding
 	url = https://github.com/MoonBark-Studio/GridPathfinding.git
+	branch = chris/event-cleanup
 [submodule "plugins/NetworkSync"]
 	path = plugins/NetworkSync
 	url = https://github.com/MoonBark-Studio/NetworkSync.git
@@ -37,9 +39,11 @@
 [submodule "plugins/GridPlacement"]
 	path = plugins/GridPlacement
 	url = https://github.com/MoonBark-Studio/GridPlacement.git
+	branch = chris/event-cleanup
 [submodule "plugins/ItemVault"]
 	path = plugins/ItemVault
 	url = https://github.com/MoonBark-Studio/ItemVault.git
+	branch = main
 [submodule "plugins/Attributes"]
 	path = plugins/Attributes
 	url = https://github.com/MoonBark-Studio/MoonBark.Attributes
@@ -52,6 +56,7 @@
 [submodule "plugins/Quest"]
 	path = plugins/Quest
 	url = https://github.com/MoonBark-Studio/Quest.git
+	branch = chris/event-cleanup
 [submodule "plugins/TiledMapLoader"]
 	path = plugins/TiledMapLoader
 	url = git@github.com:MoonBark-Studio/TiledMapLoader.git
@@ -64,6 +69,7 @@
 [submodule "plugins/WorldTime"]
 	path = plugins/WorldTime
 	url = https://github.com/MoonBark-Studio/WorldTime
+	branch = chris/event-cleanup
 [submodule "plugins/AI"]
 	path = plugins/AI
 	url = https://github.com/MoonBark-Studio/MoonBark.AI
