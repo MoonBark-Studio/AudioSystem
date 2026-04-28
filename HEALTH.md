@@ -15,53 +15,23 @@ MoonBark Studio's Godot plugin ecosystem and game projects - organized as a hub-
 
 ```
 GodotProjects (hub)
-├── cores/         (2 spokes)
+├── cores/         (1 spoke)
 ├── games/         (2 spokes)
-└── plugins/       (21 spokes)
+└── plugins/       (24 spokes)
 ```
 
-## Submodules (25 total)
+For plugin integration status and roadmap → [ROADMAP.md](./ROADMAP.md).
 
-### cores/
-| Spoke | URL | Status |
-|-------|-----|--------|
-| MoonBark.ECS | https://github.com/MoonBark-Studio/MoonBark.ECS | ✅ main |
-| MoonBark.Framework | https://github.com/MoonBark-Studio/Framework | ✅ main |
+## Submodules
 
-### games/
-| Spoke | URL | Status |
-|-------|-----|--------|
-| moonbark-idle | https://github.com/MoonBark-Studio/IdleGame.git | ✅ main |
-| thistletide | git@github.com:MoonBark-Studio/thistletide-godot.git | ✅ main |
+This repo uses git submodules. After cloning, run:
 
-### plugins/
-| Spoke | URL | Branch |
-|-------|-----|--------|
-| Abilities | https://github.com/MoonBark-Studio/Abilities.git | main |
-| AudioSystem | https://github.com/MoonBark-Studio/AudioSystem.git | main |
-| EcsPhysics2D | https://github.com/MoonBark-Studio/EcsPhysics2D.git | main |
-| Sensors | https://github.com/MoonBark-Studio/Sensors.git | main |
-| EntityTargetingSystem | https://github.com/MoonBark-Studio/EntityTargetingSystem.git | main |
-| GridPathfinding | https://github.com/MoonBark-Studio/GridPathfinding.git | main |
-| GridPlacement | https://github.com/MoonBark-Studio/GridPlacement.git | main |
-| ItemVault | https://github.com/MoonBark-Studio/ItemVault.git | main |
-| MoonBark.AI | https://github.com/MoonBark-Studio/MoonBark.AI | main |
-| MoonBark.Attributes | https://github.com/MoonBark-Studio/MoonBark.Attributes | main |
-| MoonBark.ItemDrops | https://github.com/MoonBark-Studio/ItemDrops.git | main |
-| MoonBark.Minimap | https://github.com/MoonBark-Studio/Minimap.git | main |
-| MoonBark.Quest | https://github.com/MoonBark-Studio/MoonBark.Quest.git | main |
-| NetworkSync | https://github.com/MoonBark-Studio/NetworkSync.git | main |
-| PrototypeUI | https://github.com/MoonBark-Studio/PrototypeUI.git | main |
-| RenderingOptimizations | https://github.com/MoonBark-Studio/RenderingOptimizations.git | main |
-| TaskDistribution | https://github.com/MoonBark-Studio/TaskDistribution.git | main |
-| WorldState | https://github.com/MoonBark-Studio/WorldState.git | main |
-| WorldGen2D | https://github.com/MoonBark-Studio/WorldGen2D | main |
-| WorldTime | https://github.com/MoonBark-Studio/WorldTime | main |
-
-## Recent Changes
+```bash
+git submodule update --init --recursive
+```
 
 - 2026-04-21: Reorganized into hub-and-spoke structure
-- 2026-04-21: Moved MoonBark.Framework and MoonBark.ECS to cores/
+- 2026-04-21: Moved MoonBark.Framework to cores/ (MoonBark.ECS merged into Framework 2026-04-04)
 - 2026-04-21: Removed moonbark-docs (docs moved to separate repo)
 - 2026-04-21: Updated .gitmodules submodule names to match paths
 - 2026-04-21: Fixed Framework project references (local csproj paths updated)

@@ -1,0 +1,12 @@
+<Project>
+  <!--
+    Central build properties for MoonBark Studio projects.
+    Vendor root is two directories up from this file:
+      projects/Directory.Build.props → projects/ → godot/ → vendor/
+    So $(MSBuildThisFileDirectory)/../../vendor/ resolves to the Godot root vendor/ folder.
+  -->
+  <PropertyGroup Label="MoonBark Vendor Paths">
+    <MoonBarkVendorRoot>$(MSBuildThisFileDirectory)/../../vendor/</MoonBarkVendorRoot>
+    <SylvesVendorPath>$(MoonBarkVendorRoot)Sylves.dll</SylvesVendorPath>
+  </PropertyGroup>
+</Project>

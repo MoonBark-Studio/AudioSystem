@@ -2,9 +2,8 @@
 
 ## Current Structure
 
-### cores/ (2 spokes)
-- `MoonBark.ECS` - ECS library
-- `MoonBark.Framework` - Shared utilities for MoonBark games
+### cores/ (1 spoke)
+- `MoonBark.Framework` - Shared utilities + ECS components for MoonBark games (includes merged `MoonBark.ECS`)
 
 ### games/ (2 spokes)
 - `moonbark-idle` - Idle game

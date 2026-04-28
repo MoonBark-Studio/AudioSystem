@@ -4,36 +4,41 @@ MoonBark Studio's Godot plugin ecosystem and game projects.
 
 ## Structure
 
+For full submodule list → [HEALTH.md](./HEALTH.md).
+For plugin integration status → [ROADMAP.md](./ROADMAP.md).
+
 ```
 ├── cores/           # Core libraries (no Godot dependencies)
-│   ├── MoonBark.ECS
 │   └── MoonBark.Framework
 ├── games/           # Game projects
 │   ├── moonbark-idle
 │   └── thistletide
-└── plugins/         # Godot plugins
+└── plugins/         # Godot plugins (24)
     ├── Abilities
+    ├── AI
     ├── AudioSystem
+    ├── Attributes
+    ├── Economy
     ├── EcsPhysics2D
-    ├── Sensors
     ├── EntityTargetingSystem
     ├── GridPathfinding
     ├── GridPlacement
+    ├── ItemDrops
     ├── ItemVault
-    ├── MoonBark.AI
-    ├── MoonBark.Attributes
-    ├── MoonBark.ItemDrops
-    ├── MoonBark.Minimap
-    ├── MoonBark.Quest
+    ├── Minimap
     ├── NetworkSync
     ├── PrototypeUI
+    ├── Quest
     ├── RenderingOptimizations
+    ├── Sensors
+    ├── StatusEffects
     ├── TaskDistribution
+    ├── Telemetry
     ├── TiledMapLoader
+    ├── Upgrades
     ├── WorldGen2D
     ├── WorldState
-    ├── WorldTime
-    └── moonbark-docs
+    └── WorldTime
 ```
 
 ## Submodules
