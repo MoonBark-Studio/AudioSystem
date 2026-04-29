@@ -57,9 +57,9 @@
 	path = plugins/Quest
 	url = https://github.com/MoonBark-Studio/Quest.git
 	branch = chris/event-cleanup
-[submodule "plugins/TiledMapLoader"]
-	path = plugins/TiledMapLoader
-	url = git@github.com:MoonBark-Studio/TiledMapLoader.git
+	[submodule "plugins/MapLoader"]
+	path = plugins/MapLoader
+	url = git@github.com:MoonBark-Studio/MapLoader.git
 [submodule "plugins/WorldGen2D"]
 	path = plugins/WorldGen2D
 	url = https://github.com/MoonBark-Studio/WorldGen2D
