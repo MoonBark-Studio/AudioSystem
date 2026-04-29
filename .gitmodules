@@ -94,3 +94,6 @@
 	path = plugins/Crafting
 	url = https://github.com/MoonBark-Studio/Crafting.git
 
+[submodule "plugins/GridAgents"]
+	path = plugins/GridAgents
+	url = git@github.com:MoonBark-Studio/GridAgents.git
