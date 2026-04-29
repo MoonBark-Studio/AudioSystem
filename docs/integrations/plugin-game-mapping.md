@@ -30,7 +30,7 @@
 || **Quest** | 60 | ✅ Core (wired) | ❌ Not wired | Quest YAML — idle has quests; Thistletide uses GOAP/abilities |
 || **RenderingOptimizations** | 55 | ❌ Wrong game | ✅ Godot (wired) | ECS rendering opts — Thistletide only |
 || **Sensors** | 62 | ❌ Wrong genre | ✅ Core (wired) | Visual AI sensors — idle agents use TaskDistribution, not vision |
-| StatusEffects | 50 | ✅ Core (wired) | ❌ Not wired | Buff/attribute modifiers — complements Abilities in Thistletide (abilities trigger effects → effects apply status) |
+| StatusEffects | 50 | ✅ Core (wired) | ⚠️ Integration incomplete | Buff/attribute modifiers — idle uses standalone. **Thistletide has Abilities but StatusEffects is NOT wired:** Abilities defines `BuffEffect`/`DebuffEffect` as stub data objects; `GodotEffectApplier.ApplyBuff/ApplyDebuff` are stubs; `StatusEffectExecutor.Execute()` has a TODO and does nothing. The intended flow (ability casts → `IEffectExecutor` → `StatusEffectSystem.ApplyEffect`) is not yet connected. |
 || **TaskDistribution** | 60 | ✅ Core (wired) | ✅ Core (wired) | Task board + claim system — both games |
 || **Telemetry** | 70 | ✅ Editor plugin | ❌ Not wired | Perf monitoring — editor tool; both games could use |
 || **Upgrades** | 65 | ✅ ECS (wired) | ❌ Wrong genre | Cost-scaling purchases — idle upgrade shop only |
@@ -106,7 +106,7 @@ Action RPG mechanics: AI-controlled characters with abilities, combat, loot drop
 | Telemetry | ❌ Not wired | **Consider** — perf monitoring for ECS at scale |
 | PrototypeUI | ✅ Already wired | Godot layer debug HUD scaffolding |
 | MapLoader | ❌ Wrong genre | Tiled maps — idle-specific; Thistletide uses custom terrain |
-| StatusEffects | ❌ Don't wire | Buff/attribute system — Thistletide uses Abilities for effects |
+| StatusEffects | ⚠️ Integration incomplete | Buff/attribute system — **not wired to Abilities in Thistletide.** Abilities has `BuffEffect`/`DebuffEffect` as stubs; `StatusEffectExecutor.Execute()` has a TODO. Integrate properly or remove from Thistletide. |
 | Economy | ❌ Wrong genre | Passive production — no idle mechanics |
 | Upgrades | ❌ Wrong genre | Cost-scaling purchases — idle shop; Thistletide uses Abilities/Attributes |
 | Crafting | ❌ Wrong genre | No crafting system designed |
@@ -139,7 +139,7 @@ Action RPG mechanics: AI-controlled characters with abilities, combat, loot drop
 | Sensors | ❌ Wrong genre | ✅ Core | Thistletide only |
 | RenderingOptimizations | ❌ Wrong game | ✅ Godot | Thistletide only |
 | WorldTime | ✅ Core+ECS+Views | ❌ Not wired | Idle only |
-| StatusEffects | ✅ Core | ❌ Wrong genre | Idle only |
+| StatusEffects | ✅ Core | ⚠️ Incomplete | Idle only — **Thistletide has Abilities but StatusEffects not wired**: BuffEffect/DebuffEffect are stubs; StatusEffectExecutor.Execute() is a no-op |
 | Economy | ✅ ECS | ❌ Wrong genre | Idle only |
 | Upgrades | ✅ ECS | ❌ Wrong genre | Idle only |
 | Quest | ✅ Core | ❌ Not wired | Idle only |
@@ -179,6 +179,23 @@ Action RPG mechanics: AI-controlled characters with abilities, combat, loot drop
 | **Neither game (wrong genre)** | Crafting, WorldGen2D, Minimap |
 | **Idle could use, not wired** | GridAgents, AudioSystem |
 | **Thistletide-only** | PrototypeUI |
+| **Design gap (potential integration)** | StatusEffects ↔ Abilities — Abilities defines BuffEffect/DebuffEffect stubs; StatusEffects is not wired to the Abilities effect pipeline. Integration incomplete. |
+
+---
+
+## Integration Gaps
+
+### Thistletide: StatusEffects ↔ Abilities (incomplete)
+
+**Intended design:** Ability casts → `BuffEffect`/`DebuffEffect` data objects → `IEffectExecutor` → `StatusEffectExecutor.Execute()` → `StatusEffectSystem.ApplyEffect()` → entity gets timed buff with modifiers.
+
+**Current state (broken):**
+- `Abilities.Core.Effects.BuffEffect` / `DebuffEffect` — data-only classes, no runtime behavior
+- `GodotEffectApplier.ApplyBuff()` / `ApplyDebuff()` — **stubs**: print log + trigger visual, do not modify entity state
+- `StatusEffects.ECS.EffectExecutor.Execute()` — **no-op**: `if (effect is not StatusEffectDefinition) return;` then TODO comment, does nothing
+- `StatusEffects.StatusEffectSystem.ApplyEffect()` — exists and works, but nothing calls it from Abilities
+
+**Fix:** `StatusEffectExecutor.Execute()` needs to resolve `StatusEffectDefinition` from `BuffEffect`/`DebuffEffect` data and call `StatusEffectSystem.ApplyEffect()`. Or the Abilities `GodotEffectApplier` needs to call `StatusEffectsModule.StatusEffectSystem` directly.
 
 ---
 
