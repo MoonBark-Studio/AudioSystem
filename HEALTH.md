@@ -7,6 +7,16 @@
 ## Discovered Issues
 (none yet)
 
+## Code Quality
+| Metric | Value | Last Evaluated |
+|--------|-------|----------------|
+| Overall Score | 52/100 | 2026-04-26 |
+| Structure | 55/100 | - |
+| C# Standards | 55/100 | - |
+| ECS Patterns | 50/100 | - |
+| Tests | 40/100 | - |
+| Documentation | 45/100 | - |
+
 ## Metrics
 - **Lines of C# production code**: 2309 (from `cloc --include-lang=C# --quiet Core/ src/`)
 - **Test coverage**: unknown

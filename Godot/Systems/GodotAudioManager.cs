@@ -1,4 +1,5 @@
 using MoonBark.AudioSystem.Core.Configuration;
+using MoonBark.Framework.Logging;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,13 @@ namespace MoonBark.AudioSystem.Godot.Systems;
 /// </summary>
 public partial class GodotAudioManager : Node
 {
+    private static IFrameworkLogger? _logger;
+
+    private static void LogError(string message)
+    {
+        _logger ??= FrameworkLoggers.Get<GodotAudioManager>();
+        _logger.Error(message);
+    }
     private const string MusicPlayerNodeName = "MusicPlayer";
     private const string AmbientPlayerNodeName = "AmbientPlayer";
     private const float DefaultMusicVolume = 0.0f;
@@ -117,15 +125,15 @@ public partial class GodotAudioManager : Node
         }
         catch (FileNotFoundException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Audio config file not found: {ex.Message}");
+            LogError($"Audio config file not found: {ex.Message}");
         }
         catch (IOException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
+            LogError($"Failed to read audio config file: {ex.Message}");
         }
         catch (InvalidOperationException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message}");
+            LogError($"Unexpected error loading audio config: {ex.Message}");
         }
     }
 
@@ -171,45 +179,13 @@ public partial class GodotAudioManager : Node
     {
         float deltaSec = (float)delta;
 
-        // Fade music player
-        if (_musicPlayer != null && (_musicFadingIn || Math.Abs(_musicPlayer.VolumeDb - GetEffectiveMusicVolumeDb()) > FadeEpsilon))
-        {
-            float targetDb = GetEffectiveMusicVolumeDb();
-            if (_musicFadingIn)
-            {
-                _musicPlayer.VolumeDb = Mathf.MoveToward(_musicPlayer.VolumeDb, targetDb, _musicFadeRate * deltaSec);
-                if (Math.Abs(_musicPlayer.VolumeDb - targetDb) < FadeEpsilon)
-                {
-                    _musicFadingIn = false;
-                }
-            }
-            else
-            {
-                // Fade out (target is 0)
-                _musicPlayer.VolumeDb = Mathf.MoveToward(_musicPlayer.VolumeDb, targetDb, _musicFadeRate * deltaSec);
-            }
-        }
+        // Fade both players. Both branches use identical MoveToward(target, rate*dt).
+        // _musicFadingIn / _ambientFadingIn are cleared when we first arrive at target
+        // during a fade-in; they stay false during a fade-out.
+        FadePlayerVolume(_musicPlayer, _musicFadingIn, GetEffectiveMusicVolumeDb(), _musicFadeRate * deltaSec, ref _musicFadingIn);
+        FadePlayerVolume(_ambientPlayer, _ambientFadingIn, GetEffectiveAmbientVolumeDb(), _ambientFadeRate * deltaSec, ref _ambientFadingIn);
 
-        // Fade ambient player
-        if (_ambientPlayer != null && (_ambientFadingIn || Math.Abs(_ambientPlayer.VolumeDb - GetEffectiveAmbientVolumeDb()) > FadeEpsilon))
-        {
-            float targetDb = GetEffectiveAmbientVolumeDb();
-            if (_ambientFadingIn)
-            {
-                _ambientPlayer.VolumeDb = Mathf.MoveToward(_ambientPlayer.VolumeDb, targetDb, _ambientFadeRate * deltaSec);
-                if (Math.Abs(_ambientPlayer.VolumeDb - targetDb) < FadeEpsilon)
-                {
-                    _ambientFadingIn = false;
-                }
-            }
-            else
-            {
-                // Fade out
-                _ambientPlayer.VolumeDb = Mathf.MoveToward(_ambientPlayer.VolumeDb, targetDb, _ambientFadeRate * deltaSec);
-            }
-        }
-
-        // Handle pending track changes after fade out
+        // Handle pending track changes after fade-out completes
         if (_pendingMusicCueId != null && !_musicFadingIn && _musicPlayer != null && !IsPlayerFadingToward(_musicPlayer, GetEffectiveMusicVolumeDb()))
         {
             string cueId = _pendingMusicCueId;
@@ -224,6 +200,26 @@ public partial class GodotAudioManager : Node
             _pendingAmbientCueId = null;
             PlayLoop(_ambientPlayer, cueId, _ambientPaths);
             _ambientFadingIn = true;
+        }
+    }
+
+    /// <summary>
+    /// Advances one fade step for a player, moving volume toward targetDb.
+    /// fadingIn is cleared on first arrival during a fade-in; untouched during fade-out.
+    /// </summary>
+    private void FadePlayerVolume(AudioStreamPlayer? player, bool fadingIn, float targetDb, float step, ref bool fadingInState)
+    {
+        if (player == null) return;
+
+        bool notAtTarget = Math.Abs(player.VolumeDb - targetDb) > FadeEpsilon;
+        if (!fadingIn && !notAtTarget) return;
+
+        player.VolumeDb = Mathf.MoveToward(player.VolumeDb, targetDb, step);
+
+        // Only clear fadingIn on arrival during a fade-in (fade-out doesn't set fadingIn)
+        if (fadingIn && Math.Abs(player.VolumeDb - targetDb) < FadeEpsilon)
+        {
+            fadingInState = false;
         }
     }
 
@@ -578,7 +574,7 @@ public partial class GodotAudioManager : Node
                     return resourceStream;
                 }
 
-                GD.PrintErr($"GodotAudioManager: Failed to load audio resource '{path}': ResourceLoader returned null");
+                LogError($"Failed to load audio resource '{path}': ResourceLoader returned null");
                 return null;
             }
 
@@ -590,7 +586,7 @@ public partial class GodotAudioManager : Node
                 modifiers: null);
             if (loadFromFileMethod == null)
             {
-                GD.PrintErr($"GodotAudioManager: External wav loading is unavailable in this Godot runtime: {path}");
+                LogError($"External wav loading is unavailable in this Godot runtime: {path}");
                 return null;
             }
 
@@ -600,22 +596,22 @@ public partial class GodotAudioManager : Node
                 return stream;
             }
 
-            GD.PrintErr($"GodotAudioManager: Failed to load external wav '{path}': LoadFromFile returned null");
+            LogError($"Failed to load external wav '{path}': LoadFromFile returned null");
             return null;
         }
         catch (FileNotFoundException)
         {
-            GD.PrintErr($"GodotAudioManager: Audio file not found: {path}");
+            LogError($"Audio file not found: {path}");
             return null;
         }
         catch (IOException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Failed to read audio file '{path}': {ex.Message}");
+            LogError($"Failed to read audio file '{path}': {ex.Message}");
             return null;
         }
         catch (InvalidOperationException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio '{path}': {ex.Message}");
+            LogError($"Unexpected error loading audio '{path}': {ex.Message}");
             return null;
         }
     }
