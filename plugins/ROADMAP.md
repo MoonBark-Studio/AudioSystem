@@ -97,6 +97,20 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - Flatten Godot addon paths to canonical depth
 - **Action:** Bulk cleanup with git rm + per-plugin restructuring.
 
+## Action Items from Latest Audit
+- [ ] Fix: Magic number (4+ digits) (169x)
+- [ ] Fix: Property bag access ["key"] (74x)
+- [ ] Fix: Console.WriteLine (21x)
+- [ ] Fix: NotImplementedException (1x)
+- [ ] Fix: catch-all Exception (49x)
+- [ ] Fix: Property bag (Dictionary) (4x)
+- [ ] Fix: Empty catch block (3x)
+- [ ] Fix: TODO comment (1x)
+- [ ] ECS refactor: move 83 files with ECS types into ECS/ subdirectory
+  - `plugins/Abilities/Core/Execution/AbilityCommandHandler.cs`
+  - `plugins/Abilities/godot/scripts/AbilitiesPlugin.cs`
+  - `plugins/Abilities/godot/scripts/AbilityDemo.cs`
+
 ## TODO (unprioritized)
 
 - [ ] Implement test suite for GridAgents (currently scaffold only)
@@ -112,15 +126,9 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - Consider consolidating GridAgents + GridPathfinding (overlapping concerns)
 
 ## Changelog
-
 ### 2026-04-29
-- Per-plugin quality scoring added to HEALTH/ROADMAP
-- Consolidated duplicate changelog entries in ROADMAP
-- 27 plugins scored across 4 dimensions (Boundary, Impl Quality, Testability, Test Suite)
-- GridPlacement identified as critical (47/100), Crafting as best (96/100)
+- Audit run — 322 total issues (2423 changed files)
+- ECS violations: 83
+- Framework bridge gaps: 0
 
-### 2026-04-22
-- Audit run: 172 issues, 35 changed files
-- ECS violations: 58
-- IDisposable lifetime violations: 22
-- Structure violations: 681
+<!-- previous entries preserved -->

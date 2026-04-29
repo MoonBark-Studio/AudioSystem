@@ -2,6 +2,33 @@
 
 **Module:** `plugins`
 
+## Key Types
+## Key Types (2423 files, ~362114 lines)
+AICommandCoordinator, AIMode, AITests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind, AbilityLearningComponent, AbilityRegistry, AbilityRegistryTests, AbilitySignalBus
+
+## Namespaces
+- `MoonBark.AI.Conditions`
+- `MoonBark.AI.ECS.Components`
+- `MoonBark.AI.ECS.EventWeaver`
+- `MoonBark.AI.ECS.GOAP.Systems`
+- `MoonBark.AI.ECS.Hybrid.Systems`
+- `MoonBark.AI.ECS.Shared`
+- `MoonBark.AI.Shared`
+- `MoonBark.AI.Tests`
+- `MoonBark.Abilities.Core`
+- `MoonBark.Abilities.Core.Effects`
+- `MoonBark.Abilities.Core.Execution`
+- `MoonBark.Abilities.ECS`
+- `MoonBark.Abilities.Godot`
+- `MoonBark.Abilities.Godot.Examples`
+- `MoonBark.Abilities.Tests`
+- `MoonBark.WorldState`
+
+## ECS Architecture (v2)
+- ECS subdirectories: Abilities/ECS, AI/ECS, Attributes/ECS, Economy/ECS, EcsPhysics2D/ECS, GridPathfinding/ECS, GridPlacement/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, StatusEffects/ECS, Upgrades/ECS, WorldTime/ECS, Crafting/cs/ECS, GridPlacement/cs/ECS, GridPlacement/Tests/ECS, GridPlacement/cs/test/ECS, GridPlacement/cs/Godot/test/ECS, GridPlacement/cs/test/Core/ECS, GridPlacement/Godot/test/ECS, GridPlacement/Tests/Core/ECS, ItemVault/Tests/ECS, Sensors/cs/ECS, WorldTime/ECS/obj/ECS, WorldTime/ECS/tests/ECS
+- ECS files outside subdirectories: 83
+- Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
+
 ## Overview
 27-plugin monorepo of MoonBark Studio Godot C# plugins, organized under a hub-and-spoke Git submodule architecture. Each plugin is a standalone, game-agnostic system intended for reuse across MoonBark titles.
 
@@ -78,6 +105,6 @@ MoonBark.WorldTime.Core / .ECS / .Godot
 Each plugin is self-contained. Cross-plugin dependencies go through Core/ interfaces (framework contracts). No plugin should directly reference another plugin's ECS/ or Godot/ types.
 
 ## Status
-- Audited: 2026-04-22
-- 1,718 C# files, ~229,382 lines
-- 27 plugins, 3 quality tiers (Crafting/Quest at top, GridPlacement critically degraded)
+- ✅ Audited: 2026-04-29
+- Changed files this run: 2423
+- File count: 2423 C# files (~362114 lines)

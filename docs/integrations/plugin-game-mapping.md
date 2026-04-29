@@ -7,124 +7,113 @@
 
 ## Summary
 
-| Plugin | Health | MoonBark Idle | Thistletide | Notes |
+|| Plugin | Health | MoonBark Idle | Thistletide | Notes |
 |--------|--------|---------------|-------------|-------|
-| **Framework** | — | ✅ Core only | ✅ Core only | `CoreVector2I`, `IEventBus`, `IWorldView`, `ISimulationSystem` |
-| **AI** | — | ❌ Removed | ✅ Core | GOAP planner — removed from idle (uses priority ladder); active in Thistletide |
-| **Abilities** | 82 | ❌ | ✅ Core (wired) | Ability system with cooldowns, mana costs — better fit for action RPG |
-| **Attributes** | 55 | ⚠️ Not wired | ✅ Core (wired) | Health/Energy/Mana components — valuable for Thistletide combat; referenced in idle but unused |
-| **AudioSystem** | 52 | ⚠️ Not wired | ✅ Godot (wired) | JSON-configured audio cues — both games could use |
-| **Crafting** | 65 | ❌ | ❌ Not wired | Recipe-based crafting with ItemVault — genre mismatch for both games |
-| **Economy** | 48 | ✅ ECS (wired) | ❌ Not wired | Passive production, resource pools — core to idle, not action RPG |
-| **EcsPhysics2D** | 58 | ❌ | ✅ Core (wired) | Box2D + Friflo ECS bridge — Thistletide only |
-| **EntityTargetingSystem** | 52 | ❌ | ✅ Core (wired) | Faction-based targeting — Thistletide only |
-| **GridAgents** | 100 | ❌ Not wired | ✅ Core (wired) | Reusable agent runtime scaffold — both games could benefit |
-| **GridPathfinding** | 100 | ✅ Core (wired) | ✅ Core (wired) | Hierarchical A* — both games |
-| **GridPlacement** | — | ✅ ECS + Godot.Views (wired) | ✅ Core (wired) | Building/placement validation — both games |
-| **ItemDrops** | 60 | ❌ Not wired | ✅ Core (wired) | Loot tables, conditional drops — Thistletide action content |
-| **ItemVault** | 58 | ✅ Core (wired) | ✅ Core (wired) | Inventory containers — both games |
-| **MapLoader** | 50 | ✅ Godot (wired) | ❌ Not wired | Tiled `.tmj` loader — idle ground layer; Thistletide uses custom terrain |
-| **Minimap** | 58 | ⚠️ Not wired | ❌ Not wired | Fog-of-war minimap — could enhance both |
-| **NetworkSync** | 58 | ❌ Not wired | ✅ Core (wired) | LiteNetLib multiplayer — Thistletide only |
-| **PrototypeUI** | 55 | ⚠️ Not wired | ✅ Godot (wired) | Lightweight HUD scaffolding — idle could use for debug UI |
-| **Quest** | 60 | ✅ Core (wired) | ❌ Not wired | Quest YAML system — idle has quests; Thistletide may want |
-| **RenderingOptimizations** | 55 | ❌ Not wired | ✅ Godot (wired) | ECS rendering optimizations — Thistletide only |
-| **Sensors** | 62 | ❌ Not wired | ✅ Core (wired) | Visual sensor detection for AI — Thistletide only |
-| **StatusEffects** | 50 | ✅ Core (wired) | ❌ Not wired | Buff/attribute modifiers — idle has speed buffs, deposit multipliers |
-| **TaskDistribution** | 60 | ✅ Core (wired) | ✅ Core (wired) | Task board + claim system — both games |
-| **Telemetry** | 70 | ✅ Editor plugin | ❌ Not wired | Runtime perf monitoring — both games benefit |
-| **Upgrades** | 65 | ✅ ECS (wired) | ❌ Not wired | Cost-scaling purchase system — idle upgrade shop |
-| **WorldGen2D** | 55 | ❌ Not wired | ❌ Not wired | Procedural heightmap/biome generation — neither; MapLoader for idle, Thistletide uses custom |
-| **WorldState** | 52 | ⚠️ ProjectRef present | ✅ Core (wired) | KV state store — Thistletide active; idle has ref but unverified |
-| **WorldTime** | 95 | ✅ Core + ECS + Godot.Views (wired) | ❌ Not wired | Calendar/time types — idle aging/crops; Thistletide needs time for day/night |
+|| **Framework** | — | ✅ Core only | ✅ Core only | `CoreVector2I`, `IEventBus`, `IWorldView`, `ISimulationSystem` |
+|| **AI** | — | ❌ Removed | ✅ Core | GOAP planner — removed from idle (uses priority ladder) |
+|| **Abilities** | 82 | ❌ Wrong genre | ✅ Core (wired) | Ability system with cooldowns, mana — action RPG only |
+|| **Attributes** | 55 | ⚠️ Not wired | ✅ Core (wired) | Health/Energy/Mana — Thistletide combat; idle has stub ref |
+|| **AudioSystem** | 52 | ❌ Wrong genre | ✅ Godot (wired) | JSON audio — both games could use; low priority for idle |
+|| **Crafting** | 65 | ❌ Wrong genre | ❌ Wrong genre | Recipe-based crafting — neither game has crafting UI or recipes |
+|| **Economy** | 48 | ✅ ECS (wired) | ❌ Wrong genre | Passive production, resource pools — idle only |
+|| **EcsPhysics2D** | 58 | ❌ Wrong genre | ✅ Core (wired) | Box2D + Friflo ECS — action RPG physics only |
+|| **EntityTargetingSystem** | 52 | ❌ Wrong genre | ✅ Core (wired) | Faction-based targeting — combat/action only |
+|| **GridAgents** | 100 | ❌ Wrong game | ✅ Core (wired) | Agent runtime scaffold — could benefit idle but not wired |
+|| **GridPathfinding** | 100 | ✅ Core (wired) | ✅ Core (wired) | Hierarchical A* — both games |
+|| **GridPlacement** | — | ✅ ECS + Godot.Views (wired) | ✅ Core (wired) | Building/placement — both games |
+|| **ItemDrops** | 60 | ❌ Wrong genre | ✅ Core (wired) | Loot tables — idle uses direct production, not drops |
+|| **ItemVault** | 58 | ✅ Core (wired) | ✅ Core (wired) | Inventory containers — both games |
+|| **MapLoader** | 50 | ✅ Godot (wired) | ❌ Wrong genre | Tiled `.tmj` loader — idle ground maps only |
+|| **Minimap** | 58 | ❌ Not needed | ❌ Not needed | Fog-of-war minimap — neither game has explored exploration |
+|| **NetworkSync** | 58 | ❌ Wrong genre | ✅ Core (wired) | LiteNetLib multiplayer — action RPG only |
+|| **PrototypeUI** | 55 | ❌ Not needed | ✅ Godot (wired) | Lightweight HUD — Thistletide debug; idle uses native UI |
+|| **Quest** | 60 | ✅ Core (wired) | ❌ Not wired | Quest YAML — idle has quests; Thistletide uses GOAP/abilities |
+|| **RenderingOptimizations** | 55 | ❌ Wrong game | ✅ Godot (wired) | ECS rendering opts — Thistletide only |
+|| **Sensors** | 62 | ❌ Wrong genre | ✅ Core (wired) | Visual AI sensors — idle agents use TaskDistribution, not vision |
+| StatusEffects | 50 | ✅ Core (wired) | ❌ Not wired | Buff/attribute modifiers — complements Abilities in Thistletide (abilities trigger effects → effects apply status) |
+|| **TaskDistribution** | 60 | ✅ Core (wired) | ✅ Core (wired) | Task board + claim system — both games |
+|| **Telemetry** | 70 | ✅ Editor plugin | ❌ Not wired | Perf monitoring — editor tool; both games could use |
+|| **Upgrades** | 65 | ✅ ECS (wired) | ❌ Wrong genre | Cost-scaling purchases — idle upgrade shop only |
+|| **WorldGen2D** | 55 | ❌ Wrong genre | ❌ Wrong genre | Procedural terrain — neither game; MapLoader for idle, custom terrain for Thistletide |
+|| **WorldState** | 52 | ⚠️ Unverified | ✅ Core (wired) | KV state store — Thistletide active; idle has ref but unverified |
+|| **WorldTime** | 95 | ✅ Core + ECS + Godot.Views (wired) | ❌ Not wired | Calendar/time — idle aging/crops; Thistletide needs day/night |
 
 ---
 
-## MoonBark Idle — Plugin Integration Detail
+## What Belongs Where
 
-### ✅ Active (wired and used)
+### MoonBark Idle — Genre: Idle / Tycoon
 
-| Plugin | Layer | Usage |
-|--------|-------|-------|
-| MoonBark.Framework | Core | `CoreVector2I`, `IReadOnlyWorldView`, `IEventBus`, `ISimulationSystem`, wiring bootstrap |
-| GridPlacement | ECS + Godot.Views | `PlacementSystem`, `GridOccupancySystem` — farming plots, sell bins, pantries |
-| GridPathfinding | Core | `IPathfinder` — agent A* movement |
-| TaskDistribution | Core | `TaskClaimSystem`, `ITaskRequestPolicy` — agent-to-task matching |
-| WorldTime | Core + ECS + Godot.Views | `WorldTimeIntegration`, `AgingComponent` — crop growth, harvest timing |
-| StatusEffects | Core | `AttributeModifierSystem` — speed buffs, deposit multipliers |
-| Economy | ECS | Passive production, `ResourceComponent`-based |
-| Upgrades | ECS | Cost-scaling purchase system |
-| ItemVault | Core | Inventory storage backend |
-| Quest | Core | Quests loaded from `quests.yaml` via `QuestIntegration` |
-| Telemetry | Editor plugin | `MoonBark.Telemetry.Godot` enabled in Godot editor |
-| MapLoader | Godot | `TiledGroundLoader` — loads `.tiled` ground layer maps |
+Idle mechanics: passive production, time-driven growth, resource conversion, upgrades, quests, grid placement.
 
-### ⚠️ ProjectRef present — verify before using
+| Plugin | Verdict | Reason |
+|--------|---------|--------|
+| Framework | ✅ Belongs | ECS infrastructure, shared types |
+| GridPathfinding | ✅ Belongs | Agent pathfinding |
+| GridPlacement | ✅ Belongs | Building and plot placement |
+| TaskDistribution | ✅ Belongs | Agent task assignment |
+| ItemVault | ✅ Belongs | Inventory backend |
+| WorldTime | ✅ Belongs | Crop growth, harvest timing, game clock |
+| StatusEffects | ✅ Belongs | Speed buffs, deposit multipliers on agents |
+| Economy | ✅ Belongs | Passive resource production |
+| Upgrades | ✅ Belongs | Upgrade shop with exponential cost scaling |
+| Quest | ✅ Belongs | Quest system from `quests.yaml` |
+| MapLoader | ✅ Belongs | Tiled ground layer maps |
+| Telemetry | ✅ Belongs | Editor-only telemetry plugin |
+| WorldState | ⚠️ Verify | ProjectReference present — confirm actual usage |
+| Attributes | ❌ Don't wire | No combat; agents don't have health/energy pools |
+| AudioSystem | ❌ Don't wire | Nice-to-have but not needed; no SFX design in scope |
+| PrototypeUI | ❌ Don't wire | Idle has native Godot UI; no debug HUD gap |
+| Minimap | ❌ Don't wire | Idle camera covers viewport; no exploration |
+| AI | ❌ Don't wire | Removed — idle uses priority ladder, not GOAP |
+| Abilities | ❌ Wrong genre | No combat, no abilities, no mana |
+| ItemDrops | ❌ Wrong genre | Idle has direct production, not loot drops |
+| Crafting | ❌ Wrong genre | No crafting UI or recipe system |
+| Economy (ECS) | ✅ Already wired | Already integrated |
+| EcsPhysics2D | ❌ Wrong genre | No physics simulation |
+| EntityTargetingSystem | ❌ Wrong genre | No combat system |
+| Sensors | ❌ Wrong genre | No AI vision; TaskDistribution handles agent routing |
+| NetworkSync | ❌ Wrong genre | Single-player game |
+| RenderingOptimizations | ❌ Wrong game | Designed for Thistletide's rendering needs |
+| WorldGen2D | ❌ Wrong genre | Uses MapLoader for handcrafted maps |
+| GridAgents | ❌ Wrong game | Thistletide-specific agent scaffold |
 
-| Plugin | Layer | Notes |
-|--------|-------|-------|
-| WorldState | Core | `ProjectReference` present — state store; verify active integration |
-| Attributes | Core | Referenced by StatusEffects/WorldTime but not directly used in game code |
+### Thistletide — Genre: Action RPG / Dungeon Crawler
 
-### ❌ Not wired (plugins exist, not integrated)
+Action RPG mechanics: AI-controlled characters with abilities, combat, loot drops, faction-based targeting, Box2D physics, LiteNetLib multiplayer.
 
-| Plugin | Health | Should integrate? | Reason |
-|--------|--------|-------------------|--------|
-| AudioSystem | 52 | Consider | JSON-configured audio cues — would enrich idle SFX (coin pickup, crop harvest, notifications) |
-| Minimap | 58 | Consider | Fog-of-war minimap — low priority for idle; camera viewport covers most needs |
-| PrototypeUI | 55 | Consider | Lightweight HUD scaffolding — could replace hand-rolled debug panels |
-| NetworkSync | 58 | No | LiteNetLib multiplayer — idle is single-player |
-| WorldGen2D | 55 | No | Procedural generation — idle uses handcrafted Tiled maps via MapLoader |
-| Sensors | 62 | No | Visual AI sensors — idle agents use TaskDistribution, not AI vision |
-| EntityTargetingSystem | 52 | No | Faction-based targeting — no combat system in idle |
-| ItemDrops | 60 | No | Loot tables — idle uses direct resource production via Economy |
-| EcsPhysics2D | 58 | No | Box2D physics — idle uses grid-based logic, not physics simulation |
-| Abilities | 82 | No | Ability system — idle has no combat/ability casting |
-| Crafting | 65 | No | Recipe crafting — idle has direct resource conversion; no crafting UI |
-| RenderingOptimizations | 55 | No | ECS rendering optimizations — Thistletide focus |
-
----
-
-## Thistletide — Plugin Integration Detail
-
-### ✅ Active (wired and used)
-
-| Plugin | Layer | Usage |
-|--------|-------|-------|
-| MoonBark.Framework | Core | `CoreVector2I`, `IEventBus`, `IWorldView`, wiring bootstrap |
-| AI | Core | `GOAPPlanner` — agent decision making |
-| WorldState | Core | Global/faction KV state store |
-| TaskDistribution | Core | Task board, agent assignment |
-| ItemDrops | Core | Weighted loot tables, conditional drops for enemies/chests |
-| Abilities | Core | Castable abilities with mana/cooldown |
-| EntityTargetingSystem | Core | Faction-based targeting validation |
-| AudioSystem | Godot | JSON audio cue routing |
-| GridPlacement | Core | Building placement and occupancy |
-| GridPathfinding | Core | Hierarchical A* pathfinding |
-| GridAgents | Core | Reusable agent runtime scaffold |
-| RenderingOptimizations | Godot | ECS rendering optimizations |
-| NetworkSync | Core | LiteNetLib multiplayer |
-| Sensors | Core | Visual sensor detection for AI agents |
-| ItemVault | Core | Inventory containers |
-| Attributes | Core | Health/Energy/Mana components |
-| EcsPhysics2D | Core | Box2D physics integration |
-
-### ❌ Not wired (plugins exist, not integrated)
-
-| Plugin | Health | Should integrate? | Reason |
-|--------|--------|-------------------|--------|
-| WorldTime | 95 | **Yes — high priority** | Calendar/time types — day/night cycle, ability cooldowns, buff durations |
-| WorldGen2D | 55 | Consider | Procedural terrain — Thistletide uses custom terrain system; MapLoader not applicable |
-| Telemetry | 70 | Consider | Perf monitoring — would help optimize ECS systems at scale |
-| Quest | 60 | Consider | Quest YAML system — Thistletide may want quest content without GOAP complexity |
-| Minimap | 58 | Consider | Fog-of-war minimap — fits action RPG exploration |
-| PrototypeUI | 55 | Consider | HUD scaffolding — Thistletide has Godot-native UI; PrototypeUI for debug tools |
-| StatusEffects | 50 | No | Buff system — Thistletide uses Abilities for effects; different design |
-| Economy | 48 | No | Passive production — no idle economy in action RPG |
-| Upgrades | 65 | No | Cost-scaling purchases — Thistletide uses character progression via Abilities/Attributes |
-| Crafting | 65 | No | Recipe crafting — no crafting system designed for Thistletide |
-| AudioSystem | 52 | Already wired | Already wired via Godot layer |
-| MapLoader | 50 | No | Tiled loader — Thistletide uses custom terrain; MapLoader is idle-specific |
+| Plugin | Verdict | Reason |
+|--------|---------|--------|
+| Framework | ✅ Belongs | ECS infrastructure, shared types |
+| GridPathfinding | ✅ Belongs | Agent/dungeon navigation |
+| GridPlacement | ✅ Belongs | Building/interaction placement |
+| TaskDistribution | ✅ Belongs | Task board, agent assignment |
+| ItemVault | ✅ Belongs | Inventory containers |
+| AI | ✅ Belongs | GOAP planner for agent decision making |
+| Abilities | ✅ Belongs | Castable abilities with mana, cooldowns |
+| Attributes | ✅ Belongs | Health/Energy/Mana on characters |
+| EcsPhysics2D | ✅ Belongs | Box2D physics integration |
+| EntityTargetingSystem | ✅ Belongs | Faction-based combat targeting |
+| GridAgents | ✅ Belongs | Reusable agent runtime scaffold |
+| ItemDrops | ✅ Belongs | Loot from enemies, chests, containers |
+| AudioSystem | ✅ Belongs | JSON-configured audio cues for actions/combat |
+| NetworkSync | ✅ Belongs | LiteNetLib multiplayer |
+| Sensors | ✅ Belongs | Visual detection for AI awareness |
+| RenderingOptimizations | ✅ Belongs | ECS rendering optimizations |
+| WorldState | ✅ Belongs | Global/faction KV state |
+| WorldTime | ❌ Not wired | **High priority** — day/night, ability durations, buff timers |
+| Quest | ❌ Not wired | **Consider** — YAML quest content without GOAP complexity |
+| Telemetry | ❌ Not wired | **Consider** — perf monitoring for ECS at scale |
+| PrototypeUI | ✅ Already wired | Godot layer debug HUD scaffolding |
+| MapLoader | ❌ Wrong genre | Tiled maps — idle-specific; Thistletide uses custom terrain |
+| StatusEffects | ❌ Don't wire | Buff/attribute system — Thistletide uses Abilities for effects |
+| Economy | ❌ Wrong genre | Passive production — no idle mechanics |
+| Upgrades | ❌ Wrong genre | Cost-scaling purchases — idle shop; Thistletide uses Abilities/Attributes |
+| Crafting | ❌ Wrong genre | No crafting system designed |
+| AudioSystem (idle) | ❌ Wrong game | Belongs to idle if wired at all |
+| Minimap | ❌ Don't wire | No explored dungeon layout; no fog-of-war gameplay |
+| WorldGen2D | ❌ Wrong genre | Procedural terrain — custom solution in use |
+| GridPlacement.Godot.Views | ❌ Wrong game | Idle-specific placement preview UI |
 
 ---
 
@@ -138,29 +127,29 @@
 | TaskDistribution | ✅ Core | ✅ Core | **Shared** — task board |
 | ItemVault | ✅ Core | ✅ Core | **Shared** — inventory |
 | WorldState | ⚠️ unverified | ✅ Core | **Shared** — verify idle |
-| AI | ❌ | ✅ Core | Thistletide only |
-| Abilities | ❌ | ✅ Core | Thistletide only |
-| Attributes | ⚠️ unused | ✅ Core | **Shared** — wire in idle |
-| AudioSystem | ❌ | ✅ Godot | Thistletide only |
-| EcsPhysics2D | ❌ | ✅ Core | Thistletide only |
-| EntityTargetingSystem | ❌ | ✅ Core | Thistletide only |
-| GridAgents | ❌ | ✅ Core | Thistletide only |
-| ItemDrops | ❌ | ✅ Core | Thistletide only |
-| NetworkSync | ❌ | ✅ Core | Thistletide only |
-| Sensors | ❌ | ✅ Core | Thistletide only |
-| RenderingOptimizations | ❌ | ✅ Godot | Thistletide only |
-| WorldTime | ✅ Core+ECS+Views | ❌ | Idle only |
-| StatusEffects | ✅ Core | ❌ | Idle only |
-| Economy | ✅ ECS | ❌ | Idle only |
-| Upgrades | ✅ ECS | ❌ | Idle only |
-| Quest | ✅ Core | ❌ | Idle only |
-| MapLoader | ✅ Godot | ❌ | Idle only |
-| Telemetry | ✅ Editor plugin | ❌ | Idle only |
-| Crafting | ❌ | ❌ | Neither |
-| Minimap | ❌ | ❌ | Neither |
-| PrototypeUI | ❌ | ✅ Godot | Thistletide only |
-| WorldGen2D | ❌ | ❌ | Neither |
-| AudioSystem (idle) | ❌ | — | Could integrate |
+| Attributes | ⚠️ unused | ✅ Core | **Shared** — wire in idle if needed |
+| AI | ❌ Removed | ✅ Core | Thistletide only |
+| Abilities | ❌ Wrong genre | ✅ Core | Thistletide only |
+| AudioSystem | ❌ Wrong genre | ✅ Godot | Thistletide only |
+| EcsPhysics2D | ❌ Wrong genre | ✅ Core | Thistletide only |
+| EntityTargetingSystem | ❌ Wrong genre | ✅ Core | Thistletide only |
+| GridAgents | ❌ Wrong game | ✅ Core | Thistletide only |
+| ItemDrops | ❌ Wrong genre | ✅ Core | Thistletide only |
+| NetworkSync | ❌ Wrong genre | ✅ Core | Thistletide only |
+| Sensors | ❌ Wrong genre | ✅ Core | Thistletide only |
+| RenderingOptimizations | ❌ Wrong game | ✅ Godot | Thistletide only |
+| WorldTime | ✅ Core+ECS+Views | ❌ Not wired | Idle only |
+| StatusEffects | ✅ Core | ❌ Wrong genre | Idle only |
+| Economy | ✅ ECS | ❌ Wrong genre | Idle only |
+| Upgrades | ✅ ECS | ❌ Wrong genre | Idle only |
+| Quest | ✅ Core | ❌ Not wired | Idle only |
+| MapLoader | ✅ Godot | ❌ Wrong genre | Idle only |
+| Telemetry | ✅ Editor plugin | ❌ Not wired | Editor tool |
+| Crafting | ❌ Wrong genre | ❌ Wrong genre | Neither |
+| Minimap | ❌ Not needed | ❌ Not needed | Neither |
+| PrototypeUI | ❌ Not needed | ✅ Godot | Thistletide only |
+| WorldGen2D | ❌ Wrong genre | ❌ Wrong genre | Neither |
+| GridAgents | ❌ Wrong game | ✅ Core | Thistletide only |
 
 ---
 
@@ -168,17 +157,28 @@
 
 ### For MoonBark Idle
 
-1. **Attributes** — `HealthComponent`, `EnergyComponent` wired into agent entities; StatusEffects references it but it's not in the csproj. Low effort.
-2. **AudioSystem** — JSON audio cues for game events. Low complexity, high feedback value.
-3. **WorldState** — Verify `ProjectReference` is actually active; if so, document in plugin-connections.md.
-4. **Minimap** — Low priority; idle camera covers most needs.
+1. **Attributes** — `HealthComponent`, `EnergyComponent` in csproj but unused. Only wire if agents need vitals. Low effort.
+2. **WorldState** — Verify `ProjectReference` is actually active in game code. Document in plugin-connections.md if confirmed.
+3. **AudioSystem** — Nice-to-have. No SFX design in scope yet.
 
 ### For Thistletide
 
-1. **WorldTime** — High value. Day/night cycle, ability durations, buff timers. `WorldTime.Core + ECS` layers — matches Thistletide's existing plugin structure.
-2. **Quest** — YAML quest system could complement Thistletide's content without GOAP complexity.
-3. **Telemetry** — Perf monitoring for ECS systems. Good for optimization work.
-4. **PrototypeUI** — Debug HUD scaffolding for development.
+1. **WorldTime** (95) — **High priority.** Day/night cycle, ability duration tracking, buff timers. `WorldTime.Core + ECS` layers fit Thistletide's plugin structure.
+2. **Quest** (60) — YAML quest content could complement Thistletide's content without GOAP complexity.
+3. **Telemetry** (70) — Perf monitoring for ECS systems at scale.
+
+---
+
+## Plugin Genre Classification
+
+| Classification | Plugins |
+|---------------|---------|
+| **Idle/Tycoon only** | Economy, StatusEffects, Upgrades, Quest, MapLoader, Telemetry (editor) |
+| **Action RPG only** | Abilities, Attributes, EcsPhysics2D, EntityTargetingSystem, ItemDrops, NetworkSync, Sensors, RenderingOptimizations, AI |
+| **Shared (both genres)** | Framework, GridPathfinding, GridPlacement, TaskDistribution, ItemVault, WorldState, GridAgents |
+| **Neither game (wrong genre)** | Crafting, WorldGen2D, Minimap |
+| **Idle could use, not wired** | GridAgents, AudioSystem |
+| **Thistletide-only** | PrototypeUI |
 
 ---
 
