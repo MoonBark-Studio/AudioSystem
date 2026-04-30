@@ -19,7 +19,7 @@ public partial class GodotAudioManager : Node
 
     private static void LogError(string message)
     {
-        _logger ??= FrameworkLoggers.Get<GodotAudioManager>();
+        _logger ??= new ConsoleFrameworkLogger(typeof(GodotAudioManager).Name);
         _logger.Error(message);
     }
     private const string MusicPlayerNodeName = "MusicPlayer";
