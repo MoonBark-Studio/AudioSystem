@@ -62,16 +62,22 @@ async void methods — exceptions silently swallowed
 | `games/thistletide/godot/scenes/ui/MainHUD.cs` | Godot Node subscribes to events but has no _ExitTree() — delegates keep Node alive after removal from tree |
 | `games/thistletide/godot/scenes/ui/components/AgentsModalComponent.cs` | Godot Node subscribes to events but has no _ExitTree() — delegates keep Node alive after removal from tree |
 
-## Last Audit
-*Audited by golden_trio_cron v4 — 2026-04-30 01:06*
+## Metrics
+- C# Files: 588
+- Total Lines: ~102373
+- Issues Found: 105
+- Changed Files: 7
+- Last Audit: 2026-04-30 18:06
 
-# License Compliance (v2)
-- ✅ License compliant
+## Issues Found
+- **Property bag access ["key"]**: 22
+- **Magic number (4+ digits)**: 55
+- **catch-all Exception**: 11
+- **Console.WriteLine**: 14
+- **TODO comment**: 2
+- **Empty catch block**: 1
 
-# Framework Contracts (v2)
-- ℹ️  Bridge classes: IdleIntentLifecycleAdapter, IdleMovementRecoveryAdapter, NetworkSyncLocalOccupancyValidatorAdapter, NetworkSyncOccupancyProviderAdapter, PlacementRuntimeAdapter
-
-# ECS Boundary Compliance (v2)
+## ECS Boundary Compliance (v2)
 - ❌ ECS violations: 20
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`: ECS type/Friflo outside ECS/ subdirectory
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`: ECS type/Friflo outside ECS/ subdirectory
@@ -80,17 +86,11 @@ async void methods — exceptions silently swallowed
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/IdleTestBase.cs`: ECS type/Friflo outside ECS/ subdirectory
 - ❌ 20 files with ECS types outside ECS/ subdirectory
 
-# Issues Found
-- **Property bag access ["key"]**: 22
-- **Magic number (4+ digits)**: 55
-- **catch-all Exception**: 11
-- **Console.WriteLine**: 14
-- **TODO comment**: 2
-- **Empty catch block**: 1
+## Framework Contracts (v2)
+- ℹ️  Bridge classes: IdleIntentLifecycleAdapter, IdleMovementRecoveryAdapter, NetworkSyncLocalOccupancyValidatorAdapter, NetworkSyncOccupancyProviderAdapter, PlacementRuntimeAdapter
 
-# Metrics
-- C# Files: 578
-- Total Lines: ~102268
-- Issues Found: 105
-- Changed Files: 0
-- Last Audit: 2026-04-30 01:06
+## License Compliance (v2)
+- ✅ License compliant
+
+## Last Audit
+*Audited by golden_trio_cron v4 — 2026-04-30 18:06*
