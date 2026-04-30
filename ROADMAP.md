@@ -116,3 +116,25 @@ Legend:
 These repos may exist but are not yet linked:
 - `plugins/Configuration` - repo may be private
 - `plugins/MoonBark.FogOfWar` - repo may not exist yet
+
+## Action Items from Latest Audit
+- [ ] Fix: Console.WriteLine (36x)
+- [ ] Fix: Property bag access ["key"] (90x)
+- [ ] Fix: catch-all Exception (61x)
+- [ ] Fix: Magic number (4+ digits) (224x)
+- [ ] Fix: TODO comment (4x)
+- [ ] Fix: Empty catch block (4x)
+- [ ] Fix: NotImplementedException (1x)
+- [ ] Fix: Property bag (Dictionary) (3x)
+- [ ] ECS refactor: move 101 files with ECS types into ECS/ subdirectory
+  - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
+  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+
+## Changelog
+### 2026-04-30
+- Audit run — 423 total issues (4 changed files)
+- ECS violations: 101
+- Framework bridge gaps: 0
+
+<!-- previous entries preserved -->
