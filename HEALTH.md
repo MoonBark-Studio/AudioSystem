@@ -104,31 +104,33 @@ col 3 (tile 3, GID 4) → terrain 3 = Dirt
 | WorldState.Tests | ⚠️ Package fixed | xunit.runner 2.8.2→3.1.4 |
 | WorldGen2D | ⚠️ Stub only | No noise library — placeholder |
 | TaskDistribution.Core | ✅ Builds | |
-| PrototypeUI.Godot | ⚠️ TargetFramework mismatch | net10.0 vs rest net8.0 |
+| PrototypeUI.Godot | ✅ TargetFramework fixed | net10.0→net8.0 resolved |
+| Thistletide.Godot | ✅ References fixed | PrototypeUI/RenderingOpts/GridPlacement fixed; SDK 4.6.2; build re-enabled |
 | Attributes | ⚠️ No Godot csproj | Core only, no Godot integration |
 
 ## Plugin Health Summary
 
 | Plugin | Health | Issue |
 |--------|--------|-------|
-| AI | ⚠️ Unused | Referenced but disabled in moonbark-idle |
-| Abilities | ✅ | |
-| Attributes | ⚠️ Core only | No Godot csproj |
-| EcsPhysics2D | ⚠️ Box2D | Not wired into any game |
-| Sensors | ✅ | |
-| EntityTargetingSystem | ✅ | |
-| GridPathfinding | ✅ | |
-| GridPlacement | ✅ | |
-| ItemDrops | ✅ Tests pass | 113 tests; 5 orphaned tests for removed types deleted |
-| Minimap | ✅ | |
-| PrototypeUI | ⚠️ net10.0 | Inconsistent TargetFramework |
-| Quest | ✅ | |
-| RenderingOptimizations | ✅ | |
-| TaskDistribution | ✅ | |
-| TiledMapLoader | ✅ | YATI removed, standalone works |
+| AI | ✅ | Wired in moonbark-idle + thistletide |
+| Abilities | ✅ | Wired in thistletide |
+| Attributes | ✅ Core | Core wired in both games |
+| EcsPhysics2D | ✅ | Wired in thistletide |
+| Sensors | ✅ | Wired in thistletide |
+| EntityTargetingSystem | ✅ | Wired in thistletide |
+| GridPathfinding | ✅ | Wired in both games |
+| GridPlacement | ✅ | Wired in both games |
+| ItemDrops | ✅ Tests pass | 113 tests; wired in thistletide |
+| Minimap | ✅ | Not yet wired to either game |
+| PrototypeUI | ✅ | net10.0→net8.0 fixed; spoke reference fixed in Thistletide |
+| Quest | ✅ | Wired in moonbark-idle |
+| RenderingOptimizations | ✅ | Wired in thistletide (path fixed 2026-05) |
+| TaskDistribution | ✅ | Wired in both games |
+| MapLoader (TiledMapLoader) | ✅ | YATI removed, standalone works; wired in moonbark-idle |
 | WorldGen2D | ❌ Stub | No implementation |
-| WorldState | ✅ | |
-| WorldTime | ✅ | SDK version fixed |
+| WorldState | ✅ | Wired in both games |
+| WorldTime | ✅ | Wired in moonbark-idle; not yet in thistletide |
+| NetworkSync | ✅ | Wired in thistletide |
 
 ## Cross-Spoke CI/CD Validation
 

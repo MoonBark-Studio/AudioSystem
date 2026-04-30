@@ -1,12 +1,51 @@
 <Project>
   <!--
-    Central build properties for MoonBark Studio projects.
-    Vendor root is two directories up from this file:
-      projects/Directory.Build.props → projects/ → godot/ → vendor/
-    So $(MSBuildThisFileDirectory)/../../vendor/ resolves to the Godot root vendor/ folder.
+    Hub-level build properties for MoonBark Studio projects.
+    This file is the root of the Directory.Build.props chain — all game and plugin
+    Directory.Build.props files should import this one via GetPathOfFileAbove.
+
+    Vendor layout:
+      $(MSBuildThisFileDirectory)  = projects/
+      ../                          = the directory containing projects/ (e.g. godot/)
+      ../vendor/                   = godot/vendor/  ← Sylves.dll lives here
   -->
+
+  <!-- ===== Vendor DLL Paths ===== -->
   <PropertyGroup Label="MoonBark Vendor Paths">
-    <MoonBarkVendorRoot>$(MSBuildThisFileDirectory)/../../vendor/</MoonBarkVendorRoot>
+    <MoonBarkVendorRoot>$(MSBuildThisFileDirectory)../vendor/</MoonBarkVendorRoot>
     <SylvesVendorPath>$(MoonBarkVendorRoot)Sylves.dll</SylvesVendorPath>
+  </PropertyGroup>
+
+  <!--
+    ===== Canonical NuGet Package Versions =====
+    Use these MSBuild properties in all new PackageReference elements so version bumps
+    only need to happen in one place. Existing csproj files can be migrated incrementally.
+
+    Usage:
+      <PackageReference Include="Friflo.Engine.ECS" Version="$(FrifloEngineEcsVersion)" />
+  -->
+  <PropertyGroup Label="NuGet Versions — ECS">
+    <FrifloEngineEcsVersion>3.6.0</FrifloEngineEcsVersion>
+    <FrifloJsonBurstVersion>1.0.4</FrifloJsonBurstVersion>
+    <FrifloJsonFlioxVersion>1.0.4</FrifloJsonFlioxVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet Versions — Chickensoft">
+    <ChickensoftLogicBlocksVersion>5.20.0</ChickensoftLogicBlocksVersion>
+    <ChickensoftIntrospectionVersion>3.0.2</ChickensoftIntrospectionVersion>
+    <ChickensoftLogVersion>2.0.0</ChickensoftLogVersion>
+    <ChickensoftLogGodotVersion>1.0.72</ChickensoftLogGodotVersion>
+    <ChickensoftSerializationVersion>3.1.0</ChickensoftSerializationVersion>
+    <ChickensoftCollectionsVersion>3.1.4</ChickensoftCollectionsVersion>
+    <ChickensoftGoDotTestVersion>1.3.4</ChickensoftGoDotTestVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet Versions — Misc">
+    <YamlDotNetVersion>16.3.0</YamlDotNetVersion>
+    <ShouldlyVersion>4.3.0</ShouldlyVersion>
+    <Box2DNetStandardVersion>1.0.4</Box2DNetStandardVersion>
+    <SystemIOHashingVersion>10.0.5</SystemIOHashingVersion>
+    <MsExtLoggingAbstractionsVersion>8.0.0</MsExtLoggingAbstractionsVersion>
+    <PolyKitVersion>3.0.9</PolyKitVersion>
   </PropertyGroup>
 </Project>
