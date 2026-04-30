@@ -3,13 +3,13 @@
 **Module:** `plugins.AudioSystem`
 
 ## Action Items from Latest Audit
+- [ ] Fix: Property bag access ["key"] (2x)
 - [ ] Fix: Magic number (4+ digits) (1x)
-
 ## TODO
 <!-- Action items in priority order -->
 
 ## Future Work
-<!-- Ideas, nice-to-haves -->
+<!-- Action items in priority order -->
 
 ## Changelog
 ### 2026-04-18
@@ -22,3 +22,13 @@
 
 ### 2026-04-18
 - No auto-fixable issues found.
+## Future Work
+<!-- Ideas, nice-to-haves -->
+
+## Changelog
+### 2026-04-30
+- Audit run — 3 total issues (13 changed files)
+- ECS violations: 0
+- Framework bridge gaps: 0
+
+<!-- previous entries preserved -->

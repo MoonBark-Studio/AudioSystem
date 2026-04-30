@@ -69,5 +69,21 @@ audioManager.SetMusicVolume(0.5f);
 ```
 
 ## Status
+- ✅ Audited: 2026-04-30
+- Changed files this run: 13
+- File count: 13 C# files (~2533 lines)
+## Key Types
+## Key Types (13 files, ~2533 lines)
+AudioBenchmark, AudioConfigDocument, AudioConfigDocumentTests, AudioConfigLoader, AudioConfigLoaderTests, AudioPathCollection, AudioPathCollectionTests, AudioSourceConfig, AudioSourceConfigTests, AudioSystemModule, BenchmarkPhase, GodotAudioManager, GodotAudioManagerTests, IAudioService, TestPlayer
 
-- ✅ Audited: 2026-04-18
+## Namespaces
+- `MoonBark.AudioSystem`
+- `MoonBark.AudioSystem.Core`
+- `MoonBark.AudioSystem.Core.Configuration`
+- `MoonBark.AudioSystem.Godot.Systems`
+- `MoonBark.AudioSystem.Tests`
+
+## ECS Architecture (v2)
+- ECS subdirectories: none
+- ECS files outside subdirectories: 0
+- Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
