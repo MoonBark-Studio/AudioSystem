@@ -1,1 +1,27 @@
+# Godot artifacts (root-level safety)
+.godot/
+.import/
+.kilo/
+.mono/
+addons/
+node_modules/
 **/*.import
+
+*.tscn.cache
+*.tres.cache
+export_presets.cfg
+*.uid
+*.log
+
+# Build
+bin/
+obj/
+artifacts/
+*.dll
+*.exe
+*.pdb
+
+# IDE
+.vs/
+.vscode/
+.idea/
