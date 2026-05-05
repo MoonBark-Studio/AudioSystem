@@ -7,6 +7,12 @@
 - Changed Files: 4
 - Last Audit: 2026-04-30 06:19
 
+## Test Coverage (2026-05-05)
+- **MoonBark.Framework.ECS**: 100% line coverage (562 tests)
+- **GridPathfinding.ECS**: Improved coverage (160 tests, +26 new tests)
+- **GridPlacement**: 32.8% line coverage (requires Godot runtime for full coverage)
+- **0% coverage classes**: Runtime infrastructure requiring Godot (ConsoleFrameworkLogger, FrameworkLoggingExtensions, IFrameworkLogger, IWorldView, IReadOnlyWorldView, SimulationPerformanceTracker, SystemRunner, PerformanceTrackerExtensions)
+
 ## Issues Found
 - **Console.WriteLine**: 36
 - **Property bag access ["key"]**: 90

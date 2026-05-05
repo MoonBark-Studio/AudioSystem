@@ -132,6 +132,13 @@ These repos may exist but are not yet linked:
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
 
 ## Changelog
+### 2026-05-05
+- Coverage audit: Framework.ECS at 100% coverage (562 tests)
+- GridPathfinding.ECS: +26 new tests (MovementComponentsTests.cs, GridPathfindingModuleTests.cs)
+- GridTypes verified as NOT dead code (used by GridPlacement and games)
+- Pre-existing flaky test fixed (Obstacle_Changes_Affect_New_Paths_Not_Active_Ones)
+- GridPlacement coverage: 32.8% line coverage (requires Godot runtime for higher coverage)
+
 ### 2026-04-30
 - Audit run — 423 total issues (4 changed files)
 - ECS violations: 101
