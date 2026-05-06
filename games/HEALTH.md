@@ -5,13 +5,13 @@
 
 ### 🚨 StaticWritableField  `[HIGH]`
 static writable (non-const) fields — mutable static
-- Evidence: 5 occurrences | Files: 3
+- Evidence: 7 occurrences | Files: 4
 - Top violations:
+  - `games/moonbark-idle/godot/Services/GodotSignalBus.cs` — static writable field @ line 9: private static bool _instanceSet;
+  - `games/moonbark-idle/godot/Services/GodotSignalBus.cs` — static writable field @ line 11: public static bool IsReady => _instanceSet && _instance != n
   - `games/moonbark-idle/godot/Terrain/TerrainPaintManager.cs` — static writable field @ line 175: public static TerrainSnapshot Empty => new(false, -1, -1);
   - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 19: public static bool IsActive => _instance?.IsActive ?? false;
   - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 24: public static string SessionId => _instance?.SessionId ?? st
-  - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 29: public static long CurrentTick => _instance?.CurrentTick ?? 
-  - `games/thistletide/cs/Core/Benchmarks/Runtime/MassLaneDefenseNetworkReplication.cs` — static writable field @ line 189: public static float QuantizationStep => 1.0f / PositionScale
 
 ### 🚨 HardcodedSerializationKey  `[HIGH]`
 hardcoded int/string keys in data access
@@ -25,11 +25,11 @@ hardcoded int/string keys in data access
 
 ### 🚨 NullConditionalInHotPath  `[HIGH]`
 non-event ?./?[] in large file (>3K chars) — verify null-safety of ?.Property/?.Method
-- Evidence: 33 occurrences | Files: 33
+- Evidence: 35 occurrences | Files: 35
 - Top violations:
   - `games/moonbark-idle/godot/LevelLoader.cs` — ?./?[] in large file (9596 chars) — 4 non-event usages, verify null guards
   - `games/moonbark-idle/godot/PlacementController.cs` — ?./?[] in large file (11544 chars) — 2 non-event usages, verify null guards
-  - `games/moonbark-idle/godot/SimulationBootstrap.cs` — ?./?[] in large file (20817 chars) — 13 non-event usages, verify null guards
+  - `games/moonbark-idle/godot/SimulationBootstrap.cs` — ?./?[] in large file (21373 chars) — 13 non-event usages, verify null guards
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/CropConfigurationIntegrityTests.cs` — ?./?[] in large file (7198 chars) — 2 non-event usages, verify null guards
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DeadlockRecoveryTests.cs` — ?./?[] in large file (10272 chars) — 2 non-event usages, verify null guards
 
@@ -63,20 +63,18 @@ async void methods — exceptions silently swallowed
 | `games/thistletide/godot/scenes/ui/components/AgentsModalComponent.cs` | Godot Node subscribes to events but has no _ExitTree() — delegates keep Node alive after removal from tree |
 
 ## Metrics
-- C# Files: 588
-- Total Lines: ~102373
-- Issues Found: 105
-- Changed Files: 7
-- Last Audit: 2026-04-30 18:06
-
+- C# Files: 593
+- Total Lines: ~103914
+- Issues Found: 106
+- Changed Files: 247
+- Last Audit: 2026-05-05 22:08
 ## Issues Found
 - **Property bag access ["key"]**: 22
-- **Magic number (4+ digits)**: 55
+- **Magic number (4+ digits)**: 56
 - **catch-all Exception**: 11
 - **Console.WriteLine**: 14
 - **TODO comment**: 2
 - **Empty catch block**: 1
-
 ## ECS Boundary Compliance (v2)
 - ❌ ECS violations: 20
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`: ECS type/Friflo outside ECS/ subdirectory
@@ -85,12 +83,9 @@ async void methods — exceptions silently swallowed
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/HarvestDebugTest.cs`: ECS type/Friflo outside ECS/ subdirectory
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/IdleTestBase.cs`: ECS type/Friflo outside ECS/ subdirectory
 - ❌ 20 files with ECS types outside ECS/ subdirectory
-
 ## Framework Contracts (v2)
 - ℹ️  Bridge classes: IdleIntentLifecycleAdapter, IdleMovementRecoveryAdapter, NetworkSyncLocalOccupancyValidatorAdapter, NetworkSyncOccupancyProviderAdapter, PlacementRuntimeAdapter
-
 ## License Compliance (v2)
 - ✅ License compliant
-
 ## Last Audit
-*Audited by golden_trio_cron v4 — 2026-04-30 18:06*
+*Audited by golden_trio_cron v4 — 2026-05-05 22:08*

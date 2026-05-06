@@ -98,15 +98,15 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - **Action:** Bulk cleanup with git rm + per-plugin restructuring.
 
 ## Action Items from Latest Audit
-- [ ] Fix: Magic number (4+ digits) (169x)
-- [ ] Fix: Property bag access ["key"] (67x)
-- [ ] Fix: Console.WriteLine (21x)
+- [ ] Fix: Magic number (4+ digits) (44x)
+- [ ] Fix: Property bag access ["key"] (38x)
+- [ ] Fix: Console.WriteLine (18x)
+- [ ] Fix: catch-all Exception (24x)
+- [ ] Fix: Empty catch block (4x)
 - [ ] Fix: NotImplementedException (1x)
-- [ ] Fix: catch-all Exception (49x)
-- [ ] Fix: Property bag (Dictionary) (3x)
-- [ ] Fix: Empty catch block (3x)
+- [ ] Fix: Property bag (Dictionary) (1x)
 - [ ] Fix: TODO comment (2x)
-- [ ] ECS refactor: move 81 files with ECS types into ECS/ subdirectory
+- [ ] ECS refactor: move 25 files with ECS types into ECS/ subdirectory
   - `plugins/Abilities/Core/Execution/AbilityCommandHandler.cs`
   - `plugins/Abilities/godot/scripts/AbilitiesPlugin.cs`
   - `plugins/Abilities/godot/scripts/AbilityDemo.cs`
@@ -125,9 +125,9 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - Consider consolidating GridAgents + GridPathfinding (overlapping concerns)
 
 ## Changelog
-### 2026-04-30
-- Audit run — 315 total issues (0 changed files)
-- ECS violations: 81
+### 2026-05-05
+- Audit run — 132 total issues (80 changed files)
+- ECS violations: 25
 - Framework bridge gaps: 0
 
 <!-- previous entries preserved -->
