@@ -54,10 +54,10 @@ async void methods — exceptions silently swallowed
 
 ## Metrics
 - C# Files: 593
-- Total Lines: ~103876
+- Total Lines: ~103883
 - Issues Found: 106
-- Changed Files: 0
-- Last Audit: 2026-05-06 12:06
+- Changed Files: 47
+- Last Audit: 2026-05-06 18:04
 ## Issues Found
 - **Property bag access ["key"]**: 22
 - **Magic number (4+ digits)**: 56
@@ -78,4 +78,4 @@ async void methods — exceptions silently swallowed
 ## License Compliance (v2)
 - ✅ License compliant
 ## Last Audit
-*Audited by golden_trio_cron v4 — 2026-05-06 12:06*
+*Audited by golden_trio_cron v4 — 2026-05-06 18:04*

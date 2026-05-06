@@ -133,7 +133,7 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 
 ## Action Items from Latest Audit
 - [ ] Fix: Magic number (4+ digits) (43x)
-- [ ] Fix: Property bag access ["key"] (38x)
+- [ ] Fix: Property bag access ["key"] (36x)
 - [ ] Fix: Console.WriteLine (18x)
 - [ ] Fix: catch-all Exception (24x)
 - [ ] Fix: Empty catch block (4x)
@@ -161,7 +161,7 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 
 ## Changelog
 ### 2026-05-06
-- Audit run — 131 total issues (0 changed files)
+- Audit run — 129 total issues (156 changed files)
 - ECS violations: 27
 - Framework bridge gaps: 0
 

@@ -9,7 +9,7 @@
 - `moonbark-idle` - Idle game
 - `thistletide` - Thistletide game
 
-### plugins/ (21 public + 3 internal = 24 directories)
+### plugins/ (27 submodules)
 
 ## Plugin Integration Status — moonbark-idle
 

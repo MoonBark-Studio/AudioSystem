@@ -3,8 +3,8 @@
 **Module:** `plugins`
 
 ## Key Types
-## Key Types (1722 files, ~185712 lines)
-AICommandCoordinator, AIMode, AITests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind, AbilityLearningComponent, AbilityRegistry, AbilityRegistryTests, AbilitySignalBus
+## Key Types (1745 files, ~186920 lines)
+AICommandCoordinator, AIMode, AITests, AbilitiesEcsPlugin, AbilitiesEcsPluginTests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownAdapter, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind, AbilityLearningComponent
 ## Namespaces
 - `MoonBark.AI.Conditions`
 - `MoonBark.AI.ECS.Components`
@@ -103,5 +103,5 @@ Each plugin is self-contained. Cross-plugin dependencies go through Core/ interf
 
 ## Status
 - ✅ Audited: 2026-05-06
-- Changed files this run: 0
-- File count: 1722 C# files (~185712 lines)
+- Changed files this run: 156
+- File count: 1745 C# files (~186920 lines)

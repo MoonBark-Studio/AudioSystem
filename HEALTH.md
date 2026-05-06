@@ -1,11 +1,11 @@
 # Health
 
 ## Metrics
-- C# Files: 3328
-- Total Lines: ~475720
+- C# Files: 2144
+- Total Lines: ~300283
 - Issues Found: 423
 - Changed Files: 4
-- Last Audit: 2026-04-30 06:19
+- Last Audit: 2026-05-06
 
 ## Test Coverage (2026-05-05)
 - **MoonBark.Framework.ECS**: 100% line coverage (562 tests)
