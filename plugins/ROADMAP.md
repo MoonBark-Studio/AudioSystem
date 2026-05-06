@@ -2,13 +2,53 @@
 
 **Module:** `plugins`
 
+## Architecture Standard (2026-05-06)
+
+### Single ECS Backend with Beginner/Advanced Paths
+
+All MoonBark plugins follow this architecture:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        Plugin Architecture                            │
+│                                                                     │
+│  ┌─────────────┐     ┌─────────────────────┐     ┌──────────────┐  │
+│  │ Beginner API │────▶│   Godot Facade     │────▶│  ECS Backend │  │
+│  │ (Simple)    │     │ (IManipulationSvc) │     │ (Friflo ECS) │  │
+│  └─────────────┘     └─────────────────────┘     └──────────────┘  │
+│                                                                     │
+│  ┌─────────────┐     ┌─────────────────────┐     ┌──────────────┐  │
+│  │Advanced API │────▶│   IEcsPlugin        │────▶│  EcsWorld    │  │
+│  │ (Full ECS)  │     │ (RegisterSystems)  │     │ (Shared)     │  │
+│  └─────────────┘     └─────────────────────┘     └──────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Beginner Path:** Facade with simple method names. Pre-built scenes. "It just works."
+
+**Advanced Path:** Implement `IEcsPlugin`. Get full `EcsWorld` access. Custom systems, cross-plugin queries.
+
+**Rationale:**
+- Single ECS backend — one codebase, one architecture
+- Facade hides ECS from beginners — no dual code paths
+- Advanced users extend via `IEcsPlugin` — no lock-in
+- Shared world enables cross-plugin entity queries
+
+### Plugin Requirements
+
+All plugins MUST:
+1. Implement `IEcsPlugin` interface for ECS integration
+2. Provide Godot facade (`I[Domain]Service`) for beginner use
+3. Expose `EcsWorld.Store` for advanced users
+4. Use `MoonBark.Framework.ECS` as the ECS foundation
+
 ## Per-Plugin Quality Scores (100 = perfect)
 
 Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suite 20%.
 
 | Plugin | Score | Tier |
 |--------|-------|------|
-| GridPlacement | 47 | CRITICAL |
+| GridPlacement | 52 | MEDIUM |
 | ItemDrops | 55 | LOW |
 | Economy | 63 | LOW |
 | EntityTargetingSystem | 63 | LOW |
@@ -25,7 +65,7 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 | GridPathfinding | 70 | LOW |
 | Abilities | 72 | MEDIUM |
 | ItemVault | 73 | MEDIUM |
-| WorldTime | 73 | MEDIUM |
+| WorldTime | 78 | MEDIUM | ✓ Framework.ECS |
 | AI | 75 | MEDIUM |
 | Upgrades | 75 | MEDIUM |
 | AudioSystem | 79 | MEDIUM |
@@ -38,15 +78,9 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 
 ## Critical Debt — Fix in Priority Order
 
-### P0 — GridPlacement Reconstruction
-- Score: 47/100
-- 35 ECS boundary violations — ECS types buried in Core/
-- 646 structure violations — cs/ wrapper, 349 double-nested paths, build artifacts committed
-- 16 catch-all Exception handlers
-- 75 magic numbers (4+ digits)
-- 7 async void methods
-- 5 DeepInheritance chains in EventBus files
-- **Action:** Needs dedicated restructuring sprint. Collapse cs/ wrapper, move ECS types to ECS/, audit all throw/catch patterns, replace magic numbers with named constants.
+### P0 — GridPlacement IEcsPlugin + Facade
+- Score: 52/100
+- **Action:** Implement `IEcsPlugin` for GridPlacement.ECS. Ensure facade properly hides ECS.
 
 ### P1 — ItemDrops ECS Boundary + Serialization
 - Score: 55/100
@@ -98,7 +132,7 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - **Action:** Bulk cleanup with git rm + per-plugin restructuring.
 
 ## Action Items from Latest Audit
-- [ ] Fix: Magic number (4+ digits) (44x)
+- [ ] Fix: Magic number (4+ digits) (43x)
 - [ ] Fix: Property bag access ["key"] (38x)
 - [ ] Fix: Console.WriteLine (18x)
 - [ ] Fix: catch-all Exception (24x)
@@ -106,7 +140,7 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - [ ] Fix: NotImplementedException (1x)
 - [ ] Fix: Property bag (Dictionary) (1x)
 - [ ] Fix: TODO comment (2x)
-- [ ] ECS refactor: move 25 files with ECS types into ECS/ subdirectory
+- [ ] ECS refactor: move 27 files with ECS types into ECS/ subdirectory
   - `plugins/Abilities/Core/Execution/AbilityCommandHandler.cs`
   - `plugins/Abilities/godot/scripts/AbilitiesPlugin.cs`
   - `plugins/Abilities/godot/scripts/AbilityDemo.cs`
@@ -119,15 +153,16 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 
 ## Future Work
 
+- [x] GridPlacement: NodeManipulationService tests written (20 tests, needs Godot runtime to execute)
 - Establish per-plugin CI gating (tests must pass before merge)
 - Move from manual golden trio audits to automated pre-commit hooks
 - Standardize Godot addon layout (plugin.cfg at canonical path)
 - Consider consolidating GridAgents + GridPathfinding (overlapping concerns)
 
 ## Changelog
-### 2026-05-05
-- Audit run — 132 total issues (80 changed files)
-- ECS violations: 25
+### 2026-05-06
+- Audit run — 131 total issues (0 changed files)
+- ECS violations: 27
 - Framework bridge gaps: 0
 
 <!-- previous entries preserved -->

@@ -3,7 +3,7 @@
 **Module:** `plugins`
 
 ## Key Types
-## Key Types (1695 files, ~183837 lines)
+## Key Types (1722 files, ~185712 lines)
 AICommandCoordinator, AIMode, AITests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind, AbilityLearningComponent, AbilityRegistry, AbilityRegistryTests, AbilitySignalBus
 ## Namespaces
 - `MoonBark.AI.Conditions`
@@ -24,7 +24,7 @@ AICommandCoordinator, AIMode, AITests, AbilitiesModule, AbilitiesPlugin, Ability
 - `MoonBark.WorldState`
 ## ECS Architecture (v2)
 - ECS subdirectories: Abilities/ECS, AI/ECS, Attributes/ECS, Economy/ECS, EcsPhysics2D/ECS, GridPathfinding/ECS, GridPlacement/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, StatusEffects/ECS, Upgrades/ECS, WorldTime/ECS, Crafting/cs/ECS, GridPathfinding/Tests/ECS, GridPlacement/Tests/ECS, GridPlacement/Tests/Core/ECS, ItemDrops/Tests/ECS, ItemVault/Tests/ECS, Sensors/cs/ECS, WorldTime/ECS/tests/ECS
-- ECS files outside subdirectories: 25
+- ECS files outside subdirectories: 27
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 ## Overview
 27-plugin monorepo of MoonBark Studio Godot C# plugins, organized under a hub-and-spoke Git submodule architecture. Each plugin is a standalone, game-agnostic system intended for reuse across MoonBark titles.
@@ -102,6 +102,6 @@ MoonBark.WorldTime.Core / .ECS / .Godot
 Each plugin is self-contained. Cross-plugin dependencies go through Core/ interfaces (framework contracts). No plugin should directly reference another plugin's ECS/ or Godot/ types.
 
 ## Status
-- ✅ Audited: 2026-05-05
-- Changed files this run: 80
-- File count: 1695 C# files (~183837 lines)
+- ✅ Audited: 2026-05-06
+- Changed files this run: 0
+- File count: 1722 C# files (~185712 lines)

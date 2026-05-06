@@ -1,6 +1,62 @@
 
 
-########### Status
+################# Status
+- ✅ Audited: 2026-05-06
+- Changed files this run: 0
+- File count: 593 C# files (~103876 lines)
+
+# ECS Architecture (v2)
+- ECS subdirectories: thistletide/cs/ECS
+- ECS files outside subdirectories: 20
+- Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
+
+# Namespaces
+- `MoonBark.Idle.Core`
+- `MoonBark.Idle.Core.Behavior`
+- `MoonBark.Idle.Core.Components`
+- `MoonBark.Idle.Core.Configuration`
+- `MoonBark.Idle.Core.Configuration.Definitions`
+- `MoonBark.Idle.Core.Events`
+- `MoonBark.Idle.Core.Save`
+- `MoonBark.Idle.Core.Simulation`
+- `MoonBark.Idle.Core.Systems`
+- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Godot`
+- `MoonBark.IdleGame.Godot.Context`
+- `MoonBark.IdleGame.Godot.Services`
+- `MoonBark.IdleGame.Tests`
+- `MoonBark.IdleGame.Tests.Helpers`
+
+# Status
+- ✅ Audited: 2026-05-06
+- Changed files this run: 72
+- File count: 593 C# files (~103876 lines)
+
+# ECS Architecture (v2)
+- ECS subdirectories: thistletide/cs/ECS
+- ECS files outside subdirectories: 20
+- Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
+
+# Namespaces
+- `MoonBark.Idle.Core`
+- `MoonBark.Idle.Core.Behavior`
+- `MoonBark.Idle.Core.Components`
+- `MoonBark.Idle.Core.Configuration`
+- `MoonBark.Idle.Core.Configuration.Definitions`
+- `MoonBark.Idle.Core.Events`
+- `MoonBark.Idle.Core.Save`
+- `MoonBark.Idle.Core.Simulation`
+- `MoonBark.Idle.Core.Systems`
+- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Godot`
+- `MoonBark.IdleGame.Godot.Context`
+- `MoonBark.IdleGame.Godot.Services`
+- `MoonBark.IdleGame.Tests`
+- `MoonBark.IdleGame.Tests.Helpers`
+
+# Status
 - ✅ Audited: 2026-05-05
 - Changed files this run: 247
 - File count: 593 C# files (~103914 lines)
@@ -86,5 +142,5 @@
 
 # Key Types
 ## Key Types
-## Key Types (593 files, ~103914 lines)
+## Key Types (593 files, ~103876 lines)
 ActivityComponentExtensions, ActivityDispatcherSystem, ActivityState, AgentBaseStats, AgentCategoryConfiguration, AgentConfiguration, AgentCosts, AgentDefinitionsConfig, AgentFactory, AgentFarmingPipelineIntegrationTests, AgentFeedingPipelineIntegrationTests, AgentLifecycleIntegrationTests, AgentLifecycleTests, AgentModePreset, AgentMultiMeshRenderer, AgentProduction, AgentProductionEntry, AgentPurchaseCost, AgentRenderInfo, AgentSaveData
