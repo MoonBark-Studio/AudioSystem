@@ -25,3 +25,7 @@ artifacts/
 .vs/
 .vscode/
 .idea/
+
+# Reports & staging
+plugins/coverage-report/
+plugins/moonbark/
