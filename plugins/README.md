@@ -3,14 +3,14 @@
 **Module:** `plugins`
 
 ## Key Types
-## Key Types (1745 files, ~186920 lines)
-AICommandCoordinator, AIMode, AITests, AbilitiesEcsPlugin, AbilitiesEcsPluginTests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownAdapter, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind, AbilityLearningComponent
+## Key Types (1757 files, ~187172 lines)
+AICommandCoordinator, AIEcsPlugin, AIMode, AITests, AbilitiesEcsPlugin, AbilitiesEcsPluginTests, AbilitiesModule, AbilitiesPlugin, AbilityBookComponent, AbilityCommandHandler, AbilityCommandTypesTests, AbilityComponent, AbilityComponentTests, AbilityCooldownAdapter, AbilityCooldownComponent, AbilityCooldownSystem, AbilityDefinition, AbilityDefinitionTests, AbilityDemo, AbilityKind
 ## Namespaces
 - `MoonBark.AI.Conditions`
+- `MoonBark.AI.ECS`
 - `MoonBark.AI.ECS.Components`
 - `MoonBark.AI.ECS.EventWeaver`
 - `MoonBark.AI.ECS.GOAP.Systems`
-- `MoonBark.AI.ECS.Hybrid.Systems`
 - `MoonBark.AI.ECS.Shared`
 - `MoonBark.AI.Shared`
 - `MoonBark.AI.Tests`
@@ -23,8 +23,8 @@ AICommandCoordinator, AIMode, AITests, AbilitiesEcsPlugin, AbilitiesEcsPluginTes
 - `MoonBark.Abilities.Tests`
 - `MoonBark.WorldState`
 ## ECS Architecture (v2)
-- ECS subdirectories: Abilities/ECS, AI/ECS, Attributes/ECS, Economy/ECS, EcsPhysics2D/ECS, GridPathfinding/ECS, GridPlacement/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, StatusEffects/ECS, Upgrades/ECS, WorldTime/ECS, Crafting/cs/ECS, GridPathfinding/Tests/ECS, GridPlacement/Tests/ECS, GridPlacement/Tests/Core/ECS, ItemDrops/Tests/ECS, ItemVault/Tests/ECS, Sensors/cs/ECS, WorldTime/ECS/tests/ECS
-- ECS files outside subdirectories: 27
+- ECS subdirectories: Abilities/ECS, AI/ECS, Attributes/ECS, Crafting/ECS, Economy/ECS, EcsPhysics2D/ECS, EntityTargetingSystem/ECS, GridAgents/ECS, GridPathfinding/ECS, GridPlacement/ECS, ItemVault/ECS, Minimap/ECS, Quest/ECS, StatusEffects/ECS, TaskDistribution/ECS, Upgrades/ECS, WorldTime/ECS, GridPathfinding/Tests/ECS, GridPlacement/Tests/ECS, GridPlacement/Tests/Core/ECS, ItemDrops/Tests/ECS, ItemVault/Tests/ECS, Sensors/cs/ECS, WorldTime/ECS/tests/ECS
+- ECS files outside subdirectories: 16
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 ## Overview
 27-plugin monorepo of MoonBark Studio Godot C# plugins, organized under a hub-and-spoke Git submodule architecture. Each plugin is a standalone, game-agnostic system intended for reuse across MoonBark titles.
@@ -102,6 +102,6 @@ MoonBark.WorldTime.Core / .ECS / .Godot
 Each plugin is self-contained. Cross-plugin dependencies go through Core/ interfaces (framework contracts). No plugin should directly reference another plugin's ECS/ or Godot/ types.
 
 ## Status
-- ✅ Audited: 2026-05-06
-- Changed files this run: 156
-- File count: 1745 C# files (~186920 lines)
+- ✅ Audited: 2026-05-07
+- Changed files this run: 212
+- File count: 1757 C# files (~187172 lines)

@@ -19,9 +19,18 @@ non-event ?./?[] in large file (>3K chars) — verify null-safety of ?.Property/
 - Top violations:
   - `games/moonbark-idle/godot/LevelLoader.cs` — ?./?[] in large file (9596 chars) — 4 non-event usages, verify null guards
   - `games/moonbark-idle/godot/PlacementController.cs` — ?./?[] in large file (11544 chars) — 2 non-event usages, verify null guards
-  - `games/moonbark-idle/godot/SimulationBootstrap.cs` — ?./?[] in large file (21373 chars) — 13 non-event usages, verify null guards
+  - `games/moonbark-idle/godot/SimulationBootstrap.cs` — ?./?[] in large file (21310 chars) — 13 non-event usages, verify null guards
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/CropConfigurationIntegrityTests.cs` — ?./?[] in large file (7198 chars) — 2 non-event usages, verify null guards
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DeadlockRecoveryTests.cs` — ?./?[] in large file (10272 chars) — 2 non-event usages, verify null guards
+
+### ⚠️ StaticWritableField  `[MED]`
+static writable (non-const) fields — mutable static
+- Evidence: 4 occurrences | Files: 2
+- Top violations:
+  - `games/moonbark-idle/godot/Services/GodotSignalBus.cs` — static writable field @ line 11: public static bool IsReady => _instanceSet && _instance != n
+  - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 19: public static bool IsActive => _instance?.IsActive ?? false;
+  - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 24: public static string SessionId => _instance?.SessionId ?? st
+  - `games/thistletide/cs/Core/Logging/GameLogger.cs` — static writable field @ line 29: public static long CurrentTick => _instance?.CurrentTick ?? 
 
 ### ⚠️ DeepInheritance  `[MED]`
 4+ class defs in large file
@@ -54,10 +63,10 @@ async void methods — exceptions silently swallowed
 
 ## Metrics
 - C# Files: 593
-- Total Lines: ~103883
+- Total Lines: ~103914
 - Issues Found: 106
-- Changed Files: 47
-- Last Audit: 2026-05-06 18:04
+- Changed Files: 46
+- Last Audit: 2026-05-07 12:09
 ## Issues Found
 - **Property bag access ["key"]**: 22
 - **Magic number (4+ digits)**: 56
@@ -78,4 +87,4 @@ async void methods — exceptions silently swallowed
 ## License Compliance (v2)
 - ✅ License compliant
 ## Last Audit
-*Audited by golden_trio_cron v4 — 2026-05-06 18:04*
+*Audited by golden_trio_cron v4 — 2026-05-07 12:09*

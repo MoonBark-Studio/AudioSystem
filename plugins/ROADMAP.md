@@ -134,16 +134,15 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 ## Action Items from Latest Audit
 - [ ] Fix: Magic number (4+ digits) (43x)
 - [ ] Fix: Property bag access ["key"] (36x)
-- [ ] Fix: Console.WriteLine (18x)
+- [ ] Fix: Console.WriteLine (17x)
 - [ ] Fix: catch-all Exception (24x)
 - [ ] Fix: Empty catch block (4x)
-- [ ] Fix: NotImplementedException (1x)
 - [ ] Fix: Property bag (Dictionary) (1x)
 - [ ] Fix: TODO comment (2x)
-- [ ] ECS refactor: move 27 files with ECS types into ECS/ subdirectory
-  - `plugins/Abilities/Core/Execution/AbilityCommandHandler.cs`
+- [ ] ECS refactor: move 16 files with ECS types into ECS/ subdirectory
   - `plugins/Abilities/godot/scripts/AbilitiesPlugin.cs`
   - `plugins/Abilities/godot/scripts/AbilityDemo.cs`
+  - `plugins/Abilities/godot/scripts/AbilitySignalBus.cs`
 ## TODO (unprioritized)
 
 - [ ] Implement test suite for GridAgents (currently scaffold only)
@@ -160,9 +159,9 @@ Scoring: Boundary 30% | Implementation Quality 30% | Testability 20% | Test Suit
 - Consider consolidating GridAgents + GridPathfinding (overlapping concerns)
 
 ## Changelog
-### 2026-05-06
-- Audit run — 129 total issues (156 changed files)
-- ECS violations: 27
+### 2026-05-07
+- Audit run — 127 total issues (212 changed files)
+- ECS violations: 16
 - Framework bridge gaps: 0
 
 <!-- previous entries preserved -->

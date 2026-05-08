@@ -35,20 +35,20 @@ non-event ?./?[] in large file (>3K chars) — verify null-safety of ?.Property/
 **Summary:** ✅ IDisposable lifetime: all owned resources properly cleaned up
 
 ## Metrics
-- C# Files: 176
-- Total Lines: ~13496
-- Issues Found: 4
-- Changed Files: 7
-- Last Audit: 2026-05-06 18:04
+- C# Files: 168
+- Total Lines: ~13527
+- Issues Found: 5
+- Changed Files: 14
+- Last Audit: 2026-05-07 15:12
 ## Issues Found
 - **Console.WriteLine**: 1
 - **Property bag access ["key"]**: 2
-- **catch-all Exception**: 1
+- **catch-all Exception**: 2
 ## ECS Boundary Compliance (v2)
 - ✅ ECS types inside ECS/ subdirectories
 ## Framework Contracts (v2)
-- ℹ️  Bridge classes: EcsSystemAdapter
+- ℹ️  Bridge classes: EcsFogOfWarAdapter, EcsSystemAdapter
 ## License Compliance (v2)
 - ✅ License compliant
 ## Last Audit
-*Audited by golden_trio_cron v4 — 2026-05-06 18:04*
+*Audited by golden_trio_cron v4 — 2026-05-07 15:12*

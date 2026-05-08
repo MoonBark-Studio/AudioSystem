@@ -115,9 +115,115 @@ Legend:
 
 These repos may exist but are not yet linked:
 - `plugins/Configuration` - repo may be private
-- `plugins/MoonBark.FogOfWar` - repo may not exist yet
+
+## Fog of War Architecture (Completed 2026-05-07)
+
+Fog of war is now a first-class Framework feature, NOT a separate plugin:
+
+```
+MoonBark.Framework/
+├── Exploration/
+│   ├── IFogOfWarProvider.cs      # Interface for fog state consumption
+│   ├── FogOfWarState.cs          # Core state (HashSet<Vector2Int> explored tiles)
+│   └── IFogOfWarRevealListener.cs # Event listener interface
+├── ECS/
+│   ├── VisionComponent.cs         # Reveal radius per entity
+│   ├── FogOfWarRevealSystem.cs   # Generic system (games provide position extractor)
+│   └── EcsFogOfWarAdapter.cs     # Adapter implementing IFogOfWarProvider
+└── ...
+
+MoonBark.Minimap/ (consumer)
+├── Core/FogOfWar/FogOfWarState.cs # Inherits from Framework
+└── Godot/FogOfWarOverlay.cs        # Visual rendering (uses IFogOfWarProvider)
+```
+
+**Key decisions:**
+- FogOfWarState lives in Framework (gameplay state, not just visual)
+- VisionComponent + FogOfWarRevealSystem are game-level (games provide position extractor)
+- Minimap consumes IFogOfWarProvider (visual rendering only)
+
+## Position SSOT Refactoring (In Progress 2026-05-07)
+
+### Goal
+Single source of truth for all positions: `TransformComponent2D` (2D) and `TransformComponent3D` (3D).
+
+### Current Problems
+- `TargetPositionComponent` (GridPlacement) duplicates position as Vector2Int grid
+- `PositionComponent` aliases scattered across plugins (Sensors, GridPathfinding)
+- Stale data risk when grid and world positions diverge
+- 500+ position component usages across ecosystem
+
+### Target State
+```csharp
+public struct TransformComponent2D : IComponent
+{
+    public Vector2F Position;  // World position (canonical SSOT)
+    public float Rotation;
+
+    // Grid conversion via floor (entity at tile center is at x.5)
+    public Vector2Int GridPosition => new(
+        (int)MathF.Floor(Position.X),
+        (int)MathF.Floor(Position.Y)
+    );
+
+    public Vector2Int ToGridPosition(Vector2F tileSize) => new(
+        (int)MathF.Floor(Position.X / tileSize.X),
+        (int)MathF.Floor(Position.Y / tileSize.Y)
+    );
+
+    public static TransformComponent2D FromGrid(Vector2Int gridPos, Vector2F tileSize) => new()
+    {
+        Position = new Vector2F(gridPos.X * tileSize.X + tileSize.X * 0.5f,
+                                 gridPos.Y * tileSize.Y + tileSize.Y * 0.5f),
+        Rotation = 0f
+    };
+}
+```
+
+### Change Detection
+- Use `entity.Entity.Id.version` (Friflo built-in) instead of `Revision` field
+- For archetype-based dirty tracking: `store.Query<T>(Flags.Dirty archetype)`
+
+### Migration Phases
+
+| Phase | Target | Effort | Status |
+|-------|--------|--------|--------|
+| 1 | Framework: Add grid helpers to Transform2D/3D | 2h | 🔄 In Progress |
+| 2 | GridPlacement: Deprecate TargetPositionComponent | 1-2 days | 📋 Pending |
+| 3 | Sensors: Replace AgentPositionComponent | 4h | 📋 Pending |
+| 4 | GridPathfinding: Replace GridPositionComponent | 4h | 📋 Pending |
+| 5 | Thistletide: Replace all PositionComponent usages | 2-3 days | 📋 Pending |
+| 6 | moonbark-idle: Replace all usages | 1 day | 📋 Pending |
+
+### Files to Delete After Migration
+- `plugins/GridPlacement/ECS/Components/TargetPositionComponent.cs`
+- `plugins/Sensors/cs/ECS/Components/PositionComponent.cs`
+- `plugins/GridPathfinding/ECS/Components/PositionComponent.cs`
+
+### Effort: ~1 week total, ~112 files, ~7,600 lines
 
 ## Action Items from Latest Audit
+
+### Critical (2026-05-07)
+- [ ] **CommandBus thread safety**: RegisterHandler lacks lock (race condition)
+- [ ] **Division by zero**: Minimap EcsTerrainAdapter, RenderingOptimizations SpatialPartitioning
+- [ ] **Broken dead code**: ItemDropsSignalBus references non-existent FrameworkEventBus.PickupEvent
+- [ ] **Plugin boundary violations**: Game code queries plugin ECS components directly
+
+### High Priority
+- [ ] **Duplicate IEffectsSink**: Two interfaces with same name in GridPlacement
+- [ ] **Upgrades→Economy coupling**: Queries Economy ECS components directly
+- [ ] **GridAgents empty group**: Plugin installs but does nothing
+- [ ] **Missing concurrent tests**: CommandBus thread safety untested
+
+### Medium Priority
+- [ ] **ServiceRegistry thread safety**: Dictionary without locks
+- [ ] **Framework Events dead code**: TimeEvents, InventoryEvents, CombatEvents have no consumers
+- [ ] **DeathEvent no consumers**: Documented but not implemented by any plugin
+- [ ] **TargetingService interface drift**: Methods not in interface
+- [ ] **Abilities command handler mislocated**: Not a proper ECS system
+
+### Code Smells (Volume)
 - [ ] Fix: Console.WriteLine (36x)
 - [ ] Fix: Property bag access ["key"] (90x)
 - [ ] Fix: catch-all Exception (61x)
@@ -131,7 +237,31 @@ These repos may exist but are not yet linked:
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
   - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
 
+## Health Score Progression
+| Date | Score | Notes |
+|------|-------|-------|
+| 2026-05-07 | 91/100 | Thread safety, division guards, dead code removed |
+| 2026-05-05 | 88/100 | Initial audit |
+| Baseline | 78/100 | Pre-audit state |
+
 ## Changelog
+### 2026-05-07 (continued)
+- **Fog of War Architecture**: Moved FogOfWarState to Framework (was Minimap), added VisionComponent, FogOfWarRevealSystem, EcsFogOfWarAdapter
+- **SSOT Position Refactoring**: Plan created - TransformComponent2D/3D will be single source of truth for all positions
+- **Minimap Core Tests**: 26 tests passing
+- **Framework Tests**: 609 tests passing
+
+### 2026-05-07
+- **Critical Risk Fixes**: CommandBus thread safety, division by zero guards, dead code removal
+- **Test Coverage**: Framework 609 tests, WorldTime 519 tests all passing
+- **API Contract Fixes**: Removed orphan interfaces, fixed naming collisions
+- **Entity ID Standardization**: IMovementService now uses `int` (matches Frilfo ECS)
+- Coverage audit: Framework.ECS at 100% coverage (562 tests)
+- GridPathfinding.ECS: +26 new tests (MovementComponentsTests.cs, GridPathfindingModuleTests.cs)
+- GridTypes verified as NOT dead code (used by GridPlacement and games)
+- Pre-existing flaky test fixed (Obstacle_Changes_Affect_New_Paths_Not_Active_Ones)
+- GridPlacement coverage: 32.8% line coverage (requires Godot runtime for higher coverage)
+
 ### 2026-05-05
 - Coverage audit: Framework.ECS at 100% coverage (562 tests)
 - GridPathfinding.ECS: +26 new tests (MovementComponentsTests.cs, GridPathfindingModuleTests.cs)
