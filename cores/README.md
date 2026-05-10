@@ -199,4 +199,4 @@
 # Key Types
 ## Key Types
 ## Key Types (168 files, ~13527 lines)
-AbilityAction, AbilityCommand, AbilityTargetingRules, AbilityTargetingRulesTests, ActionContent, ActionSlot, AgentState, BaseEventBus, CommandCompleted, CommandResult, CommandSource, CommandStarted, ConsoleFrameworkLogger, ConsoleFrameworkLoggerFactory, ContainerDefinition, ContainerId, CooldownInfo, DeferredComponentQueue, EcsFogOfWarAdapter, EcsSystemAdapter
+AbilityAction, AbilityCommand, AbilityTargetingRules, AbilityTargetingRulesTests, ActionContent, ActionSlot, AgentState, BaseEventBus, CommandCompleted, CommandResult, CommandSource, CommandStarted, ConsoleLogger, ConsoleFrameworkLoggerFactory, ContainerDefinition, ContainerId, CooldownInfo, DeferredComponentQueue, EcsFogOfWarAdapter, EcsSystemAdapter

@@ -51,7 +51,7 @@ git submodule update --init --recursive
 
 ## Key Types
 ## Key Types (3328 files, ~475720 lines)
-AbilityAction, AbilityCommand, ActionContent, AgentState, CommandCompleted, CommandResult, CommandSource, CommandStarted, ConsoleFrameworkLogger, ConsoleFrameworkLoggerFactory, ContainerDefinition, ContainerId, CooldownInfo, DeferredComponentQueue, EffectContext, EffectTargetRequirements, EntityExtensions, EventBus, ExtendedCommandResult, FailureReason
+AbilityAction, AbilityCommand, ActionContent, AgentState, CommandCompleted, CommandResult, CommandSource, CommandStarted, ConsoleLogger, ConsoleFrameworkLoggerFactory, ContainerDefinition, ContainerId, CooldownInfo, DeferredComponentQueue, EffectContext, EffectTargetRequirements, EntityExtensions, EventBus, ExtendedCommandResult, FailureReason
 
 ## Namespaces
 - `MoonBark.Framework.AI`

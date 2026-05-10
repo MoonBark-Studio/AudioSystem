@@ -17,8 +17,8 @@
 | 3 | Movement step engine (dx/dy/dist/clamp) | `MovementSystem` → uses `MovementStepEngine` | Uses `MovementStepEngine` ✅ | `GridAgents` already has it | 🔴 High | ✅ Done |
 | 4 | `DeferredComponentQueue<T>` | Deleted from Utilities | Inline pattern (unchanged) | `MoonBark.Framework.ECS` | 🟠 Medium | ✅ Done |
 | 5 | `EntityStore.TryGetComponent<T>` safety helpers | Deleted from Utilities | Bare Friflo calls (unchanged) | `MoonBark.Framework.ECS.EntityExtensions` | 🟠 Medium | ✅ Done |
-| 6 | `IFrameworkLogger` null-coalescing factory | 7 callers migrated → `OrConsoleDefault<T>` | Ad-hoc per-system (unchanged) | `MoonBark.Framework.Logging.FrameworkLoggingExtensions` | 🟠 Medium | ✅ Done |
-| 7 | Godot → `IFrameworkLogger` bridge | `GodotFrameworkLogger.cs` (Idle only) | Missing (uses `Console.WriteLine`) | New `Framework.Godot` project | 🟠 Medium | 🔜 Pending |
+| 6 | `IFrameworkLogger` null-coalescing factory | 7 callers migrated → `OrConsoleDefault<T>` | Ad-hoc per-system (unchanged) | `MoonBark.Framework.Logging.LoggingExtensions` | 🟠 Medium | ✅ Done |
+| 7 | Godot → `ILogger` bridge | `GodotLogger.cs` (Idle only) | Missing (uses `Console.WriteLine`) | New `Framework.Godot` project | 🟠 Medium | 🔜 Pending |
 | 8 | `ISimulationSystem` vs `IECSSystem` | `ISimulationSystem` (Framework alias) | `IECSSystem` (game-local) | `MoonBark.Framework.Core` | 🟡 Low-Med | 🔜 Pending |
 | 9 | YAML config loading boilerplate | Raw `YamlDotNet.DeserializerBuilder` | `YamlConfigurationFiles` ✅ | Idle should adopt Framework util | 🟡 Low-Med | 🔜 Pending |
 | 10 | `TaskDistributionBridgeSystem` pattern | `TaskDistributionBridgeSystem.cs` | `TaskDistributionBridgeSystem.cs` (Obsolete) | `TaskDistribution` plugin base | 🟡 Low-Med | 🔜 Pending |
@@ -173,8 +173,8 @@ No API breakage — additive change to an existing file.
 ### The problem
 Every Idle system that takes `IFrameworkLogger? logger = null` calls:
 ```games/moonbark-idle/cs/Core/Systems/FrameworkLoggerHelper.cs#L1-8
-public static IFrameworkLogger CreateOrDefault<T>(IFrameworkLogger? logger, FrameworkLogLevel level)
-    => logger ?? new ConsoleFrameworkLogger(typeof(T).Name, level);
+public static IFrameworkLogger CreateOrDefault<T>(IFrameworkLogger? logger, LogLevel level)
+    => logger ?? new ConsoleLogger(typeof(T).Name, level);
 ```
 
 Thistletide systems either:
@@ -183,12 +183,12 @@ Thistletide systems either:
 - Use `Console.WriteLine` directly (6 occurrences flagged by the audit)
 
 ### Proposed fix
-Add to `cores/MoonBark.Framework/Logging/FrameworkLoggingExtensions.cs`:
-```/dev/null/FrameworkLoggingExtensions.cs#L1-8
+Add to `cores/MoonBark.Framework/Logging/LoggingExtensions.cs`:
+```/dev/null/LoggingExtensions.cs#L1-8
 public static IFrameworkLogger OrConsoleDefault<T>(
     this IFrameworkLogger? logger,
-    FrameworkLogLevel level = FrameworkLogLevel.Debug)
-    => logger ?? new ConsoleFrameworkLogger(typeof(T).Name, level);
+    LogLevel level = LogLevel.Debug)
+    => logger ?? new ConsoleLogger(typeof(T).Name, level);
 ```
 
 Delete `FrameworkLoggerHelper.cs` from Idle; all callers change to `logger.OrConsoleDefault<T>()`.
