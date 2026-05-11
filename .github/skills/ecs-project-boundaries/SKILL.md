@@ -13,6 +13,8 @@ Use this skill when a plugin needs to follow the workspace ECS split rule:
 - ECS namespaces should match the ECS project root namespace.
 - `*Component` runtime types belong in ECS code, not Core, Godot, or root runtime projects.
 
+For MoonBark plugin bus wiring, provider patterns, or `GodotSignalBus` migration work, use the companion `moonbark-plugin-architecture` skill. This skill is only for ECS folder, namespace, and project-boundary enforcement.
+
 ## Workspace Script
 
 Primary tool:
