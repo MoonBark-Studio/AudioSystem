@@ -59,3 +59,15 @@ git push origin main
 
 - **main** - Production-ready state
 - Submodules have their own branch/release cycles
+
+## Godot Test Running
+
+- Use the Godot test-running skill and project-local runner wrappers for Godot/GDUnit/GoDotTest suites.
+- Prefer the smallest affected class or suite first, then widen only after focused verification passes.
+- Treat runner/build infrastructure failures separately from test assertion failures and document blockers explicitly.
+
+## Plugin EventBus / SignalBus Contract
+
+- Core `EventBus` types are engine-agnostic C# event publishers for domain logic and tests.
+- Godot `SignalBus` types are adapter/delegation layers that subscribe to or wrap Core buses and expose the same event payloads through C# callbacks and Godot signals.
+- For plugins with both layers, add parity tests proving Core publishes and SignalBus publishes/bridges preserve callback triggering and payload values.
