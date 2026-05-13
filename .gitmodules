@@ -87,12 +87,16 @@
 	path = plugins/StatusEffects
 	url = https://github.com/MoonBark-Studio/StatusEffects.git
 
-[submodule "plugins/Telemetry"]
-	path = plugins/Telemetry
-	url = https://github.com/MoonBark-Studio/Telemetry.git
+[submodule "plugins/Profiler"]
+	path = plugins/Profiler
+	url = https://github.com/MoonBark-Studio/Profiler.git
 [submodule "plugins/Crafting"]
 	path = plugins/Crafting
 	url = https://github.com/MoonBark-Studio/Crafting.git
+
+[submodule "plugins/Telemetry"]
+	path = plugins/Telemetry
+	url = https://github.com/MoonBark-Studio/Telemetry.git
 
 [submodule "plugins/GridAgents"]
 	path = plugins/GridAgents
