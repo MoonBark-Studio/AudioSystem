@@ -5,6 +5,24 @@
 ## Overview
 27-plugin monorepo of MoonBark Studio Godot C# plugins. Last full audit: 2026-04-22.
 
+## Coverage Audit Findings (2026-05-12)
+
+Per AI Development Patterns strategy, coverage gates are enforced:
+
+| Plugin | Layer | Current Coverage | Target | Gap |
+|--------|-------|-----------------|--------|-----|
+| WorldTime | Core | **39.74%** | 80% | -40.26% |
+| GridPlacement | Core | **29.58%** | 80% | -50.42% |
+| Crafting | Unknown | **10.92%** | 70% | -59.08% |
+| ItemDrops | Unknown | **15.24%** | 70% | -54.76% |
+| Quest | Unknown | **10.95%** | 70% | -59.05% |
+| StatusEffects | Unknown | **6.09%** | 70% | -63.91% |
+| Abilities | Godot | **8.43%** | 70% | -61.57% |
+
+**All plugins significantly below target coverage.** Coverage sprint is the highest priority.
+
+See AI Development Patterns in agent-rules.md for Test-Light + Coverage Gates strategy.
+
 ## Metrics
 - C# Files: 1757
 - Total Lines: ~187172

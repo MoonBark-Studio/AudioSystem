@@ -1,0 +1,148 @@
+name: Coverage Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_VERSION: "8.0.x"
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Core Coverage Gate (pure .NET, no Godot needed)
+  # 80% threshold for Core libraries
+  # ─────────────────────────────────────────────
+  coverage-core:
+    name: Core Coverage (80% minimum)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build Core Tests
+        shell: pwsh
+        run: dotnet build Core/Tests/*.csproj --configuration Debug --no-restore
+
+      - name: Run Core Tests with Coverage
+        shell: pwsh
+        run: |
+          dotnet test Core/Tests/*.csproj `
+            --configuration Debug `
+            --no-build `
+            --collect:"XPlat Code Coverage" `
+            --logger "console;verbosity=normal"
+
+      - name: Check Core Coverage
+        shell: pwsh
+        run: |
+          $coverageFiles = Get-ChildItem -Path "." -Recurse -Filter "coverage.cobertura.xml" | Select-Object -First 1
+          if (-not $coverageFiles) {
+            Write-Output "No coverage file found"
+            exit 1
+          }
+
+          [xml]$xml = Get-Content $coverageFiles.FullName
+          $lineRate = [double]$xml.coverage.'line-rate'
+          $linePercent = [math]::Round($lineRate * 100, 2)
+          Write-Output "Core Line Coverage: $linePercent%"
+
+          if ($lineRate -lt 0.80) {
+            Write-Output "FAIL: Core coverage ($linePercent%) is below 80% minimum"
+            exit 1
+          }
+          Write-Output "PASS: Core coverage meets 80% threshold"
+
+      - name: Upload Core Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-coverage-report
+          path: "**/coverage.cobertura.xml"
+
+  # ─────────────────────────────────────────────
+  # Godot Coverage Gate (requires Godot runtime)
+  # 70% threshold for Godot integration
+  # ─────────────────────────────────────────────
+  coverage-godot:
+    name: Godot Coverage (70% minimum)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: "4.6.2"
+          use-dotnet: true
+
+      - name: Build Godot Tests
+        shell: pwsh
+        run: |
+          dotnet build Godot/Tests/*.csproj --configuration Debug --no-restore
+
+      - name: Run Godot Tests with Coverage
+        shell: pwsh
+        env:
+          GODOT: ${{ env.GODOT }}
+        run: |
+          # coverlet requires target directory containing assemblies, NOT the csproj
+          # assemblies are in .godot/mono/temp/bin/Debug after build
+          coverlet `
+            "./Godot/.godot/mono/temp/bin/Debug" `
+            --verbosity detailed `
+            --target "$env:GODOT" `
+            --targetargs "--run-tests --coverage --quit-on-finish" `
+            --format "opencover" `
+            --output "./coverage/godot-coverage.xml" `
+            --exclude-by-file "**/test/**/*.cs" `
+            --exclude-by-file "**/*Microsoft.NET.Test.Sdk.Program.cs" `
+            --exclude-by-file "**/Godot.SourceGenerators/**/*.cs" `
+            --exclude-assemblies-without-sources "missingall"
+
+      - name: Check Godot Coverage
+        shell: pwsh
+        run: |
+          [xml]$xml = Get-Content "./coverage/godot-coverage.xml"
+          $lineRate = [double]$xml.CoverageSession.Summary.sequenceCoverage
+          $linePercent = [math]::Round($lineRate * 100, 2)
+          Write-Output "Godot Line Coverage: $linePercent%"
+
+          if ($lineRate -lt 0.70) {
+            Write-Output "FAIL: Godot coverage ($linePercent%) is below 70% minimum"
+            exit 1
+          }
+          Write-Output "PASS: Godot coverage meets 70% threshold"
+
+      - name: Upload Godot Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-coverage-report
+          path: "./coverage/godot-coverage.xml"
+
+# Coverage Thresholds:
+# - Core libraries (pure .NET): 80% line coverage
+# - Godot integration (requires Godot runtime): 70% line coverage
+# - Critical paths (damage, death, economy): 90% line coverage
+#
+# Key Differences:
+# - Core tests: Use `dotnet test` with --collect flag (no Godot needed)
+# - Godot tests: Use coverlet targeting Godot executable with --coverage flag
+#
+# Common Issues:
+# - "No loader found for resource" = using standard Godot instead of Mono version
+# - DLL lock errors = Godot editor running, close it before headless tests
+# - "No coverage file" = coverlet targeting wrong directory (use .godot/mono/temp/bin/Debug)
+#
+# Prerequisites for Godot coverage:
+# - coverlet.console > 3.2.0 (nightly required for Godot Mono)
+# - GODOT env var pointing to Godot_v4.x-stable_mono_win64.exe
