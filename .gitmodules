@@ -21,9 +21,6 @@
 [submodule "plugins/NetworkSync"]
 	path = plugins/NetworkSync
 	url = https://github.com/MoonBark-Studio/NetworkSync.git
-[submodule "plugins/PrototypeUI"]
-	path = plugins/PrototypeUI
-	url = https://github.com/MoonBark-Studio/PrototypeUI.git
 [submodule "plugins/RenderingOptimizations"]
 	path = plugins/RenderingOptimizations
 	url = https://github.com/MoonBark-Studio/RenderingOptimizations.git
@@ -101,3 +98,6 @@
 [submodule "plugins/GridAgents"]
 	path = plugins/GridAgents
 	url = git@github.com:MoonBark-Studio/GridAgents.git
+[submodule "plugins/HudKit"]
+	path = plugins/HudKit
+	url = https://github.com/MoonBark-Studio/HudKit.git

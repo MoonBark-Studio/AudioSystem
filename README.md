@@ -27,7 +27,7 @@ For plugin integration status → [ROADMAP.md](./ROADMAP.md).
     ├── ItemVault
     ├── Minimap
     ├── NetworkSync
-    ├── PrototypeUI
+    ├── HudKit
     ├── Quest
     ├── RenderingOptimizations
     ├── Sensors
