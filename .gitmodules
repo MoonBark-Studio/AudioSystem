@@ -101,3 +101,6 @@
 [submodule "plugins/HudKit"]
 	path = plugins/HudKit
 	url = https://github.com/MoonBark-Studio/HudKit.git
+[submodule "plugins/KinematicPhysics"]
+	path = plugins/KinematicPhysics
+	url = https://github.com/MoonBark-Studio/KinematicPhysics.git
