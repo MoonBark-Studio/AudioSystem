@@ -104,3 +104,8 @@
 [submodule "plugins/KinematicPhysics"]
 	path = plugins/KinematicPhysics
 	url = https://github.com/MoonBark-Studio/KinematicPhysics.git
+
+[submodule "plugins/MoodBubbles"]
+	path = plugins/MoodBubbles
+	url = https://github.com/MoonBark-Studio/MoodBubbles.git
+
