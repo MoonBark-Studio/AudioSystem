@@ -11,16 +11,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -39,16 +39,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -67,16 +67,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -95,16 +95,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -123,16 +123,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -151,16 +151,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`
@@ -179,16 +179,16 @@
 - Flat structure: Core/, ECS/, Godot/ (cs/ prefix not required)
 
 # Namespaces
-- `MoonBark.Idle.Core`
-- `MoonBark.Idle.Core.Behavior`
-- `MoonBark.Idle.Core.Components`
-- `MoonBark.Idle.Core.Configuration`
-- `MoonBark.Idle.Core.Configuration.Definitions`
-- `MoonBark.Idle.Core.Events`
-- `MoonBark.Idle.Core.Save`
-- `MoonBark.Idle.Core.Simulation`
-- `MoonBark.Idle.Core.Systems`
-- `MoonBark.Idle.Core.Utilities`
+- `MoonBark.IdleGame.Core`
+- `MoonBark.IdleGame.Core.Behavior`
+- `MoonBark.IdleGame.Core.Components`
+- `MoonBark.IdleGame.Core.Configuration`
+- `MoonBark.IdleGame.Core.Configuration.Definitions`
+- `MoonBark.IdleGame.Core.Events`
+- `MoonBark.IdleGame.Core.Save`
+- `MoonBark.IdleGame.Core.Simulation`
+- `MoonBark.IdleGame.Core.Systems`
+- `MoonBark.IdleGame.Core.Utilities`
 - `MoonBark.IdleGame.Core`
 - `MoonBark.IdleGame.Godot`
 - `MoonBark.IdleGame.Godot.Context`

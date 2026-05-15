@@ -20,8 +20,8 @@ Build error: `AgentStallMonitor` does not exist in the current context (line 490
 |------|--------|
 | `games/moonbark-idle/cs/Core/Simulation/IdleSimulationHarness.cs` | Add `AgentStallMonitor` property of the new system type; wire it into `_systemRunner` at line 490 |
 | `games/moonbark-idle/cs/Core/Systems/` (new) | Create `AgentStallMonitorSystem.cs` — implements the ECS system that bridges agents to `StallMonitor` |
-| `games/moonbark-idle/cs/Core/MoonBark.Idle.Core.csproj` | Add `<Compile Include="Core/Systems/AgentStallMonitorSystem.cs" />` |
-| `games/moonbark-idle/cs/MoonBark.Idle.Tests/AgentStallMonitorIntegrationTests.cs` | These tests exist (in `TestResults/`) — find and verify they pass after the fix |
+| `games/moonbark-idle/cs/Core/MoonBark.IdleGame.Core.csproj` | Add `<Compile Include="Core/Systems/AgentStallMonitorSystem.cs" />` |
+| `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/AgentStallMonitorIntegrationTests.cs` | These tests exist (in `TestResults/`) — find and verify they pass after the fix |
 
 ## Implementation Steps
 
@@ -69,7 +69,7 @@ The exact shape of `AgentStallMonitorSystem` depends on how intents and movement
 
 ### Step 3 — Add to csproj
 
-In `MoonBark.Idle.Core.csproj`, add explicit compile include if using explicit pattern:
+In `MoonBark.IdleGame.Core.csproj`, add explicit compile include if using explicit pattern:
 ```xml
 <Compile Include="Core/Systems/AgentStallMonitorSystem.cs" />
 ```
@@ -83,7 +83,7 @@ find . -name "AgentStallMonitorIntegrationTests.cs"
 
 Run:
 ```bash
-dotnet test MoonBark.Idle.Tests/MoonBark.Idle.Tests.csproj --filter "AgentStallMonitor"
+dotnet test MoonBark.IdleGame.Tests/MoonBark.IdleGame.Tests.csproj --filter "AgentStallMonitor"
 ```
 
 Expected: all 5 tests pass (they were passing in latest.trx at `current.trx`).

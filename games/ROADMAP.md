@@ -17,8 +17,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-05-06
@@ -37,8 +37,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-05-06
@@ -57,8 +57,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-05-06
@@ -77,8 +77,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-05-05
@@ -97,8 +97,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-04-30
@@ -117,8 +117,8 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 # Changelog
 ### 2026-04-30
@@ -137,5 +137,5 @@
 - [ ] Fix: Empty catch block (1x)
 - [ ] ECS refactor: move 20 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`

@@ -48,4 +48,19 @@
     <MsExtLoggingAbstractionsVersion>8.0.0</MsExtLoggingAbstractionsVersion>
     <PolyKitVersion>3.0.9</PolyKitVersion>
   </PropertyGroup>
+
+  <PropertyGroup Label="Default Item Excludes">
+    <DefaultItemExcludes>$(DefaultItemExcludes);artifacts\**;**\artifacts\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <!-- ===== Build Artifact Exclusions =====
+       Prevent stale build artifacts in artifacts/ folders from being compiled.
+       These folders often contain generated .cs files (AssemblyInfo.cs, etc.)
+       that conflict with freshly generated ones in obj/.
+  -->
+  <ItemGroup>
+    <Compile Remove="artifacts\**" />
+    <EmbeddedResource Remove="artifacts\**" />
+    <None Remove="artifacts\**" />
+  </ItemGroup>
 </Project>

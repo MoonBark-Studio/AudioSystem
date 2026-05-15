@@ -26,9 +26,9 @@
 | 9 | **MoonBark.Economy** | public | ✅ Integrated | Passive production, resource pools |
 | 10 | **MoonBark.Upgrades** | public | ✅ Integrated | Cost-scaling purchase system |
 | 11 | **MoonBark.Framework** | core | ✅ Integrated | Always integrated (CoreVector2I, BaseComponent, ISimulationSystem, etc.) |
-| 12 | **MoonBark.Quest** | public | ✅ Integrated | Referenced in MoonBark.Idle.Core.csproj; quests.yaml wired (content TBD) |
+| 12 | **MoonBark.Quest** | public | ✅ Integrated | Referenced in MoonBark.IdleGame.Core.csproj; quests.yaml wired (content TBD) |
 | 13 | **MoonBark.MapLoader** | public | ✅ Integrated | TiledMapLoader.Godot referenced in Idle Godot csproj; TiledGroundLoader uses it |
-| 14 | **MoonBark.WorldState** | public | ✅ Integrated | WorldState.Core referenced in MoonBark.Idle.Godot.csproj for global state query |
+| 14 | **MoonBark.WorldState** | public | ✅ Integrated | WorldState.Core referenced in MoonBark.IdleGame.Godot.csproj for global state query |
 | 15 | **MoonBark.WorldGen2D** | public | 🔜 Not integrated yet | Level is hand-crafted (sunhatch-glade.tmj); procedural gen not needed yet |
 | 16 | **MoonBark.Minimap** | public | 🔜 Not integrated yet | UI feature not yet built |
 | 17 | **MoonBark.AudioSystem** | public | 🔜 Not integrated yet | No audio in idle game yet |
@@ -86,7 +86,7 @@ Legend:
 - [x] Fix Thistletide.Godot.csproj: re-enable solution build (remove BuildProjectWhenBuildingSolution=false)
 - [x] Fix Thistletide.Godot.Tests.csproj: same PrototypeUI reference + dead compile glob
 - [x] Fix Thistletide.slnx: remove non-existent spoke refs, correct all plugin paths
-- [x] Fix MoonBark.Idle.Godot.slnx: TiledMapLoader → MapLoader folder name
+- [x] Fix MoonBark.IdleGame.Godot.slnx: TiledMapLoader → MapLoader folder name
 - [x] Add Directory.Build.props parent-import chain (hub → game level)
 - [x] Hub Directory.Build.props: add canonical NuGet version properties
 - [x] Hub Directory.Build.props: fix SylvesVendorPath (was ../../vendor/, now ../vendor/)
@@ -234,8 +234,8 @@ public struct TransformComponent2D : IComponent
 - [ ] Fix: Property bag (Dictionary) (3x)
 - [ ] ECS refactor: move 101 files with ECS types into ECS/ subdirectory
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`
 
 ## Health Score Progression
 | Date | Score | Notes |

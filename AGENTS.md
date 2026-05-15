@@ -70,4 +70,6 @@ git push origin main
 
 - Core `EventBus` types are engine-agnostic C# event publishers for domain logic and tests.
 - Godot `SignalBus` types are adapter/delegation layers that subscribe to or wrap Core buses and expose the same event payloads through C# callbacks and Godot signals.
+- **All plugin `SignalBus` types must extend `Resource` (not `RefCounted` or `Node`)** and carry `[GlobalClass]`. This enables `[Export]` inspector wiring while keeping reference-counted semantics. See `godot-idle-game-patterns` skill pattern #7.
+- **Wiring rule:** Root nodes `[Export]` the shared bus; child nodes receive it through an explicit `Configure()` method. Never let child nodes create or re-Initialize a shared bus.
 - For plugins with both layers, add parity tests proving Core publishes and SignalBus publishes/bridges preserve callback triggering and payload values.

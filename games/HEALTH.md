@@ -20,8 +20,8 @@ non-event ?./?[] in large file (>3K chars) — verify null-safety of ?.Property/
   - `games/moonbark-idle/godot/LevelLoader.cs` — ?./?[] in large file (9596 chars) — 4 non-event usages, verify null guards
   - `games/moonbark-idle/godot/PlacementController.cs` — ?./?[] in large file (11544 chars) — 2 non-event usages, verify null guards
   - `games/moonbark-idle/godot/SimulationBootstrap.cs` — ?./?[] in large file (21310 chars) — 13 non-event usages, verify null guards
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/CropConfigurationIntegrityTests.cs` — ?./?[] in large file (7198 chars) — 2 non-event usages, verify null guards
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DeadlockRecoveryTests.cs` — ?./?[] in large file (10272 chars) — 2 non-event usages, verify null guards
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/CropConfigurationIntegrityTests.cs` — ?./?[] in large file (7198 chars) — 2 non-event usages, verify null guards
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DeadlockRecoveryTests.cs` — ?./?[] in large file (10272 chars) — 2 non-event usages, verify null guards
 
 ### ⚠️ StaticWritableField  `[MED]`
 static writable (non-const) fields — mutable static
@@ -77,10 +77,10 @@ async void methods — exceptions silently swallowed
 ## ECS Boundary Compliance (v2)
 - ❌ ECS violations: 20
   - `games/moonbark-idle/cs/Core/EntityStoreFarmingExtensions.cs`: ECS type/Friflo outside ECS/ subdirectory
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DebugDryCropTest.cs`: ECS type/Friflo outside ECS/ subdirectory
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/DiagnosticTest.cs`: ECS type/Friflo outside ECS/ subdirectory
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/HarvestDebugTest.cs`: ECS type/Friflo outside ECS/ subdirectory
-  - `games/moonbark-idle/cs/MoonBark.Idle.Tests/IdleTestBase.cs`: ECS type/Friflo outside ECS/ subdirectory
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DebugDryCropTest.cs`: ECS type/Friflo outside ECS/ subdirectory
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/DiagnosticTest.cs`: ECS type/Friflo outside ECS/ subdirectory
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/HarvestDebugTest.cs`: ECS type/Friflo outside ECS/ subdirectory
+  - `games/moonbark-idle/cs/MoonBark.IdleGame.Tests/IdleTestBase.cs`: ECS type/Friflo outside ECS/ subdirectory
 - ❌ 20 files with ECS types outside ECS/ subdirectory
 ## Framework Contracts (v2)
 - ℹ️  Bridge classes: IdleIntentLifecycleAdapter, IdleMovementRecoveryAdapter, NetworkSyncLocalOccupancyValidatorAdapter, NetworkSyncOccupancyProviderAdapter, PlacementRuntimeAdapter
