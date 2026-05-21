@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>AudioSystem.Core</RootNamespace>
     <AssemblyName>AudioSystem.Core</AssemblyName>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
   </PropertyGroup>
 
   <ItemGroup>
