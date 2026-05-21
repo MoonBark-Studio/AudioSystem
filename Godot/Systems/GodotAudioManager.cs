@@ -138,6 +138,7 @@ public partial class GodotAudioManager : Node
                 return busName;
             }
         }
+        GD.PushWarning($"AudioSystem: bus '{busName}' not found — falling back to Master");
         return "Master";
     }
 

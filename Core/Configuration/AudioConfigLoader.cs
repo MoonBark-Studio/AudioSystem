@@ -124,6 +124,11 @@ public static class AudioConfigLoader
             return Path.GetFullPath(rootPath);
         }
 
+        if (IsGodotResourcePath(rootPath))
+        {
+            return rootPath;
+        }
+
         string configDirectory = Path.GetDirectoryName(configFilePath) ?? AppContext.BaseDirectory;
         return Path.GetFullPath(Path.Combine(configDirectory, NormalizeConfigPath(rootPath)));
     }

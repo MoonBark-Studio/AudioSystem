@@ -57,7 +57,7 @@ public partial class AudioBenchmark : Node
     private string _results = "";
     private int    _currentLevelIndex = -1;
     private BenchmarkPhase _phase = BenchmarkPhase.Idle;
-    public BenchmarkPhase Phase => _phase;  // exposed for GDScript headless runner
+    public BenchmarkPhase Phase => _phase;
     public int PhaseIndex => (int)_phase;
     private int    _phaseIteration  = 0;
     private int    _phaseTargetCount = 0;
