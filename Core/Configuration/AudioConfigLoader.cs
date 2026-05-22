@@ -84,6 +84,7 @@ public static class AudioConfigLoader
             throw new InvalidOperationException($"Audio config at {resolvedPath} is missing required mappings.");
         }
 
+        config.MergeTierCuePaths();
         return config;
     }
 

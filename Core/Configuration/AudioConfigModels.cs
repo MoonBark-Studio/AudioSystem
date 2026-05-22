@@ -2,6 +2,7 @@ namespace MoonBark.AudioSystem.Core.Configuration;
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 /// <summary>
@@ -23,6 +24,18 @@ public sealed class AudioConfigDocument
 
     [JsonPropertyName("ambient")]
     public Dictionary<string, string> AmbientDict { get; set; } = new();
+
+    [JsonPropertyName("tiers")]
+    public JsonElement Tiers { get; set; }
+
+    /// <summary>Merges nested <c>tiers</c> leaf paths into <see cref="CuesDict"/> and <see cref="AmbientDict"/>.</summary>
+    public void MergeTierCuePaths()
+    {
+        if (Tiers.ValueKind != JsonValueKind.Object)
+            return;
+
+        AudioConfigTierFlattener.MergeTierPathsInto(CuesDict, AmbientDict, Tiers);
+    }
 
     /// <summary>
     /// Gets the type-safe cue mappings.

@@ -1,4 +1,5 @@
 using MoonBark.AudioSystem.Core.Configuration;
+using MoonBark.AudioSystem.Core.Diagnostics;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -53,9 +54,14 @@ public partial class GodotAudioManager : Node
     private string? _pendingMusicCueId;
     private string? _pendingAmbientCueId;
 
-    // Ambient ducking
+    // Ambient ducking (ref-counted while one-shots are playing)
     private float _ambientVolumeBeforeDuck = 1.0f;
     private bool _ambientDucking = false;
+    private int _playingOneShotCount;
+
+    private string? _activeMusicCueId;
+
+    private readonly GodotAudioPlaybackDiagnostics _diagnostics = new();
 
     // Bus names
     private string _musicBus = "Music";
@@ -74,13 +80,7 @@ public partial class GodotAudioManager : Node
         _musicPlayer.Name = MusicPlayerNodeName;
         _musicPlayer.Bus = _musicBus;
         _musicPlayer.VolumeDb = DefaultMusicVolume;
-        _musicPlayer.Finished += () =>
-        {
-            if (_musicPlayer?.Stream != null)
-            {
-                _musicPlayer.Play();
-            }
-        };
+        _musicPlayer.Finished += OnMusicFinished;
         AddChild(_musicPlayer);
 
         _ambientPlayer = new AudioStreamPlayer();
@@ -98,6 +98,7 @@ public partial class GodotAudioManager : Node
             var player = new AudioStreamPlayer();
             player.Bus = _sfxBus;
             player.VolumeDb = 0f;
+            player.Finished += () => OnOneShotPoolPlayerFinished(player);
             AddChild(player);
             _oneShotPool[i] = player;
         }
@@ -146,12 +147,25 @@ public partial class GodotAudioManager : Node
     {
         foreach (string cueId in collection.CueIds)
         {
-            if (collection.TryGetPath(cueId, out string? path) && !string.IsNullOrWhiteSpace(path))
+            if (!collection.TryGetPath(cueId, out string? path) || string.IsNullOrWhiteSpace(path))
             {
-                if (!CanResolveAudioPath(path))
-                {
-                    GD.PushWarning($"AudioSystem: cue '{cueId}' ({category}) → file not found: {path}");
-                }
+                _diagnostics.Report(
+                    AudioPlaybackFailureKind.CueNotRegistered,
+                    category,
+                    cueId,
+                    "mapping has no path",
+                    logEveryTime: true);
+                continue;
+            }
+
+            if (!CanResolveAudioPath(path))
+            {
+                _diagnostics.Report(
+                    AudioPlaybackFailureKind.AssetNotFound,
+                    category,
+                    cueId,
+                    AudioPlaybackLog.AssetNotFoundDetail(path),
+                    logEveryTime: true);
             }
         }
     }
@@ -265,7 +279,22 @@ public partial class GodotAudioManager : Node
     /// <param name="fadeDurationSec">Fade in duration in seconds (0 = instant).</param>
     public void TryPlayMusic(string cueId, float fadeDurationSec)
     {
-        if (_musicPlayer == null) return;
+        if (_musicPlayer == null)
+        {
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.PlayerNotReady,
+                "music",
+                cueId,
+                "music AudioStreamPlayer is not initialized");
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(cueId)
+            && cueId == _activeMusicCueId
+            && _musicPlayer.Playing)
+        {
+            return;
+        }
 
         if (fadeDurationSec <= 0f)
         {
@@ -308,7 +337,15 @@ public partial class GodotAudioManager : Node
     /// <param name="fadeDurationSec">Fade in duration in seconds (0 = instant).</param>
     public void TryPlayAmbient(string cueId, float fadeDurationSec)
     {
-        if (_ambientPlayer == null) return;
+        if (_ambientPlayer == null)
+        {
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.PlayerNotReady,
+                "ambient",
+                cueId,
+                "ambient AudioStreamPlayer is not initialized");
+            return;
+        }
 
         if (fadeDurationSec <= 0f)
         {
@@ -341,6 +378,7 @@ public partial class GodotAudioManager : Node
         if (_musicPlayer == null) return;
 
         _pendingMusicCueId = null;
+        _activeMusicCueId = null;
         if (fadeOutSec <= 0f)
         {
             _musicPlayer.Stop();
@@ -466,36 +504,54 @@ public partial class GodotAudioManager : Node
 
     private void PlayLoop(AudioStreamPlayer player, string cueId, AudioPathCollection mapping)
     {
+        string category = player == _musicPlayer ? "music" : "ambient";
         player.Stop();
         player.Stream = null;
 
-        if (string.IsNullOrWhiteSpace(cueId) || !mapping.TryGetPath(cueId, out string? path) || !CanResolveAudioPath(path))
+        if (!TryResolveCuePath(cueId, mapping, category, out string? path))
         {
+            if (player == _musicPlayer)
+                _activeMusicCueId = null;
             return;
         }
 
-        AudioStream? stream = LoadAudioStream(path);
+        AudioStream? stream = LoadAudioStream(cueId, category, path);
         if (stream == null)
         {
+            if (player == _musicPlayer)
+                _activeMusicCueId = null;
             return;
         }
 
+        if (player == _musicPlayer)
+            _activeMusicCueId = cueId;
+
         player.Stream = stream;
-        player.Play();
+        if (!TryStartPlayback(player, cueId, category))
+        {
+            if (player == _musicPlayer)
+                _activeMusicCueId = null;
+        }
+    }
+
+    private void OnMusicFinished()
+    {
+        if (_musicPlayer == null || string.IsNullOrWhiteSpace(_activeMusicCueId))
+            return;
+
+        if (_musicPlayer.Stream != null)
+            _musicPlayer.Play();
     }
 
     private void PlayCue(string cueId, AudioPathCollection mapping)
     {
-        if (string.IsNullOrWhiteSpace(cueId) || !mapping.TryGetPath(cueId, out string? path) || !CanResolveAudioPath(path))
-        {
+        const string category = "one-shot";
+        if (!TryResolveCuePath(cueId, mapping, category, out string? path))
             return;
-        }
 
-        AudioStream? stream = LoadAudioStream(path);
+        AudioStream? stream = LoadAudioStream(cueId, category, path);
         if (stream == null)
-        {
             return;
-        }
 
         // ── Approach B: Ring-buffer pool ────────────────────────────────────────
         // Round-robin scan for idle slot. Zero GC after init.
@@ -516,42 +572,113 @@ public partial class GodotAudioManager : Node
 
         if (player == null)
         {
-            // Pool exhausted — silently drop. Increase OneShotPoolMaxSize if needed.
-            // For MoonBark Idle, 32 is almost never exhausted (footsteps, hits, pings).
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.PoolExhausted,
+                category,
+                cueId,
+                AudioPlaybackLog.PoolExhaustedDetail(OneShotPoolMaxSize));
             return;
         }
 
-        // Duck ambient if playing
-        bool wasAmbientPlaying = _ambientPlayer?.Playing ?? false;
-        if (wasAmbientPlaying && !_ambientDucking)
-        {
-            _ambientDucking = true;
-            _ambientVolumeBeforeDuck = _ambientVolume;
-            _ambientVolume *= 0.5f;
-            if (_ambientPlayer != null)
-            {
-                _ambientPlayer.VolumeDb = GetEffectiveAmbientVolumeDb();
-            }
-        }
+        if ((_ambientPlayer?.Playing ?? false) && _playingOneShotCount == 0)
+            BeginAmbientDuck();
 
+        _playingOneShotCount++;
         player.Stream = stream;
-        player.Finished -= HandleOneShotFinished;
-        player.Finished += HandleOneShotFinished;
-        player.Play();
+        if (!TryStartPlayback(player, cueId, category))
+            _playingOneShotCount = Math.Max(0, _playingOneShotCount - 1);
     }
 
-    private void HandleOneShotFinished()
+    private bool TryResolveCuePath(
+        string cueId,
+        AudioPathCollection mapping,
+        string category,
+        out string path)
     {
-        // Restore ambient volume when one-shot finishes
-        if (_ambientDucking)
+        path = string.Empty;
+        if (string.IsNullOrWhiteSpace(cueId))
         {
-            _ambientDucking = false;
-            _ambientVolume = _ambientVolumeBeforeDuck;
-            if (_ambientPlayer != null)
-            {
-                _ambientPlayer.VolumeDb = GetEffectiveAmbientVolumeDb();
-            }
+            _diagnostics.Report(AudioPlaybackFailureKind.InvalidCueId, category, cueId, string.Empty);
+            return false;
         }
+
+        if (!mapping.TryGetPath(cueId, out path) || string.IsNullOrWhiteSpace(path))
+        {
+            _diagnostics.Report(AudioPlaybackFailureKind.CueNotRegistered, category, cueId, string.Empty);
+            return false;
+        }
+
+        if (!CanResolveAudioPath(path))
+        {
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.AssetNotFound,
+                category,
+                cueId,
+                AudioPlaybackLog.AssetNotFoundDetail(path));
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool TryStartPlayback(AudioStreamPlayer player, string cueId, string category)
+    {
+        if (player.Stream == null)
+        {
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.PlayRejected,
+                category,
+                cueId,
+                "AudioStreamPlayer has no stream assigned");
+            return false;
+        }
+
+        player.Play();
+        if (!player.Playing)
+        {
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.PlayRejected,
+                category,
+                cueId,
+                "AudioStreamPlayer.Play() did not start playback");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void OnOneShotPoolPlayerFinished(AudioStreamPlayer player)
+    {
+        _ = player;
+        if (_playingOneShotCount <= 0)
+            return;
+
+        _playingOneShotCount--;
+        if (_playingOneShotCount == 0)
+            EndAmbientDuck();
+    }
+
+    private void BeginAmbientDuck()
+    {
+        if (_ambientDucking)
+            return;
+
+        _ambientDucking = true;
+        _ambientVolumeBeforeDuck = _ambientVolume;
+        _ambientVolume *= 0.5f;
+        if (_ambientPlayer != null)
+            _ambientPlayer.VolumeDb = GetEffectiveAmbientVolumeDb();
+    }
+
+    private void EndAmbientDuck()
+    {
+        if (!_ambientDucking)
+            return;
+
+        _ambientDucking = false;
+        _ambientVolume = _ambientVolumeBeforeDuck;
+        if (_ambientPlayer != null)
+            _ambientPlayer.VolumeDb = GetEffectiveAmbientVolumeDb();
     }
 
     private static bool CanResolveAudioPath(string path)
@@ -567,7 +694,7 @@ public partial class GodotAudioManager : Node
             || path.StartsWith("user://", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static AudioStream? LoadAudioStream(string path)
+    private AudioStream? LoadAudioStream(string cueId, string category, string path)
     {
         try
         {
@@ -575,11 +702,13 @@ public partial class GodotAudioManager : Node
             {
                 AudioStream? resourceStream = ResourceLoader.Load<AudioStream>(path);
                 if (resourceStream != null)
-                {
                     return resourceStream;
-                }
 
-                GD.PrintErr($"GodotAudioManager: Failed to load audio resource '{path}': ResourceLoader returned null");
+                _diagnostics.Report(
+                    AudioPlaybackFailureKind.LoadFailed,
+                    category,
+                    cueId,
+                    AudioPlaybackLog.LoadReturnedNullDetail(path));
                 return null;
             }
 
@@ -591,32 +720,50 @@ public partial class GodotAudioManager : Node
                 modifiers: null);
             if (loadFromFileMethod == null)
             {
-                GD.PrintErr($"GodotAudioManager: External wav loading is unavailable in this Godot runtime: {path}");
+                _diagnostics.Report(
+                    AudioPlaybackFailureKind.LoadFailed,
+                    category,
+                    cueId,
+                    "external wav loading is unavailable in this Godot runtime");
                 return null;
             }
 
             AudioStreamWav? stream = loadFromFileMethod.Invoke(obj: null, parameters: [path]) as AudioStreamWav;
             if (stream != null)
-            {
                 return stream;
-            }
 
-            GD.PrintErr($"GodotAudioManager: Failed to load external wav '{path}': LoadFromFile returned null");
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.LoadFailed,
+                category,
+                cueId,
+                AudioPlaybackLog.LoadReturnedNullDetail(path));
             return null;
         }
         catch (FileNotFoundException)
         {
-            GD.PrintErr($"GodotAudioManager: Audio file not found: {path}");
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.AssetNotFound,
+                category,
+                cueId,
+                AudioPlaybackLog.AssetNotFoundDetail(path));
             return null;
         }
         catch (IOException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Failed to read audio file '{path}': {ex.Message}");
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.LoadFailed,
+                category,
+                cueId,
+                $"failed to read file '{path}': {ex.Message}");
             return null;
         }
         catch (InvalidOperationException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio '{path}': {ex.Message}");
+            _diagnostics.Report(
+                AudioPlaybackFailureKind.LoadFailed,
+                category,
+                cueId,
+                $"unexpected error loading '{path}': {ex.Message}");
             return null;
         }
     }

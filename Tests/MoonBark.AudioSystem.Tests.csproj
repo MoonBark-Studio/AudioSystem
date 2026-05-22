@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="AudioBenchmark.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Fixtures\audio_config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
