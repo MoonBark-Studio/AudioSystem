@@ -119,14 +119,16 @@ public static class AudioConfigLoader
             return Path.GetDirectoryName(configFilePath) ?? AppContext.BaseDirectory;
         }
 
-        if (Path.IsPathRooted(rootPath))
-        {
-            return Path.GetFullPath(rootPath);
-        }
-
+        // Godot resource paths must be checked before Path.IsPathRooted — on Windows,
+        // "res:" is treated as a drive letter and Path.Combine/GetFullPath corrupts res:// URLs.
         if (IsGodotResourcePath(rootPath))
         {
             return rootPath;
+        }
+
+        if (Path.IsPathRooted(rootPath))
+        {
+            return Path.GetFullPath(rootPath);
         }
 
         string configDirectory = Path.GetDirectoryName(configFilePath) ?? AppContext.BaseDirectory;
@@ -164,16 +166,26 @@ public static class AudioConfigLoader
                 continue;
             }
 
-            // res:// and user:// paths are Godot resource paths â€” return as-is
+            // res:// and user:// paths are Godot resource paths — return as-is
             if (IsGodotResourcePath(relativePath))
             {
                 collection.Add(cueId, relativePath);
                 continue;
             }
 
-            string absolutePath = Path.IsPathRooted(relativePath)
-                ? Path.GetFullPath(relativePath)
-                : Path.GetFullPath(Path.Combine(audioRootPath, NormalizeConfigPath(relativePath)));
+            string absolutePath;
+            if (IsGodotResourcePath(audioRootPath))
+            {
+                absolutePath = CombineGodotResourcePath(audioRootPath, relativePath);
+            }
+            else if (Path.IsPathRooted(relativePath))
+            {
+                absolutePath = Path.GetFullPath(relativePath);
+            }
+            else
+            {
+                absolutePath = Path.GetFullPath(Path.Combine(audioRootPath, NormalizeConfigPath(relativePath)));
+            }
 
             collection.Add(cueId, absolutePath);
         }
@@ -190,5 +202,16 @@ public static class AudioConfigLoader
     private static string NormalizeConfigPath(string path)
     {
         return path.Replace('/', Path.DirectorySeparatorChar);
+    }
+
+    /// <summary>
+    /// Joins a Godot resource root (res:// or user://) with a relative path using forward slashes.
+    /// Avoids Path.Combine, which on Windows treats "res:" as a drive letter.
+    /// </summary>
+    internal static string CombineGodotResourcePath(string resourceRoot, string relativePath)
+    {
+        string normalizedRoot = resourceRoot.TrimEnd('/');
+        string normalizedRelative = relativePath.TrimStart('/', '\\').Replace('\\', '/');
+        return $"{normalizedRoot}/{normalizedRelative}";
     }
 }

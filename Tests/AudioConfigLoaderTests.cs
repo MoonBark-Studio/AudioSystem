@@ -138,4 +138,34 @@ public class AudioConfigLoaderTests
         Assert.True(result.TryGetPath("test_cue", out string? path));
         Assert.Equal("res://assets/audio/sfx/test.ogg", path);
     }
+
+    [Fact]
+    public void BuildAbsolutePathMap_ResRootWithRelativeCue_ProducesValidResUrl()
+    {
+        // Arrange — mirrors MoonBark Idle audio_config.json layout
+        AudioConfigDocument config = new()
+        {
+            AudioRootPath = "res://assets",
+            MusicDict = new Dictionary<string, string>
+            {
+                ["main_theme"] = "music/track_2.wav"
+            }
+        };
+
+        // Act
+        AudioPathCollection result = AudioConfigLoader.BuildAbsolutePathMap(
+            config, config.Music, FixturePath);
+
+        // Assert — must stay a res:// URL, not a Windows path like D:\...\res:\assets\...
+        Assert.True(result.TryGetPath("main_theme", out string? path));
+        Assert.Equal("res://assets/music/track_2.wav", path);
+        Assert.DoesNotContain(":\\", path);
+    }
+
+    [Fact]
+    public void ResolveConfigRootPath_ResRoot_ReturnsUnchanged()
+    {
+        string root = AudioConfigLoader.ResolveConfigRootPath("res://assets", FixturePath);
+        Assert.Equal("res://assets", root);
+    }
 }
