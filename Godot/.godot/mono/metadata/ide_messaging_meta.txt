@@ -1,2 +1,0 @@
-﻿64916
-C:/Users/chris/AppData/Roaming/godotenv/godot/bin/godot.exe

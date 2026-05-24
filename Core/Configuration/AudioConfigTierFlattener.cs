@@ -1,6 +1,7 @@
 namespace MoonBark.AudioSystem.Core.Configuration;
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 
 /// <summary>
@@ -27,6 +28,11 @@ public static class AudioConfigTierFlattener
                     continue;
 
                 bool toAmbient = group.Name.Contains("loop", StringComparison.OrdinalIgnoreCase);
+                bool hasAmbientPath = group.Value.EnumerateObject()
+                    .Any(p => p.Value.ValueKind == JsonValueKind.String &&
+                              p.Value.GetString()?.Contains("/ambient/", StringComparison.OrdinalIgnoreCase) == true);
+                if (!toAmbient && hasAmbientPath)
+                    toAmbient = true;
                 Walk(group.Value, cues, ambient, toAmbient);
             }
         }

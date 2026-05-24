@@ -3,6 +3,7 @@ namespace MoonBark.AudioSystem.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -14,9 +15,11 @@ using System.Text.Json.Serialization;
 public static class AudioConfigLoader
 {
     private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.json";
+    private const string GodotProjectPath = "res://project.godot";
 
     /// <summary>
     /// Resolves the audio configuration path by walking up from the supplied or default roots.
+    /// Falls back to Godot project root if running in-editor.
     /// </summary>
     /// <param name="startDirectory">An optional starting directory.</param>
     /// <returns>The resolved configuration file path.</returns>
@@ -53,8 +56,44 @@ public static class AudioConfigLoader
             }
         }
 
+        string godotProjectDir = GetGodotProjectDirectory();
+        if (!string.IsNullOrWhiteSpace(godotProjectDir))
+        {
+            string candidate = Path.Combine(godotProjectDir, RelativeAudioConfigPath.Replace('/', Path.DirectorySeparatorChar));
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+        }
+
         throw new FileNotFoundException(
             $"Audio config file not found. Expected to locate {RelativeAudioConfigPath} from {startDirectory ?? AppContext.BaseDirectory}.");
+    }
+
+    private static string? GetGodotProjectDirectory()
+    {
+        try
+        {
+            Type? projectSettingsType = Type.GetType("Godot.ProjectSettings, GodotSharp");
+            if (projectSettingsType == null)
+                return null;
+
+            MethodInfo? globalizePath = projectSettingsType.GetMethod("GlobalizePath", BindingFlags.Public | BindingFlags.Static);
+            if (globalizePath == null)
+                return null;
+
+            object?[] parameters = [GodotProjectPath];
+            object? result = globalizePath.Invoke(obj: null, parameters);
+            if (result is not string godotPath)
+                return null;
+
+            return Path.GetDirectoryName(godotPath);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[AudioConfigLoader] GetGodotProjectDirectory failed: {ex.Message}");
+            return null;
+        }
     }
 
     /// <summary>

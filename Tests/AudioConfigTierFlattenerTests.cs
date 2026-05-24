@@ -11,7 +11,7 @@ public class AudioConfigTierFlattenerTests
     {
         string configPath = Path.Combine(
             AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..",
+            "..", "..", "..",
             "games", "moonbark-idle", "Godot", "assets", "audio", "audio_config.json");
         configPath = Path.GetFullPath(configPath);
         if (!File.Exists(configPath))

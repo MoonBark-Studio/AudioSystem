@@ -255,7 +255,7 @@ public class AudioConfigDocumentTests
     }
 
     [Fact]
-    public void Cues_ReturnsNewCollectionEachAccess()
+    public void Cues_ReturnsSameCachedCollection()
     {
         var doc = new AudioConfigDocument
         {
@@ -268,7 +268,7 @@ public class AudioConfigDocumentTests
         var collection1 = doc.Cues;
         var collection2 = doc.Cues;
 
-        Assert.NotSame(collection1, collection2);
+        Assert.Same(collection1, collection2);
         Assert.Equal(collection1.Count, collection2.Count);
     }
 

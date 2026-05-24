@@ -172,10 +172,6 @@ public class GodotAudioManagerTests
     [Fact]
     public void AudioConfig_PoolSizeConstant_Is32()
     {
-        // This test documents the pool size constant from GodotAudioManager.
-        // If you change OneShotPoolMaxSize, update this test.
-        // Pool size 32 covers virtually all idle game concurrent needs.
-        const int expectedPoolSize = 32;
-        Assert.Equal(expectedPoolSize, 32); // self-documenting constant
+        Assert.Equal(32, 32);
     }
 }

@@ -26,34 +26,41 @@ public sealed class AudioConfigDocument
     public Dictionary<string, string> AmbientDict { get; set; } = new();
 
     [JsonPropertyName("tiers")]
-    public JsonElement Tiers { get; set; }
+    public JsonElement? Tiers { get; set; }
 
     /// <summary>Merges nested <c>tiers</c> leaf paths into <see cref="CuesDict"/> and <see cref="AmbientDict"/>.</summary>
     public void MergeTierCuePaths()
     {
-        if (Tiers.ValueKind != JsonValueKind.Object)
+        if (!Tiers.HasValue || Tiers.Value.ValueKind != JsonValueKind.Object)
             return;
 
-        AudioConfigTierFlattener.MergeTierPathsInto(CuesDict, AmbientDict, Tiers);
+        AudioConfigTierFlattener.MergeTierPathsInto(CuesDict, AmbientDict, Tiers.Value);
+        _cues = null;
+        _music = null;
+        _ambient = null;
     }
 
     /// <summary>
     /// Gets the type-safe cue mappings.
     /// </summary>
     [JsonIgnore]
-    public AudioPathCollection Cues => AudioPathCollection.FromDictionary(CuesDict);
+    public AudioPathCollection Cues => _cues ??= AudioPathCollection.FromDictionary(CuesDict);
 
     /// <summary>
     /// Gets the type-safe music mappings.
     /// </summary>
     [JsonIgnore]
-    public AudioPathCollection Music => AudioPathCollection.FromDictionary(MusicDict);
+    public AudioPathCollection Music => _music ??= AudioPathCollection.FromDictionary(MusicDict);
 
     /// <summary>
     /// Gets the type-safe ambient mappings.
     /// </summary>
     [JsonIgnore]
-    public AudioPathCollection Ambient => AudioPathCollection.FromDictionary(AmbientDict);
+    public AudioPathCollection Ambient => _ambient ??= AudioPathCollection.FromDictionary(AmbientDict);
+
+    private AudioPathCollection? _cues;
+    private AudioPathCollection? _music;
+    private AudioPathCollection? _ambient;
 }
 
 /// <summary>
@@ -94,9 +101,9 @@ public sealed class AudioPathCollection
     /// <param name="cueId">The cue identifier.</param>
     /// <param name="filePath">The resolved file path when found.</param>
     /// <returns><see langword="true"/> when a mapping exists; otherwise <see langword="false"/>.</returns>
-    public bool TryGetPath(string cueId, out string filePath)
+    public bool TryGetPath(string cueId, out string? filePath)
     {
-        return _paths.TryGetValue(cueId, out filePath!);
+        return _paths.TryGetValue(cueId, out filePath);
     }
 
     /// <summary>

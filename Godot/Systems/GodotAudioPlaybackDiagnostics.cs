@@ -1,14 +1,17 @@
-using Godot;
 using MoonBark.AudioSystem.Core.Diagnostics;
+using MoonBark.Framework.Logging;
 
 namespace MoonBark.AudioSystem.Godot.Systems;
 
-/// <summary>
-/// Deduped Godot console logging for missing cues, failed loads, and failed playback.
-/// </summary>
 internal sealed class GodotAudioPlaybackDiagnostics
 {
     private readonly HashSet<string> _loggedKeys = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ILogger? _logger;
+
+    internal GodotAudioPlaybackDiagnostics(ILogger? logger)
+    {
+        _logger = logger;
+    }
 
     public void Report(
         AudioPlaybackFailureKind kind,
@@ -22,7 +25,19 @@ internal sealed class GodotAudioPlaybackDiagnostics
         if (!logEveryTime && !_loggedKeys.Add(key))
             return;
 
-        GD.PrintErr(message);
+        switch (kind)
+        {
+            case AudioPlaybackFailureKind.PoolExhausted:
+                _logger?.Info(message);
+                break;
+            case AudioPlaybackFailureKind.CueNotRegistered:
+            case AudioPlaybackFailureKind.InvalidCueId:
+                _logger?.Debug(message);
+                break;
+            default:
+                _logger?.Warning(message);
+                break;
+        }
     }
 
     public void ClearLoggedKeys() => _loggedKeys.Clear();

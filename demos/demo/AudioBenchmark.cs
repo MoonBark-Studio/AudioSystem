@@ -155,10 +155,6 @@ public partial class AudioBenchmark : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        // DEBUG: remove after verifying physics runs
-        if (_phase != BenchmarkPhase.Idle && _phase != BenchmarkPhase.Complete)
-            GD.Print($"DEBUG: phase={_phase} acc={_accumulatedTime:F3}");
-
         // ── Approach A: deferred QueueFree cleanup (every 4 frames) ──────────
         _naiveFrameCheckCounter++;
         if (_naiveFrameCheckCounter >= 4)

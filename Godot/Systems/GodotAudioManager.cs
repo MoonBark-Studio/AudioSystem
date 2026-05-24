@@ -1,5 +1,6 @@
 using MoonBark.AudioSystem.Core.Configuration;
 using MoonBark.AudioSystem.Core.Diagnostics;
+using MoonBark.Framework.Logging;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ public partial class GodotAudioManager : Node
     private const string AmbientPlayerNodeName = "AmbientPlayer";
     private const float DefaultMusicVolume = 0.0f;
     private const float DefaultAmbientVolume = -10.0f;
-    private const int OneShotPoolMaxSize = 32;  // MoonBark Idle target; covers virtually all concurrent needs
+    internal const int OneShotPoolMaxSizeConstant = 32;
+    private const int OneShotPoolMaxSize = OneShotPoolMaxSizeConstant;  // MoonBark Idle target; covers virtually all concurrent needs
     private const float FadeEpsilon = 0.001f;
 
     private readonly AudioPathCollection _cuePaths = new();
@@ -61,11 +63,23 @@ public partial class GodotAudioManager : Node
 
     private string? _activeMusicCueId;
 
-    private readonly GodotAudioPlaybackDiagnostics _diagnostics = new();
+    private readonly GodotAudioPlaybackDiagnostics _diagnostics;
+    private readonly ILogger? _logger;
+
+    private Action? _musicFinishedHandler;
+    private Action? _oneShotFinishedHandler;
 
     // Bus names
     private string _musicBus = "Music";
     private string _sfxBus = "SFX";
+
+    public GodotAudioManager() : this(null) { }
+
+    public GodotAudioManager(ILogger? logger)
+    {
+        _logger = logger;
+        _diagnostics = new GodotAudioPlaybackDiagnostics(logger);
+    }
 
     /// <summary>
     /// Initializes audio players and loads configured cue, music, and ambient path mappings.
@@ -80,7 +94,8 @@ public partial class GodotAudioManager : Node
         _musicPlayer.Name = MusicPlayerNodeName;
         _musicPlayer.Bus = _musicBus;
         _musicPlayer.VolumeDb = DefaultMusicVolume;
-        _musicPlayer.Finished += OnMusicFinished;
+        _musicFinishedHandler = OnMusicFinished;
+        _musicPlayer.Finished += _musicFinishedHandler;
         AddChild(_musicPlayer);
 
         _ambientPlayer = new AudioStreamPlayer();
@@ -88,6 +103,8 @@ public partial class GodotAudioManager : Node
         _ambientPlayer.Bus = _sfxBus;
         _ambientPlayer.VolumeDb = DefaultAmbientVolume;
         AddChild(_ambientPlayer);
+
+        _oneShotFinishedHandler = OnOneShotPoolPlayerFinished;
 
         // ── Approach B: Pre-allocate one-shot pool ─────────────────────────────
         // Pool size 32 covers virtually all idle game concurrent needs.
@@ -98,7 +115,7 @@ public partial class GodotAudioManager : Node
             var player = new AudioStreamPlayer();
             player.Bus = _sfxBus;
             player.VolumeDb = 0f;
-            player.Finished += () => OnOneShotPoolPlayerFinished(player);
+            player.Finished += _oneShotFinishedHandler;
             AddChild(player);
             _oneShotPool[i] = player;
         }
@@ -118,16 +135,39 @@ public partial class GodotAudioManager : Node
         }
         catch (FileNotFoundException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Audio config file not found: {ex.Message}");
+            _logger?.Error($"Audio config file not found: {ex.Message}");
         }
         catch (IOException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Failed to read audio config file: {ex.Message}");
+            _logger?.Error($"Failed to read audio config file: {ex.Message}");
         }
         catch (InvalidOperationException ex)
         {
-            GD.PrintErr($"GodotAudioManager: Unexpected error loading audio config: {ex.Message}");
+            _logger?.Error($"Unexpected error loading audio config: {ex.Message}");
         }
+    }
+
+    public override void _ExitTree()
+    {
+        if (_musicPlayer != null)
+        {
+            _musicPlayer.Finished -= _musicFinishedHandler;
+            _musicPlayer.QueueFree();
+            _musicPlayer = null;
+        }
+
+        if (_ambientPlayer != null)
+        {
+            _ambientPlayer.QueueFree();
+            _ambientPlayer = null;
+        }
+
+        foreach (var player in _oneShotPool)
+        {
+            player.Finished -= _oneShotFinishedHandler;
+            player.QueueFree();
+        }
+        _oneShotPool = Array.Empty<AudioStreamPlayer>();
     }
 
     private string ResolveBusName(string busName)
@@ -140,6 +180,7 @@ public partial class GodotAudioManager : Node
             }
         }
         GD.PushWarning($"AudioSystem: bus '{busName}' not found — falling back to Master");
+        _logger?.Warning($"Audio bus '{busName}' not found, using Master");
         return "Master";
     }
 
@@ -175,7 +216,7 @@ public partial class GodotAudioManager : Node
         target.Clear();
         foreach (string cueId in source.CueIds)
         {
-            if (source.TryGetPath(cueId, out string? path))
+            if (source.TryGetPath(cueId, out string? path) && !string.IsNullOrWhiteSpace(path))
             {
                 target.Add(cueId, path);
             }
@@ -272,6 +313,24 @@ public partial class GodotAudioManager : Node
         TryPlayMusic(cueId, 0.5f);
     }
 
+    private float GetCurrentStreamResourcePath(AudioStreamPlayer player)
+    {
+        if (player.Stream is AudioStreamOggVorbis ogg)
+            return string.IsNullOrWhiteSpace(ogg.ResourcePath) ? 0f : 1f;
+        if (player.Stream is AudioStreamWav wav)
+            return string.IsNullOrWhiteSpace(wav.ResourcePath) ? 0f : 1f;
+        return 0f;
+    }
+
+    private bool HasCurrentStreamPath(AudioStreamPlayer player)
+    {
+        if (player.Stream is AudioStreamOggVorbis ogg)
+            return !string.IsNullOrWhiteSpace(ogg.ResourcePath);
+        if (player.Stream is AudioStreamWav wav)
+            return !string.IsNullOrWhiteSpace(wav.ResourcePath);
+        return false;
+    }
+
     /// <summary>
     /// Starts looping music for the given cue id with optional fade in. Call from a GDScript signal handler.
     /// </summary>
@@ -298,13 +357,11 @@ public partial class GodotAudioManager : Node
 
         if (fadeDurationSec <= 0f)
         {
-            // No fade, play immediately
             PlayLoop(_musicPlayer, cueId, _musicPaths);
             return;
         }
 
-        // If something is playing, fade out first, then switch
-        if (_musicPlayer.Playing && !string.IsNullOrWhiteSpace(_musicPlayer.Stream as AudioStreamOggVorbis == null ? (_musicPlayer.Stream as AudioStreamWav)?.ResourcePath : ((AudioStreamOggVorbis?)_musicPlayer.Stream)?.ResourcePath))
+        if (_musicPlayer.Playing && HasCurrentStreamPath(_musicPlayer))
         {
             _pendingMusicCueId = cueId;
             _musicFadeRate = 1.0f / fadeDurationSec;
@@ -602,11 +659,13 @@ public partial class GodotAudioManager : Node
             return false;
         }
 
-        if (!mapping.TryGetPath(cueId, out path) || string.IsNullOrWhiteSpace(path))
+        if (!mapping.TryGetPath(cueId, out string? resolved) || string.IsNullOrWhiteSpace(resolved))
         {
             _diagnostics.Report(AudioPlaybackFailureKind.CueNotRegistered, category, cueId, string.Empty);
             return false;
         }
+
+        path = resolved;
 
         if (!CanResolveAudioPath(path))
         {
@@ -647,9 +706,8 @@ public partial class GodotAudioManager : Node
         return true;
     }
 
-    private void OnOneShotPoolPlayerFinished(AudioStreamPlayer player)
+    private void OnOneShotPoolPlayerFinished()
     {
-        _ = player;
         if (_playingOneShotCount <= 0)
             return;
 

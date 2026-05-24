@@ -5,30 +5,22 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>MoonBark.AudioSystem.Godot</AssemblyName>
+    <RootNamespace>MoonBark.AudioSystem.Godot</RootNamespace>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GodotProjectDir>$(MSBuildProjectDirectory)</GodotProjectDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <AssemblyName>AudioSystem.Godot</AssemblyName>
-    <RootNamespace>AudioSystem.Godot</RootNamespace>
-    <OutputPath>bin/Debug/net8.0/</OutputPath>
-    <UseExportedPluginDlls>true</UseExportedPluginDlls>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE;TOOLS</DefineConstants>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;TOOLS</DefineConstants>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\MoonBark.AudioSystem.Core.csproj" />
+    <ProjectReference Include="..\..\..\cores\MoonBark.Framework\MoonBark.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="..\Core\**" />
+    <Compile Remove="..\Tests\**" />
   </ItemGroup>
 
 </Project>
-
