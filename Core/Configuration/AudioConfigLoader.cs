@@ -56,7 +56,7 @@ public static class AudioConfigLoader
             }
         }
 
-        string godotProjectDir = GetGodotProjectDirectory();
+        string? godotProjectDir = GetGodotProjectDirectory();
         if (!string.IsNullOrWhiteSpace(godotProjectDir))
         {
             string candidate = Path.Combine(godotProjectDir, RelativeAudioConfigPath.Replace('/', Path.DirectorySeparatorChar));
