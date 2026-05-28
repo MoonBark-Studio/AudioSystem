@@ -14,7 +14,12 @@ using System.Text.Json.Serialization;
 /// </summary>
 public static class AudioConfigLoader
 {
-    private const string RelativeAudioConfigPath = "Assets/Audio/audio_config.json";
+    private static readonly string[] RelativeAudioConfigPaths =
+    [
+        "Assets/Audio/audio_config.json",
+        "assets/audio/audio_config.json",
+    ];
+
     private const string GodotProjectPath = "res://project.godot";
 
     /// <summary>
@@ -40,10 +45,13 @@ public static class AudioConfigLoader
             string? current = Path.GetFullPath(root);
             while (!string.IsNullOrWhiteSpace(current))
             {
-                string candidate = Path.Combine(current, RelativeAudioConfigPath.Replace('/', Path.DirectorySeparatorChar));
-                if (File.Exists(candidate))
+                foreach (string relativePath in RelativeAudioConfigPaths)
                 {
-                    return candidate;
+                    string candidate = Path.Combine(current, relativePath.Replace('/', Path.DirectorySeparatorChar));
+                    if (File.Exists(candidate))
+                    {
+                        return candidate;
+                    }
                 }
 
                 DirectoryInfo? parent = Directory.GetParent(current);
@@ -59,15 +67,18 @@ public static class AudioConfigLoader
         string? godotProjectDir = GetGodotProjectDirectory();
         if (!string.IsNullOrWhiteSpace(godotProjectDir))
         {
-            string candidate = Path.Combine(godotProjectDir, RelativeAudioConfigPath.Replace('/', Path.DirectorySeparatorChar));
-            if (File.Exists(candidate))
+            foreach (string relativePath in RelativeAudioConfigPaths)
             {
-                return candidate;
+                string candidate = Path.Combine(godotProjectDir, relativePath.Replace('/', Path.DirectorySeparatorChar));
+                if (File.Exists(candidate))
+                {
+                    return candidate;
+                }
             }
         }
 
         throw new FileNotFoundException(
-            $"Audio config file not found. Expected to locate {RelativeAudioConfigPath} from {startDirectory ?? AppContext.BaseDirectory}.");
+            $"Audio config file not found. Expected to locate one of [{string.Join(", ", RelativeAudioConfigPaths)}] from {startDirectory ?? AppContext.BaseDirectory}.");
     }
 
     private static string? GetGodotProjectDirectory()

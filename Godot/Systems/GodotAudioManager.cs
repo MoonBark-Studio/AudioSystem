@@ -73,6 +73,9 @@ public partial class GodotAudioManager : Node
     private string _musicBus = "Music";
     private string _sfxBus = "SFX";
 
+    /// <summary>Optional absolute path to audio_config.json. When unset, <see cref="AudioConfigLoader.ResolveConfigPath"/> is used.</summary>
+    public string? ConfigFilePath { get; set; }
+
     public GodotAudioManager() : this(null) { }
 
     public GodotAudioManager(ILogger? logger)
@@ -122,7 +125,9 @@ public partial class GodotAudioManager : Node
 
         try
         {
-            string configPath = AudioConfigLoader.ResolveConfigPath();
+            string configPath = !string.IsNullOrWhiteSpace(ConfigFilePath)
+                ? ConfigFilePath
+                : AudioConfigLoader.ResolveConfigPath();
             AudioConfigDocument config = AudioConfigLoader.Load(configPath);
             CopyMappings(_cuePaths, AudioConfigLoader.BuildAbsolutePathMap(config, config.Cues, configPath));
             CopyMappings(_musicPaths, AudioConfigLoader.BuildAbsolutePathMap(config, config.Music, configPath));
@@ -581,9 +586,18 @@ public partial class GodotAudioManager : Node
         }
 
         if (player == _musicPlayer)
+        {
             _activeMusicCueId = cueId;
+            if (stream is AudioStreamOggVorbis ogg)
+                ogg.Loop = true;
+            else if (stream is AudioStreamWav wav)
+                wav.LoopMode = AudioStreamWav.LoopModeEnum.Forward;
+        }
 
         player.Stream = stream;
+        if (player == _musicPlayer)
+            player.VolumeDb = GetEffectiveMusicVolumeDb();
+
         if (!TryStartPlayback(player, cueId, category))
         {
             if (player == _musicPlayer)
