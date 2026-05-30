@@ -28,6 +28,9 @@ public sealed class AudioConfigDocument
     [JsonPropertyName("tiers")]
     public JsonElement? Tiers { get; set; }
 
+    [JsonPropertyName("playlists")]
+    public Dictionary<string, PlaylistConfig> Playlists { get; set; } = new();
+
     /// <summary>Merges nested <c>tiers</c> leaf paths into <see cref="CuesDict"/> and <see cref="AmbientDict"/>.</summary>
     public void MergeTierCuePaths()
     {
@@ -179,4 +182,25 @@ public sealed class AudioSourceConfig
 
     [JsonPropertyName("notes")]
     public string Notes { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Represents a named playlist of music track cue IDs with playback options.
+/// </summary>
+public sealed class PlaylistConfig
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    [JsonPropertyName("track_ids")]
+    public List<string> TrackIds { get; set; } = new();
+
+    [JsonPropertyName("shuffle")]
+    public bool Shuffle { get; set; }
+
+    [JsonPropertyName("inter_track_delay_sec")]
+    public float InterTrackDelaySec { get; set; }
+
+    [JsonPropertyName("loop")]
+    public bool Loop { get; set; } = true;
 }

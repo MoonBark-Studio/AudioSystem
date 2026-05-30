@@ -5,15 +5,11 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MoonBark.AudioSystem.Godot.Systems;
 
-/// <summary>
-/// Godot audio manager that plays music, ambient, and one-shot audio cues via direct method calls.
-/// Call TryPlayMusic / TryPlayAmbient / TryPlayOneShot from GDScript signal handlers.
-/// YAML config provides cue-to-path mappings.
-/// </summary>
 public partial class GodotAudioManager : Node
 {
     private const string MusicPlayerNodeName = "MusicPlayer";
@@ -21,7 +17,7 @@ public partial class GodotAudioManager : Node
     private const float DefaultMusicVolume = 0.0f;
     private const float DefaultAmbientVolume = -10.0f;
     internal const int OneShotPoolMaxSizeConstant = 32;
-    private const int OneShotPoolMaxSize = OneShotPoolMaxSizeConstant;  // MoonBark Idle target; covers virtually all concurrent needs
+    private const int OneShotPoolMaxSize = OneShotPoolMaxSizeConstant;
     private const float FadeEpsilon = 0.001f;
 
     private readonly AudioPathCollection _cuePaths = new();
@@ -30,25 +26,13 @@ public partial class GodotAudioManager : Node
     private AudioStreamPlayer? _musicPlayer;
     private AudioStreamPlayer? _ambientPlayer;
 
-    // ── Approach B: Pre-allocated pool (primary) ────────────────────────────────
-    // Zero GC after init. Ring-buffer reuse — just call Play() on an idle slot.
-    // Concurrent cap: OneShotPoolMaxSize (hard cap; sounds beyond are silently dropped).
-    //
-    // APPROACH D (AudioStreamGenerator + PushFrame) as overflow:
-    //   D requires per-frame PCM feeding via AudioStreamGeneratorPlayback.PushFrame().
-    //   This adds CPU overhead and is only useful for truly procedural audio (synths, DSP).
-    //   For one-shot file playback, D offers no benefit over B — increase pool size instead.
-    //   Pool size is configurable via OneShotPoolMaxSize. For >32 concurrent sounds,
-    //   increase to 64 or more; Godot can handle hundreds of idle AudioStreamPlayer nodes.
     private AudioStreamPlayer[] _oneShotPool = Array.Empty<AudioStreamPlayer>();
-    private int _poolCursor;  // ring-buffer cursor for round-robin reuse
+    private int _poolCursor;
 
-    // Volume control
     private float _masterVolume = 1.0f;
     private float _musicVolume = 1.0f;
     private float _ambientVolume = 1.0f;
 
-    // Fade control
     private float _musicFadeRate;
     private float _ambientFadeRate;
     private bool _musicFadingIn;
@@ -56,12 +40,20 @@ public partial class GodotAudioManager : Node
     private string? _pendingMusicCueId;
     private string? _pendingAmbientCueId;
 
-    // Ambient ducking (ref-counted while one-shots are playing)
     private float _ambientVolumeBeforeDuck = 1.0f;
     private bool _ambientDucking = false;
     private int _playingOneShotCount;
 
     private string? _activeMusicCueId;
+
+    private PlaylistConfig? _activePlaylist;
+    private List<string> _playlistOrder = new();
+    private int _playlistIndex;
+    private bool _shuffleEnabled;
+    private float _interTrackDelaySec;
+    private float _delayRemaining;
+    private bool _inPlaylistMode;
+    private bool _playlistFadingOut;
 
     private readonly GodotAudioPlaybackDiagnostics _diagnostics;
     private readonly ILogger? _logger;
@@ -69,11 +61,9 @@ public partial class GodotAudioManager : Node
     private Action? _musicFinishedHandler;
     private Action? _oneShotFinishedHandler;
 
-    // Bus names
     private string _musicBus = "Music";
     private string _sfxBus = "SFX";
 
-    /// <summary>Optional absolute path to audio_config.json. When unset, <see cref="AudioConfigLoader.ResolveConfigPath"/> is used.</summary>
     public string? ConfigFilePath { get; set; }
 
     public GodotAudioManager() : this(null) { }
@@ -84,12 +74,8 @@ public partial class GodotAudioManager : Node
         _diagnostics = new GodotAudioPlaybackDiagnostics(logger);
     }
 
-    /// <summary>
-    /// Initializes audio players and loads configured cue, music, and ambient path mappings.
-    /// </summary>
     public override void _Ready()
     {
-        // Resolve bus names (fall back to Master if not found)
         _musicBus = ResolveBusName("Music");
         _sfxBus = ResolveBusName("SFX");
 
@@ -109,9 +95,6 @@ public partial class GodotAudioManager : Node
 
         _oneShotFinishedHandler = OnOneShotPoolPlayerFinished;
 
-        // ── Approach B: Pre-allocate one-shot pool ─────────────────────────────
-        // Pool size 32 covers virtually all idle game concurrent needs.
-        // Zero GC after init — nodes are reused, never allocated during play.
         _oneShotPool = new AudioStreamPlayer[OneShotPoolMaxSize];
         for (int i = 0; i < OneShotPoolMaxSize; i++)
         {
@@ -133,10 +116,14 @@ public partial class GodotAudioManager : Node
             CopyMappings(_musicPaths, AudioConfigLoader.BuildAbsolutePathMap(config, config.Music, configPath));
             CopyMappings(_ambientPaths, AudioConfigLoader.BuildAbsolutePathMap(config, config.Ambient, configPath));
 
-            // Validate all cue files exist
             ValidateCueFiles(_cuePaths, "cue");
             ValidateCueFiles(_musicPaths, "music");
             ValidateCueFiles(_ambientPaths, "ambient");
+
+            foreach (var kvp in config.Playlists)
+            {
+                kvp.Value.Id = kvp.Key;
+            }
         }
         catch (FileNotFoundException ex)
         {
@@ -232,7 +219,16 @@ public partial class GodotAudioManager : Node
     {
         float deltaSec = (float)delta;
 
-        // Fade music player
+        if (_inPlaylistMode && _delayRemaining > 0f)
+        {
+            _delayRemaining -= deltaSec;
+            if (_delayRemaining <= 0f)
+            {
+                _delayRemaining = 0f;
+                AdvancePlaylist();
+            }
+        }
+
         if (_musicPlayer != null && (_musicFadingIn || Math.Abs(_musicPlayer.VolumeDb - GetEffectiveMusicVolumeDb()) > FadeEpsilon))
         {
             float targetDb = GetEffectiveMusicVolumeDb();
@@ -246,12 +242,10 @@ public partial class GodotAudioManager : Node
             }
             else
             {
-                // Fade out (target is 0)
                 _musicPlayer.VolumeDb = Mathf.MoveToward(_musicPlayer.VolumeDb, targetDb, _musicFadeRate * deltaSec);
             }
         }
 
-        // Fade ambient player
         if (_ambientPlayer != null && (_ambientFadingIn || Math.Abs(_ambientPlayer.VolumeDb - GetEffectiveAmbientVolumeDb()) > FadeEpsilon))
         {
             float targetDb = GetEffectiveAmbientVolumeDb();
@@ -265,12 +259,10 @@ public partial class GodotAudioManager : Node
             }
             else
             {
-                // Fade out
                 _ambientPlayer.VolumeDb = Mathf.MoveToward(_ambientPlayer.VolumeDb, targetDb, _ambientFadeRate * deltaSec);
             }
         }
 
-        // Handle pending track changes after fade out
         if (_pendingMusicCueId != null && !_musicFadingIn && _musicPlayer != null && !IsPlayerFadingToward(_musicPlayer, GetEffectiveMusicVolumeDb()))
         {
             string cueId = _pendingMusicCueId;
@@ -309,10 +301,6 @@ public partial class GodotAudioManager : Node
         return Mathf.LinearToDb(linear);
     }
 
-    /// <summary>
-    /// Starts looping music for the given cue id. Call from a GDScript signal handler.
-    /// </summary>
-    /// <param name="cueId">The music track cue id from audio_config.yaml.</param>
     public void TryPlayMusic(string cueId)
     {
         TryPlayMusic(cueId, 0.5f);
@@ -336,11 +324,6 @@ public partial class GodotAudioManager : Node
         return false;
     }
 
-    /// <summary>
-    /// Starts looping music for the given cue id with optional fade in. Call from a GDScript signal handler.
-    /// </summary>
-    /// <param name="cueId">The music track cue id from audio_config.yaml.</param>
-    /// <param name="fadeDurationSec">Fade in duration in seconds (0 = instant).</param>
     public void TryPlayMusic(string cueId, float fadeDurationSec)
     {
         if (_musicPlayer == null)
@@ -370,7 +353,6 @@ public partial class GodotAudioManager : Node
         {
             _pendingMusicCueId = cueId;
             _musicFadeRate = 1.0f / fadeDurationSec;
-            // Fade out to silence
             FadePlayerOut(_musicPlayer, fadeDurationSec);
         }
         else
@@ -378,25 +360,15 @@ public partial class GodotAudioManager : Node
             PlayLoop(_musicPlayer, cueId, _musicPaths);
             _musicFadingIn = true;
             _musicFadeRate = 1.0f / fadeDurationSec;
-            // Start at silence and fade in
             _musicPlayer.VolumeDb = DefaultMusicVolume + LinearToDb(_masterVolume * _musicVolume * FadeEpsilon);
         }
     }
 
-    /// <summary>
-    /// Starts looping ambient audio for the given cue id. Call from a GDScript signal handler.
-    /// </summary>
-    /// <param name="cueId">The ambient track cue id from audio_config.yaml.</param>
     public void TryPlayAmbient(string cueId)
     {
         TryPlayAmbient(cueId, 0.5f);
     }
 
-    /// <summary>
-    /// Starts looping ambient audio for the given cue id with optional fade in. Call from a GDScript signal handler.
-    /// </summary>
-    /// <param name="cueId">The ambient track cue id from audio_config.yaml.</param>
-    /// <param name="fadeDurationSec">Fade in duration in seconds (0 = instant).</param>
     public void TryPlayAmbient(string cueId, float fadeDurationSec)
     {
         if (_ambientPlayer == null)
@@ -415,7 +387,6 @@ public partial class GodotAudioManager : Node
             return;
         }
 
-        // If something is playing, fade out first, then switch
         if (_ambientPlayer.Playing)
         {
             _pendingAmbientCueId = cueId;
@@ -431,16 +402,14 @@ public partial class GodotAudioManager : Node
         }
     }
 
-    /// <summary>
-    /// Stops the music player with optional fade out.
-    /// </summary>
-    /// <param name="fadeOutSec">Fade out duration in seconds.</param>
     public void TryStopMusic(float fadeOutSec = 0.3f)
     {
         if (_musicPlayer == null) return;
 
         _pendingMusicCueId = null;
         _activeMusicCueId = null;
+        _inPlaylistMode = false;
+        _activePlaylist = null;
         if (fadeOutSec <= 0f)
         {
             _musicPlayer.Stop();
@@ -449,7 +418,6 @@ public partial class GodotAudioManager : Node
         }
 
         FadePlayerOut(_musicPlayer, fadeOutSec);
-        // Schedule stop after fade
         Callable.From(() =>
         {
             if (_musicPlayer != null)
@@ -459,10 +427,6 @@ public partial class GodotAudioManager : Node
         }).CallDeferred();
     }
 
-    /// <summary>
-    /// Stops the ambient player with optional fade out.
-    /// </summary>
-    /// <param name="fadeOutSec">Fade out duration in seconds.</param>
     public void TryStopAmbient(float fadeOutSec = 0.3f)
     {
         if (_ambientPlayer == null) return;
@@ -490,9 +454,6 @@ public partial class GodotAudioManager : Node
         if (durationSec <= 0f) return;
 
         float fadeRate = 1.0f / durationSec;
-        float currentDb = player.VolumeDb;
-        // We rely on _Process to fade toward silence
-        // Store the fade rate for use during fade
         if (player == _musicPlayer)
         {
             _musicFadeRate = fadeRate;
@@ -503,30 +464,18 @@ public partial class GodotAudioManager : Node
         }
     }
 
-    /// <summary>
-    /// Sets the master volume (0–1).
-    /// </summary>
-    /// <param name="vol">Volume level from 0.0 to 1.0.</param>
     public void SetMasterVolume(float vol)
     {
         _masterVolume = Mathf.Clamp(vol, 0f, 1f);
         UpdateAllVolumes();
     }
 
-    /// <summary>
-    /// Sets the music volume (0–1).
-    /// </summary>
-    /// <param name="vol">Volume level from 0.0 to 1.0.</param>
     public void SetMusicVolume(float vol)
     {
         _musicVolume = Mathf.Clamp(vol, 0f, 1f);
         UpdateMusicVolume();
     }
 
-    /// <summary>
-    /// Sets the ambient volume (0–1).
-    /// </summary>
-    /// <param name="vol">Volume level from 0.0 to 1.0.</param>
     public void SetAmbientVolume(float vol)
     {
         _ambientVolume = Mathf.Clamp(vol, 0f, 1f);
@@ -555,13 +504,158 @@ public partial class GodotAudioManager : Node
         }
     }
 
-    /// <summary>
-    /// Plays a one-shot audio cue. Call from a GDScript signal handler.
-    /// </summary>
-    /// <param name="cueId">The one-shot cue id from audio_config.yaml.</param>
     public void TryPlayOneShot(string cueId)
     {
         PlayCue(cueId, _cuePaths);
+    }
+
+    public void SetActivePlaylist(string playlistId, float fadeDurationSec = 0.5f)
+    {
+        var configPath = !string.IsNullOrWhiteSpace(ConfigFilePath)
+            ? ConfigFilePath
+            : AudioConfigLoader.ResolveConfigPath();
+        AudioConfigDocument config = AudioConfigLoader.Load(configPath);
+
+        if (!config.Playlists.TryGetValue(playlistId, out var playlist))
+        {
+            _logger?.Warning($"Playlist '{playlistId}' not found in audio config");
+            return;
+        }
+
+        if (playlist.TrackIds == null || playlist.TrackIds.Count == 0)
+        {
+            _logger?.Warning($"Playlist '{playlistId}' has no tracks");
+            return;
+        }
+
+        _activePlaylist = playlist;
+        _shuffleEnabled = playlist.Shuffle;
+        _interTrackDelaySec = playlist.InterTrackDelaySec;
+        _playlistIndex = 0;
+
+        var validTracks = playlist.TrackIds.Where(t => _musicPaths.ContainsCue(t)).ToList();
+        if (validTracks.Count == 0)
+        {
+            _logger?.Warning($"Playlist '{playlistId}' has no valid tracks");
+            _activePlaylist = null;
+            return;
+        }
+
+        _playlistOrder = _shuffleEnabled ? ShuffleList(validTracks) : validTracks;
+        _inPlaylistMode = true;
+
+        string firstTrack = _playlistOrder[_playlistIndex];
+        TryPlayMusic(firstTrack, fadeDurationSec);
+    }
+
+    public void ClearActivePlaylist()
+    {
+        _inPlaylistMode = false;
+        _activePlaylist = null;
+        _playlistOrder.Clear();
+        _playlistIndex = 0;
+        _delayRemaining = 0f;
+        TryStopMusic(0.3f);
+    }
+
+    public void SetShuffleEnabled(bool enabled)
+    {
+        _shuffleEnabled = enabled;
+        if (_activePlaylist != null && _playlistOrder.Count > 0)
+        {
+            string currentTrack = _playlistOrder[_playlistIndex];
+            _playlistOrder = _shuffleEnabled ? ShuffleList(_playlistOrder) : new List<string>(_activePlaylist.TrackIds.Where(t => _musicPaths.ContainsCue(t)));
+            _playlistIndex = _playlistOrder.IndexOf(currentTrack);
+            if (_playlistIndex < 0) _playlistIndex = 0;
+        }
+    }
+
+    public void SetInterTrackDelay(float seconds)
+    {
+        _interTrackDelaySec = Mathf.Max(0f, seconds);
+    }
+
+    public void SkipToNext()
+    {
+        if (!_inPlaylistMode || _activePlaylist == null || _playlistOrder.Count == 0) return;
+
+        _playlistIndex++;
+        if (_playlistIndex >= _playlistOrder.Count)
+        {
+            if (_activePlaylist.Loop)
+            {
+                _playlistIndex = 0;
+                if (_shuffleEnabled)
+                {
+                    _playlistOrder = ShuffleList(_playlistOrder);
+                }
+            }
+            else
+            {
+                _playlistIndex = _playlistOrder.Count - 1;
+                _inPlaylistMode = false;
+                return;
+            }
+        }
+
+        string nextTrack = _playlistOrder[_playlistIndex];
+        TryPlayMusic(nextTrack, 0.3f);
+    }
+
+    public void SkipToPrevious()
+    {
+        if (!_inPlaylistMode || _activePlaylist == null || _playlistOrder.Count == 0) return;
+
+        _playlistIndex--;
+        if (_playlistIndex < 0)
+        {
+            _playlistIndex = _activePlaylist.Loop ? _playlistOrder.Count - 1 : 0;
+        }
+
+        string prevTrack = _playlistOrder[_playlistIndex];
+        TryPlayMusic(prevTrack, 0.3f);
+    }
+
+    private List<string> ShuffleList(List<string> input)
+    {
+        var list = new List<string>(input);
+        int n = list.Count;
+        var rng = new Random();
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+        return list;
+    }
+
+    private void AdvancePlaylist()
+    {
+        if (_activePlaylist == null || _playlistOrder.Count == 0) return;
+
+        _playlistIndex++;
+        if (_playlistIndex >= _playlistOrder.Count)
+        {
+            if (_activePlaylist.Loop)
+            {
+                _playlistIndex = 0;
+                if (_shuffleEnabled)
+                {
+                    _playlistOrder = ShuffleList(_playlistOrder);
+                }
+            }
+            else
+            {
+                _inPlaylistMode = false;
+                _activePlaylist = null;
+                TryStopMusic(0.5f);
+                return;
+            }
+        }
+
+        string nextTrack = _playlistOrder[_playlistIndex];
+        TryPlayMusic(nextTrack, 0.3f);
     }
 
     private void PlayLoop(AudioStreamPlayer player, string cueId, AudioPathCollection mapping)
@@ -610,6 +704,19 @@ public partial class GodotAudioManager : Node
         if (_musicPlayer == null || string.IsNullOrWhiteSpace(_activeMusicCueId))
             return;
 
+        if (_inPlaylistMode)
+        {
+            if (_interTrackDelaySec > 0f)
+            {
+                _delayRemaining = _interTrackDelaySec;
+            }
+            else
+            {
+                AdvancePlaylist();
+            }
+            return;
+        }
+
         if (_musicPlayer.Stream != null)
             _musicPlayer.Play();
     }
@@ -624,10 +731,6 @@ public partial class GodotAudioManager : Node
         if (stream == null)
             return;
 
-        // ── Approach B: Ring-buffer pool ────────────────────────────────────────
-        // Round-robin scan for idle slot. Zero GC after init.
-        // If pool is full (all slots busy), the sound is silently dropped —
-        // correct behavior: never block game thread for audio.
         AudioStreamPlayer? player = null;
         int searchStart = _poolCursor;
         for (int i = 0; i < OneShotPoolMaxSize; i++)
