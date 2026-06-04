@@ -1,7 +1,7 @@
 using Godot;
 using MoonBark.AudioSystem.Core;
 
-namespace MoonBark.AudioSystem.Godot;
+namespace MoonBark.AudioSystem.Godot.Plugin.Plugin;
 
 [GlobalClass]
 public partial class AudioSystemPlugin : RefCounted

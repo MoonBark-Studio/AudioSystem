@@ -34,7 +34,7 @@ public partial class AudioBenchmark : Node
     // Primary: synthetic generator (self-contained, no file dependency)
     // Fallback: audio file from MoonBark.GridPlacement demos
     private AudioStream? _testStream;
-    private string _demoStreamPath = "res://demos/shared/assets/audio/sfx/workshopsfx_gamesupply/build_place_pkg2_33.mp3";
+    private string _demoStreamPath = "res://Godot/demos/shared/assets/audio/sfx/workshopsfx_gamesupply/build_place_pkg2_33.mp3";
 
     // ─── Approach A: Naive ─────────────────────────────────────────────────────
     private readonly List<AudioStreamPlayer> _naiveActive = new();

@@ -1,7 +1,7 @@
 using MoonBark.AudioSystem.Core.Diagnostics;
 using MoonBark.Framework.Logging;
 
-namespace MoonBark.AudioSystem.Godot.Systems;
+namespace MoonBark.AudioSystem.Godot.Adapters.Systems;
 
 internal sealed class GodotAudioPlaybackDiagnostics
 {

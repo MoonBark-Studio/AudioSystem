@@ -5,8 +5,8 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>MoonBark.AudioSystem.Godot</AssemblyName>
-    <RootNamespace>MoonBark.AudioSystem.Godot</RootNamespace>
+    <AssemblyName>MoonBark.AudioSystem.Godot.Plugin.Adapters</AssemblyName>
+    <RootNamespace>MoonBark.AudioSystem.Godot.Plugin.Adapters</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GodotProjectDir>$(MSBuildProjectDirectory)</GodotProjectDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

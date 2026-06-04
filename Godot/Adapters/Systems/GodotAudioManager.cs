@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace MoonBark.AudioSystem.Godot.Systems;
+namespace MoonBark.AudioSystem.Godot.Adapters.Systems;
 
 public partial class GodotAudioManager : Node
 {
