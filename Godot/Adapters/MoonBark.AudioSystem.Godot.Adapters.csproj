@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\MoonBark.AudioSystem.Core.csproj" />
-    <ProjectReference Include="..\..\..\cores\MoonBark.Framework\MoonBark.Framework.csproj" />
+    <ProjectReference Include="../../Core/MoonBark.AudioSystem.Core.csproj" />
+    <ProjectReference Include="$(MoonBarkRoot)cores/MoonBark.Framework/MoonBark.Framework.csproj" />
   </ItemGroup>
 
   <ItemGroup>
