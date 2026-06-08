@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="$(MoonBarkRoot)/cores/MoonBark.Framework/MoonBark.Framework.csproj" />
+    <ProjectReference Include="$(MoonBarkRoot)/plugins/WorldState/MoonBark.WorldState.Core.csproj" />
   </ItemGroup>
 
 </Project>
