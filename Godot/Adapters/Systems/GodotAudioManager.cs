@@ -1,3 +1,4 @@
+using MoonBark.AudioSystem.Core;
 using MoonBark.AudioSystem.Core.Configuration;
 using MoonBark.AudioSystem.Core.Diagnostics;
 using MoonBark.Framework.Logging;
@@ -10,7 +11,7 @@ using System.Reflection;
 
 namespace MoonBark.AudioSystem.Godot.Adapters.Systems;
 
-public partial class GodotAudioManager : Node
+public partial class GodotAudioManager : Node, IAudioService
 {
     private const string MusicPlayerNodeName = "MusicPlayer";
     private const string AmbientPlayerNodeName = "AmbientPlayer";
@@ -100,11 +101,13 @@ public partial class GodotAudioManager : Node
         {
             var player = new AudioStreamPlayer();
             player.Bus = _sfxBus;
-            player.VolumeDb = 0f;
+            player.VolumeDb = GetEffectiveSoundEffectsVolumeDb();
             player.Finished += _oneShotFinishedHandler;
             AddChild(player);
             _oneShotPool[i] = player;
         }
+
+        UpdateSoundEffectsVolume();
 
         try
         {
@@ -295,6 +298,11 @@ public partial class GodotAudioManager : Node
         return DefaultAmbientVolume + LinearToDb(_masterVolume * _ambientVolume);
     }
 
+    private float GetEffectiveSoundEffectsVolumeDb()
+    {
+        return LinearToDb(_masterVolume * _ambientVolume);
+    }
+
     private static float LinearToDb(float linear)
     {
         if (linear <= 0f) return -80f;
@@ -304,6 +312,11 @@ public partial class GodotAudioManager : Node
     public void TryPlayMusic(string cueId)
     {
         TryPlayMusic(cueId, 0.5f);
+    }
+
+    public void PlayMusic(string cueId, float fadeInDurationSec = 0f)
+    {
+        TryPlayMusic(cueId, fadeInDurationSec);
     }
 
     private float GetCurrentStreamResourcePath(AudioStreamPlayer player)
@@ -369,6 +382,11 @@ public partial class GodotAudioManager : Node
         TryPlayAmbient(cueId, 0.5f);
     }
 
+    public void PlayAmbient(string cueId, float fadeInDurationSec = 0f)
+    {
+        TryPlayAmbient(cueId, fadeInDurationSec);
+    }
+
     public void TryPlayAmbient(string cueId, float fadeDurationSec)
     {
         if (_ambientPlayer == null)
@@ -427,6 +445,11 @@ public partial class GodotAudioManager : Node
         }).CallDeferred();
     }
 
+    public void StopMusic(float fadeOutSec = 0.3f)
+    {
+        TryStopMusic(fadeOutSec);
+    }
+
     public void TryStopAmbient(float fadeOutSec = 0.3f)
     {
         if (_ambientPlayer == null) return;
@@ -447,6 +470,11 @@ public partial class GodotAudioManager : Node
                 _ambientPlayer.Stop();
             }
         }).CallDeferred();
+    }
+
+    public void StopAmbient(float fadeOutSec = 0.3f)
+    {
+        TryStopAmbient(fadeOutSec);
     }
 
     private void FadePlayerOut(AudioStreamPlayer player, float durationSec)
@@ -476,10 +504,21 @@ public partial class GodotAudioManager : Node
         UpdateMusicVolume();
     }
 
-    public void SetAmbientVolume(float vol)
+    public void SetSoundEffectsVolume(float vol)
     {
         _ambientVolume = Mathf.Clamp(vol, 0f, 1f);
+        UpdateSoundEffectsVolume();
         UpdateAmbientVolume();
+    }
+
+    public void SetAmbientVolume(float vol)
+    {
+        SetSoundEffectsVolume(vol);
+    }
+
+    public void PlayOneShot(string cueId)
+    {
+        TryPlayOneShot(cueId);
     }
 
     private void UpdateAllVolumes()
@@ -501,6 +540,15 @@ public partial class GodotAudioManager : Node
         if (_ambientPlayer != null && !_ambientDucking)
         {
             _ambientPlayer.VolumeDb = GetEffectiveAmbientVolumeDb();
+        }
+    }
+
+    private void UpdateSoundEffectsVolume()
+    {
+        float volumeDb = GetEffectiveSoundEffectsVolumeDb();
+        foreach (AudioStreamPlayer player in _oneShotPool)
+        {
+            player.VolumeDb = volumeDb;
         }
     }
 
@@ -759,6 +807,7 @@ public partial class GodotAudioManager : Node
 
         _playingOneShotCount++;
         player.Stream = stream;
+        player.VolumeDb = GetEffectiveSoundEffectsVolumeDb();
         if (!TryStartPlayback(player, cueId, category))
             _playingOneShotCount = Math.Max(0, _playingOneShotCount - 1);
     }
