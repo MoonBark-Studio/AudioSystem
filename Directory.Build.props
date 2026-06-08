@@ -1,0 +1,12 @@
+<Project>
+  <!--
+    Workspace-level build settings for the audio system plugin.
+    MoonBarkRoot can be supplied by the MOONBARK_ROOT environment variable or
+    overridden explicitly with -p:MoonBarkRoot=... when building in a workspace.
+  -->
+
+  <PropertyGroup>
+    <MoonBarkRoot Condition="'$(MoonBarkRoot)' == '' and '$([System.Environment]::GetEnvironmentVariable(`MOONBARK_ROOT`))' != ''">$([System.Environment]::GetEnvironmentVariable(`MOONBARK_ROOT`))</MoonBarkRoot>
+    <MoonBarkRoot Condition="'$(MoonBarkRoot)' == ''">/home/chris/gamedev/godot/projects/</MoonBarkRoot>
+  </PropertyGroup>
+</Project>

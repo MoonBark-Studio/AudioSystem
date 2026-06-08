@@ -15,8 +15,10 @@ public sealed class AudioSystemModule : IFrameworkModule
         _audioService = audioService ?? throw new ArgumentNullException(nameof(audioService));
     }
 
-    public void ConfigureServices(IServiceRegistry services)
-    {
-        services.Register(_audioService);
-    }
+  public void ConfigureServices(IServiceRegistry services)
+  {
+        services.Register<IAudioService>(_audioService);
+        services.Register<IAudioPlayback>(_audioService);
+        services.Register<IAudioVolumeControl>(_audioService);
+  }
 }
