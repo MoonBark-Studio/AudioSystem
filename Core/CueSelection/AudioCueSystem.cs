@@ -1,10 +1,9 @@
 using Friflo.Engine.ECS;
-using MoonBark.WorldState;
 
 namespace AudioSystem.Core.CueSelection;
 
 /// <summary>
-/// Generic audio cue selection system that reads the WorldState blackboard
+/// Generic audio cue selection system that reads normalized cue-selection state
 /// and selects ambient/music/cue tracks via an injected
 /// <see cref="ICueSelectionConfiguration"/>. Game-specific selection rules
 /// belong in the configuration implementation; this system is purely
@@ -12,17 +11,17 @@ namespace AudioSystem.Core.CueSelection;
 /// </summary>
 public sealed class AudioCueSystem
 {
-    private readonly WorldState _worldState;
+    private readonly IAudioCueStateReader _stateReader;
     private readonly ICueSelectionConfiguration _configuration;
 
     /// <summary>
     /// Creates a new cue selection system.
     /// </summary>
-    /// <param name="worldState">WorldState blackboard providing time, event, and task data.</param>
+    /// <param name="stateReader">Normalized cue-selection state provided by the integration layer.</param>
     /// <param name="configuration">Game-specific cue selection rules.</param>
-    public AudioCueSystem(WorldState worldState, ICueSelectionConfiguration configuration)
+    public AudioCueSystem(IAudioCueStateReader stateReader, ICueSelectionConfiguration configuration)
     {
-        _worldState = worldState ?? throw new ArgumentNullException(nameof(worldState));
+        _stateReader = stateReader ?? throw new ArgumentNullException(nameof(stateReader));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
@@ -33,7 +32,8 @@ public sealed class AudioCueSystem
     public void Update(EntityStore world, float deltaTime)
     {
         if (world == null) throw new ArgumentNullException(nameof(world));
-        // Generic orchestration placeholder. Game-specific implementations
-        // override selection rules via ICueSelectionConfiguration.
+        // Generic orchestration placeholder. Game-specific integrations provide
+        // normalized state via IAudioCueStateReader and selection rules via
+        // ICueSelectionConfiguration.
     }
 }
