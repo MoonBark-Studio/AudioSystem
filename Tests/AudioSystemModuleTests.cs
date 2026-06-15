@@ -1,5 +1,4 @@
 using MoonBark.AudioSystem.Core;
-using MoonBark.Framework.Core;
 using Xunit;
 
 namespace MoonBark.AudioSystem.Tests;

@@ -14,7 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(MoonBarkRoot)/cores/MoonBark.Framework/MoonBark.Framework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="/home/chris/gamedev/godot/projects/cores/MoonBark.Framework/MoonBark.Framework.csproj" />
+    <ProjectReference Include="/home/chris/gamedev/godot/projects/cores/MoonBark.Framework/MoonBark.Framework.Friflo/MoonBark.Framework.Friflo.csproj" />
+  </ItemGroup>
 </Project>
